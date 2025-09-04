@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная страница dks5</title>
+    <!-- Подключение Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            color: #333;
+        }
+
+        .glowing-text {
+            color: #5B21B6;
+            text-shadow: none;
+        }
+
+        .card {
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 0.5rem;
+        }
+        
+        .dark body {
+            background-color: #1A1F2E;
+            color: #dbe5f2;
+        }
+        .dark .card {
+            background-color: #0F131A;
+            border: 1px solid #2B3D55;
+            box-shadow: 0 0 10px 2px rgba(139, 108, 235, 0.6);
+        }
+        .dark .glowing-text {
+            color: #A78BFA;
+        }
+        .dark a {
+            color: #A78BFA;
+        }
+        
+        /* Light theme button colors */
+        .bg-blue-500 {
+            background-color: #5B21B6;
+        }
+        .hover\:bg-blue-600:hover {
+            background-color: #7C3AED;
+        }
+
+        /* Dark theme button colors */
+        .dark .bg-blue-500 {
+            background-color: #4A1B8C;
+        }
+        .dark .hover\:bg-blue-600:hover {
+            background-color: #6B21A8;
+        }
+        .dark .bg-gray-500 {
+            background-color: #3b4554;
+        }
+        .dark .hover:bg-gray-600:hover {
+            background-color: #2c3541;
+        }
+
+        .tree-view-container {
+            font-family: monospace;
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .root-folder-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            padding-bottom: 20px;
+        }
+        .root-folder-item .icon {
+            font-size: 3rem;
+        }
+        .root-folder-item .label {
+            font-size: 1.25rem;
+        }
+
+        .root-folder-branches {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            position: relative;
+            padding-top: 10px;
+            width: 100%;
+        }
+        
+        .branch {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            position: relative;
+            min-width: 0;
+            padding-left: 20px;
+        }
+        
+        .tree-item {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        
+        .tree-item.folder .folder-icon {
+            font-size: 1.5rem; /* Larger folder icon */
+            position: relative;
+            cursor: pointer;
+        }
+        .tree-item.file .file-icon {
+            font-size: 1.5rem; /* Larger file icon */
+            margin-right: 5px;
+            color: #9e9e9e;
+        }
+
+        .tree-item.folder .folder-icon {
+            color: #ffc107;
+        }
+
+        .dark .tree-item.folder .folder-icon {
+            color: #ffeb3b;
+        }
+
+        .dark .tree-item.file .file-icon {
+            color: #a78bfa;
+        }
+
+        .toggle-icon {
+            position: absolute;
+            left: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white; /* White color for contrast */
+            font-size: 1rem;
+            font-weight: bold;
+        }
+        
+        .dark .toggle-icon {
+            color: #333;
+        }
+
+        .folder-content {
+            overflow: hidden;
+            display: none;
+            padding-left: 20px;
+        }
+        
+        .tree-item.expanded + .folder-content {
+            display: block;
+        }
+        
+        .branch .tree-item {
+            margin-top: 0.5rem;
+        }
+        
+        .tree-item.file {
+            margin-left: 20px;
+        }
+        
+        .tree-item span, .tree-item a {
+            font-size: 1.1rem; /* Larger font size */
+        }
+
+        @media (max-width: 768px) {
+            .root-folder-branches {
+                flex-direction: column;
+                align-items: center;
+            }
+            .root-folder-branches::after {
+                content: none;
+            }
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center px-4 md:px-6">
+
+    <!-- Header -->
+    <header class="w-full text-center py-8">
+        <h1 class="text-4xl font-bold glowing-text">Главная страница dks5</h1>
+        <p class="text-gray-600 mt-2">Обзор всех файлов, сгруппированных по темам.</p>
+        <div class="mt-4 flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-4">
+            <button id="toggleAllButton" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full shadow-lg transition-colors duration-200">
+                Развернуть каталоги
+            </button>
+            <button id="themeToggleButton" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-full shadow-colors duration-200">
+                Тёмная тема
+            </button>
+        </div>
+    </header>
+
+    <!-- Content container -->
+    <div class="w-full max-w-5xl p-6 card">
+        <!-- Tree View container -->
+        <div class="tree-view-container">
+            <!-- Root Folder -->
+            <div class="root-folder-item">
+                <span class="icon">🏠</span>
+                <span class="label">[https://dks5.github.io/]</span>
+            </div>
+            
+            <!-- Branches -->
+            <div class="root-folder-branches flex flex-wrap justify-center">
+                <!-- Data for dynamic rendering -->
+                <div id="folderData" class="hidden">
+                    <div data-folder="dks5.github.io">
+                        <div data-file="anotherfile.html">anotherfile.html</div>
+                    </div>
+                    <div data-folder="tools">
+                        <div data-file="simple-win-activate.html">simple-win-activate.html</div>
+                        <div data-file="easy-xray-install.html">easy-xray-install.html</div>
+                        <div data-file="xray-core-bash-script.html">xray-core-bash-script.html</div>
+                        <div data-file="openvpn-installer-handbook.html">openvpn-installer-handbook.html</div>
+                        <div data-file="create-home-github-pages.html">create-home-github-pages.html</div>
+                    </div>
+                    <div data-folder="web-projects">
+                        <div data-file="my-site.html">my-site.html</div>
+                        <div data-file="HTML-publisher.html">HTML-publisher.html</div>
+                        <div data-file="PrivatePageViewer.html">PrivatePageViewer.html</div>
+                        <div data-file="BootstrapHTMLwebsiteTutorial.html">BootstrapHTMLwebsiteTutorial.html</div>
+                        <div data-file="avatar-creator.html">avatar-creator.html</div>
+                        <div data-file="1.html">1.html</div>
+                    </div>
+                    <div data-folder="docs">
+                        <div data-file="SSL-Cert-StepByStep.html">SSL-Cert-StepByStep.html</div>
+                        <div data-file="eurokappa-report.html">eurokappa-report.html</div>
+                        <div data-file="ESUOT.html">ESUOT.html</div>
+                    </div>
+                    <div data-folder="peptides">
+                        <div data-file="PeptideHandbook.html">PeptideHandbook.html</div>
+                        <div data-file="Tirzepatide.html">Tirzepatide.html</div>
+                        <div data-file="Retatrutide-LY3437943.html">Retatrutide-LY3437943.html</div>
+                    </div>
+                    <div data-folder="china">
+                        <div data-file="Alipay-DIDI.html">Alipay-DIDI.html</div>
+                        <div data-file="china-taxi-alipay.html">china-taxi-alipay.html</div>
+                    </div>
+                    <div data-folder="whisper">
+                        <div data-file="WhisperTranscribe.html">WhisperTranscribe.html</div>
+                        <div data-file="Whisper-Installer-Windows.html">Whisper-Installer-Windows.html</div>
+                        <div data-file="Whisper-Installer-Macbook.html">Whisper-Installer-Macbook.html</div>
+                    </div>
+                    <div data-folder="html-prompts">
+                        <div data-file="index-dot-html-explained.html">index-dot-html-explained.html</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="w-full text-center text-gray-500 text-sm mt-8">
+        <p>&copy; 2025. Все права защищены.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const rootHtml = document.documentElement;
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+            const branchesContainer = document.querySelector('.root-folder-branches');
+            const folderDataContainer = document.getElementById('folderData');
+            const toggleAllButton = document.getElementById('toggleAllButton');
+            const themeToggleButton = document.getElementById('themeToggleButton');
+
+            let isExpanded = false;
+
+            const renderFolders = (folders) => {
+                branchesContainer.innerHTML = '';
+                const numFolders = folders.length;
+                const half = Math.ceil(numFolders / 2);
+                
+                const leftBranch = document.createElement('div');
+                leftBranch.classList.add('branch');
+                const rightBranch = document.createElement('div');
+                rightBranch.classList.add('branch');
+                
+                folders.forEach((folder, index) => {
+                    const branch = index < half ? leftBranch : rightBranch;
+                    const folderDiv = document.createElement('div');
+                    folderDiv.classList.add('tree-item', 'folder');
+                    folderDiv.innerHTML = `<span class="folder-icon">
+                                            <span class="toggle-icon">+</span>
+                                            📁
+                                        </span>
+                                        <span>[${folder.name}]</span>`;
+                    
+                    const contentDiv = document.createElement('div');
+                    contentDiv.classList.add('folder-content');
+                    folder.files.forEach(file => {
+                        const fileDiv = document.createElement('div');
+                        fileDiv.classList.add('tree-item', 'file');
+                        fileDiv.innerHTML = `<span class="file-icon">📄</span><a href="https://dks5.github.io/${folder.name}/${file.name}">${file.name}</a>`;
+                        contentDiv.appendChild(fileDiv);
+                    });
+                    
+                    branch.appendChild(folderDiv);
+                    branch.appendChild(contentDiv);
+                });
+                
+                branchesContainer.appendChild(leftBranch);
+                branchesContainer.appendChild(rightBranch);
+            };
+
+            const getFolderData = () => {
+                const folders = [];
+                Array.from(folderDataContainer.children).forEach(folderEl => {
+                    const folderName = folderEl.dataset.folder;
+                    const files = [];
+                    Array.from(folderEl.children).forEach(fileEl => {
+                        const fileName = fileEl.dataset.file;
+                        files.push({
+                            name: fileEl.textContent,
+                            href: fileEl.dataset.file
+                        });
+                    });
+                    folders.push({ name: folderName, files: files });
+                });
+                return folders;
+            };
+
+            const folders = getFolderData();
+            renderFolders(folders);
+            
+            // --- Theme Toggle Logic ---
+            const currentTheme = localStorage.getItem('theme');
+            if (currentTheme === 'dark' || (!currentTheme && prefersDark.matches)) {
+                rootHtml.classList.add('dark');
+                themeToggleButton.textContent = 'Светлая тема';
+            } else {
+                themeToggleButton.textContent = 'Тёмная тема';
+            }
+            
+            prefersDark.addEventListener('change', (e) => {
+                if (!localStorage.getItem('theme')) {
+                    if (e.matches) {
+                        rootHtml.classList.add('dark');
+                    } else {
+                        rootHtml.classList.remove('dark');
+                    }
+                    themeToggleButton.textContent = rootHtml.classList.contains('dark') ? 'Светлая тема' : 'Тёмная тема';
+                }
+            });
+            
+            themeToggleButton.addEventListener('click', () => {
+                rootHtml.classList.toggle('dark');
+                if (rootHtml.classList.contains('dark')) {
+                    localStorage.setItem('theme', 'dark');
+                    themeToggleButton.textContent = 'Светлая тема';
+                } else {
+                    localStorage.setItem('theme', 'light');
+                    themeToggleButton.textContent = 'Тёмная тема';
+                }
+            });
+            
+            // --- Folder Management Logic ---
+            const toggleFolder = (item, expand = null) => {
+                const content = item.nextElementSibling;
+                if (!content || !content.classList.contains('folder-content')) return;
+
+                const isCurrentlyExpanded = item.classList.contains('expanded');
+                const willExpand = (expand === true) || (expand === null && !isCurrentlyExpanded);
+
+                const toggleIcon = item.querySelector('.toggle-icon');
+
+                if (willExpand) {
+                    content.style.display = 'block';
+                    item.classList.add('expanded');
+                    toggleIcon.textContent = '-';
+                } else {
+                    content.style.display = 'none';
+                    item.classList.remove('expanded');
+                    toggleIcon.textContent = '+';
+                }
+            };
+            
+            const folderItems = document.querySelectorAll('.tree-item.folder');
+            folderItems.forEach(item => {
+                const toggleIconContainer = item.querySelector('.folder-icon');
+                if (toggleIconContainer) {
+                    toggleIconContainer.addEventListener('click', (event) => {
+                        event.stopPropagation();
+                        toggleFolder(item);
+                    });
+                }
+                toggleFolder(item, false);
+            });
+            
+            toggleAllButton.addEventListener('click', () => {
+                isExpanded = !isExpanded;
+                const allFolders = document.querySelectorAll('.tree-item.folder');
+                if (isExpanded) {
+                    allFolders.forEach(item => toggleFolder(item, true));
+                    toggleAllButton.textContent = 'Свернуть все';
+                } else {
+                    allFolders.forEach(item => toggleFolder(item, false));
+                    toggleAllButton.textContent = 'Развернуть каталоги';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
