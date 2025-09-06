@@ -82,9 +82,11 @@
       margin-bottom: 16px;
     }
 
+    /* Исправление: делаем круги идеально круглыми на любом экране */
     .step-number {
-      width: 40px;
-      height: 40px;
+      /* Используем 'aspect-ratio' для сохранения соотношения 1:1 */
+      aspect-ratio: 1 / 1;
+      
       display: flex;
       justify-content: center;
       align-items: center;
@@ -94,6 +96,20 @@
       font-weight: 700;
       margin-right: 16px;
       box-shadow: 0 0 10px var(--accent-glow);
+      
+      /* Устанавливаем фиксированный размер для десктопа */
+      width: 40px;
+      min-width: 40px;
+      max-width: 40px;
+    }
+
+    /* Сжатие кругов на мобильных устройствах, сохраняя пропорции */
+    @media (max-width: 768px) {
+        .step-number {
+            width: 30px;
+            min-width: 30px;
+            max-width: 30px;
+        }
     }
 
     .step-text {
@@ -211,11 +227,6 @@
       .section-title {
         font-size: 1.5rem;
       }
-      .step-number {
-        width: 30px;
-        height: 30px;
-        font-size: 1rem;
-      }
       .step-text {
         font-size: 1rem;
       }
@@ -231,7 +242,7 @@
     <h1 class="header-title">
       Полное руководство по веб-парсингу на Python
     </h1>
-
+    
     <div class="card">
       <p class="text-lg text-gray-300">
         Этот документ содержит пошаговую инструкцию по созданию работающего веб-скрипта. Мы рассмотрим несколько подходов, решим самые распространенные проблемы и научимся сохранять данные в файл.
@@ -408,7 +419,7 @@ pip install requests beautifulsoup4
         <div class="step-number">4</div>
         <p class="step-text text-gray-200">Код для парсинга одной страницы</p>
       </div>
-      <p class="text-gray-400">Вставьте этот код в файл `main.py` в вашей папке `web_scraping`. Он отправит HTTP-запрос на указанный URL, получит HTML-код страницы и извлечет все элементы с классом "message-text".</p>
+      <p class="text-gray-400">Вставьте этот код в файл `main.py` в вашей папке `web_scraping`. Он отправит HTTP-запрос на указанный URL, получит HTML-кода страницы и извлечет все элементы с классом "message-text".</p>
       <div class="code-block">
         <button class="copy-btn" onclick="copyCode(this)">
             <svg width="20" height="20" viewBox="0 0 60 60" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
