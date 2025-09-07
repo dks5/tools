@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Активация Windows</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #337ab7;
+        }
+        .instruction-step {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+        .command-block {
+            background-color: #e0f7fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #b2ebf2;
+        }
+        .command {
+            font-family: monospace;
+            font-size: 1em;
+            color: #00796b;
+            margin-right: 10px;
+            flex-grow: 1;
+        }
+        .copy-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.9em;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .copy-button:hover {
+            background-color: #45a049;
+        }
+        .note {
+            color: #777;
+            font-size: 0.9em;
+            margin-top: 10px;
+            font-style: italic;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Активация Windows</h1>
+
+        <div class="instruction-step">
+            <p><span class="success">✅</span> Этим ключом 13/12/2023 активировал W10</p>
+            <p class="note">Обратите внимание, что данный ключ был использован ранее и может не подойти для новой активации.</p>
+        </div>
+
+        <h2>Инструкция по активации Windows через командную строку</h2>
+
+        <div class="instruction-step">
+            <p><strong>Шаг 1:</strong> Запустите командную строку от имени администратора.</p>
+            <p>Для этого:</p>
+            <ul>
+                <li>Нажмите правой кнопкой мыши на кнопку "Пуск".</li>
+                <li>Выберите "Windows PowerShell (администратор)" или "Командная строка (администратор)".</li>
+                <li>Если появится запрос контроля учетных записей пользователей, нажмите "Да".</li>
+            </ul>
+        </div>
+
+        <div class="instruction-step">
+            <p><strong>Шаг 2:</strong> Введите поочередно следующие команды. После ввода каждой команды нажимайте клавишу <kbd>Enter</kbd>.</p>
+
+            <div class="command-block">
+                <span class="command">slmgr /ipk W269N-WFGWX-YVC9B-4J6C9-T83GX</span>
+                <button class="copy-button" onclick="copyToClipboard('slmgr /ipk W269N-WFGWX-YVC9B-4J6C9-T83GX')">Копировать</button>
+            </div>
+
+            <div class="command-block">
+                <span class="command">slmgr /skms kms.digiboy.ir</span>
+                <button class="copy-button" onclick="copyToClipboard('slmgr /skms kms.digiboy.ir')">Копировать</button>
+            </div>
+
+            <div class="command-block">
+                <span class="command">slmgr /ato</span>
+                <button class="copy-button" onclick="copyToClipboard('slmgr /ato')">Копировать</button>
+            </div>
+
+            <p class="note">Каждая команда выполняет определенное действие:</p>
+            <ul>
+                <li><code>slmgr /ipk [ключ продукта]</code> - устанавливает ключ продукта.</li>
+                <li><code>slmgr /skms [KMS-сервер]</code> - устанавливает имя или IP-адрес KMS-сервера.</li>
+                <li><code>slmgr /ato</code> - активирует Windows, обращаясь к KMS-серверу.</li>
+            </ul>
+        </div>
+
+        <div class="instruction-step">
+            <p><strong>Шаг 3:</strong> Дождитесь сообщения об успешной активации Windows.</p>
+            <p>После выполнения команды <code>slmgr /ato</code> вы должны увидеть сообщение, подтверждающее успешную активацию.</p>
+        </div>
+
+        <p class="note"><strong>Важно:</strong> Для успешной активации ваш компьютер должен быть подключен к интернету, чтобы иметь возможность связаться с указанным KMS-сервером.</p>
+    </div>
+
+    <script>
+        function copyToClipboard(text) {
+            const tempInput = document.createElement('input');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            alert('Команда скопирована в буфер обмена!');
+        }
+    </script>
+</body>
+</html>
