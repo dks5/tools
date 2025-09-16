@@ -419,6 +419,22 @@
             return pdf.output('blob');
         };
 
+        const fetchWithRetry = async (url, options, retries = 3) => {
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return await response.json();
+                } catch (error) {
+                    console.error(`Attempt ${i + 1} failed:`, error);
+                    if (i === retries - 1) throw error;
+                    await new Promise(resolve => setTimeout(resolve, Math.pow(2, i) * 1000)); // Exponential backoff
+                }
+            }
+        };
+
         // --- Main Generation Logic ---
         generateBtn.addEventListener('click', async () => {
             generateBtn.disabled = true;
@@ -478,12 +494,12 @@
                         const apiKey = "";
                         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
 
-                        const response = await fetch(apiUrl, {
+                        const result = await fetchWithRetry(apiUrl, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(payload)
                         });
-                        const result = await response.json();
+
                         if (result.predictions && result.predictions.length > 0 && result.predictions[0].bytesBase64Encoded) {
                             return `data:image/jpeg;base64,${result.predictions[0].bytesBase64Encoded}`;
                         }
@@ -502,12 +518,12 @@
                         const apiKey = "";
                         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
 
-                        const response = await fetch(apiUrl, {
+                        const result = await fetchWithRetry(apiUrl, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(payload)
                         });
-                        const result = await response.json();
+
                         if (result.predictions && result.predictions.length > 0 && result.predictions[0].bytesBase64Encoded) {
                             return `data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`;
                         }
@@ -526,12 +542,12 @@
                         const apiKey = "";
                         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
 
-                        const response = await fetch(apiUrl, {
+                        const result = await fetchWithRetry(apiUrl, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(payload)
                         });
-                        const result = await response.json();
+
                         if (result.predictions && result.predictions.length > 0 && result.predictions[0].bytesBase64Encoded) {
                             return `data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`;
                         }
