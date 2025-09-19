@@ -97,8 +97,8 @@
             border-radius: 0.5rem;
             padding: 1rem;
             font-family: 'Courier New', Courier, monospace;
-            white-space: pre-wrap; /* Обеспечивает перенос текста */
-            word-wrap: break-word; /* Обеспечивает перенос длинных слов */
+            white-space: pre-wrap;
+            word-wrap: break-word;
         }
         
         .code-container {
@@ -133,16 +133,22 @@
             flex-grow: 1;
         }
 
-        .theory-content p {
+        .theory-content p, .faq-content p, .data-content p, .data-content ul {
             line-height: 1.8;
             margin-bottom: 1rem;
         }
         
-        .theory-content h3 {
+        .theory-content h4, .faq-content h4, .data-content h4 {
             margin-top: 2rem;
             margin-bottom: 1rem;
             border-bottom: 2px solid #007bff;
             padding-bottom: 0.5rem;
+        }
+        
+        .theory-content h5, .faq-content h5, .data-content h5 {
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #d1d5db;
         }
 
         .modal-overlay {
@@ -196,6 +202,12 @@
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="theory-tab" data-bs-toggle="tab" data-bs-target="#theory" type="button" role="tab" aria-controls="theory" aria-selected="false">Теория</button>
                         </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="faq-tab" data-bs-toggle="tab" data-bs-target="#faq" type="button" role="tab" aria-controls="faq" aria-selected="false">Вопросы и ответы</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="data-tab" data-bs-toggle="tab" data-bs-target="#data" type="button" role="tab" aria-controls="data" aria-selected="false">Данные</button>
+                        </li>
                     </ul>
 
                     <!-- Содержимое табов -->
@@ -205,7 +217,7 @@
                             <p class="text-center lead">Введите имя пользователя, репозитория и файла, чтобы сгенерировать HTML-код с прямой ссылкой на изображение.</p>
                             <!-- Блок конфигурации переменных -->
                             <div class="mb-4">
-                                <h2 class="h4 mb-3">Конфигурация переменных</h2>
+                                <h4 class="mb-3">Конфигурация переменных</h4>
                                 <div class="row g-3">
                                     <div class="col-md-6">
                                         <label for="userName" class="form-label">Имя пользователя (переменная #1):</label>
@@ -222,20 +234,32 @@
                                 </div>
                             </div>
 
-                            <!-- Блок с динамическим URL -->
+                            <!-- Блок с динамическими URL -->
                             <div class="mb-4">
-                                <h3 class="h5">Сгенерированный URL-адрес:</h3>
-                                <div class="code-container">
-                                    <button class="copy-btn" onclick="copyCode('urlCodeBlock')">
-                                        <i class="bi bi-clipboard"></i>
-                                    </button>
-                                    <pre id="urlCodeBlock" class="code-style"></pre>
+                                <h4 class="mb-3">Сгенерированные URL-адреса:</h4>
+                                <div class="mb-3">
+                                    <label class="form-label">Ссылка для встраивания (raw):</label>
+                                    <div class="code-container">
+                                        <button class="copy-btn" onclick="copyCode('rawUrlCodeBlock')">
+                                            <i class="bi bi-clipboard"></i>
+                                        </button>
+                                        <pre id="rawUrlCodeBlock" class="code-style"></pre>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="form-label">Путь к файлу на GitHub:</label>
+                                    <div class="code-container">
+                                        <button class="copy-btn" onclick="copyCode('githubUrlCodeBlock')">
+                                            <i class="bi bi-clipboard"></i>
+                                        </button>
+                                        <pre id="githubUrlCodeBlock" class="code-style"></pre>
+                                    </div>
                                 </div>
                             </div>
-                            
+
                             <!-- Блок для сохранения и загрузки профилей -->
                             <div class="mb-4">
-                                <h3 class="h5">Профили</h3>
+                                <h4 class="mb-3">Профили</h4>
                                 <!-- Новая структура с сеткой для выравнивания кнопок -->
                                 <div class="row g-2 align-items-center">
                                     <!-- Выпадающий список и кнопка загрузки -->
@@ -255,7 +279,7 @@
 
                             <!-- Инструкция -->
                             <div class="mb-4">
-                                <h2 class="h4 mb-3">Инструкция</h2>
+                                <h4 class="mb-3">Инструкция</h4>
                                 <p>После того как вы настроили переменные выше, скопируйте следующий HTML-код, чтобы вставить изображение на свою страницу.</p>
                                 
                                 <div class="code-container">
@@ -283,24 +307,24 @@
 
                         <!-- Вкладка "Теория" -->
                         <div class="tab-pane fade theory-content" id="theory" role="tabpanel" aria-labelledby="theory-tab">
-                            <h2 class="h4 mb-3">Что такое `raw.githubusercontent.com`?</h2>
+                            <h4 class="mb-3">Что такое `raw.githubusercontent.com`?</h4>
                             <p>
                                 `https://raw.githubusercontent.com/` — это специальный домен, который GitHub использует для выдачи <b>«сырого»</b> (raw) содержимого файлов из репозиториев.
                             </p>
                             
                             <hr class="my-4">
 
-                            <h3 class="h5">В чём разница между `github.com` и `raw.githubusercontent.com`?</h3>
+                            <h5 class="h5">В чём разница между `github.com` и `raw.githubusercontent.com`?</h5>
                             <p>
                                 Когда вы открываете файл, например, изображение, на сайте `github.com`, вы видите не только само изображение, но и всю веб-страницу GitHub вокруг него: заголовок репозитория, кнопки, комментарии и т.д. Этот путь предназначен для <b>просмотра</b> файла в веб-интерфейсе.
                             </p>
                             <p>
                                 Когда вы используете путь с `raw.githubusercontent.com`, вы получаете доступ к самому файлу <b>без какого-либо форматирования или окружения GitHub</b>. Браузер сразу видит, что это файл изображения, и может использовать его напрямую. Это идеальный способ для встраивания изображений, CSS-стилей или JavaScript-файлов в другие веб-страницы.
-                                                            </p>
+                            </p>
                             
                             <hr class="my-4">
 
-                            <h3 class="h5">Структура URL-адреса</h3>
+                            <h5 class="h5">Структура URL-адреса</h5>
                             <p>
                                 Путь имеет чёткую структуру, которую мы используем в нашей инструкции:
                             </p>
@@ -312,6 +336,118 @@
                                 <li><b>`имя-файла`</b> — полный путь к файлу в репозитории.</li>
                             </ul>
                         </div>
+                        
+                        <!-- Вкладка "Вопросы и ответы" -->
+                        <div class="tab-pane fade faq-content" id="faq" role="tabpanel" aria-labelledby="faq-tab">
+                            <h4 class="mb-3">Вопросы и ответы</h4>
+                            
+                            <h5 class="h5">Где должен находиться мой файл? На `raw.githubusercontent.com` или на `github.com`?</h5>
+                            <p>
+                                Ваш файл должен находиться в репозитории на <b>`github.com`</b>. Это платформа, где вы храните свои проекты.
+                            </p>
+                            <p>
+                                Путь <b>`https://raw.githubusercontent.com/`</b> — это не место для хранения, а специальный адрес для **получения** этого файла напрямую, без веб-интерфейса GitHub. Именно эту ссылку нужно использовать для вставки изображений на другие веб-страницы.
+                            </p>
+
+                            <hr class="my-4">
+
+                            <h5 class="h5">Что означает `blob` в пути к файлу?</h5>
+                            <p>
+                                <b>`blob`</b> в пути к файлу на GitHub — это сокращение от <b>"Binary Large Object"</b> (двоичный большой объект). Когда вы видите `.../blob/main/...`, это означает, что вы просматриваете <b>содержимое файла</b> в веб-интерфейсе GitHub. Это часть адреса, которую GitHub добавляет автоматически для отображения файла на своей странице.
+                            </p>
+
+                            <hr class="my-4">
+
+                            <h5 class="h5">Почему в URL, который я ввожу, нет `blob`?</h5>
+                            <p>
+                                Вы не указываете `blob` самостоятельно, потому что это не часть пути к вашему файлу в репозитории. `blob` — это часть веб-адреса, которую GitHub автоматически добавляет, чтобы показать вам содержимое файла. Вы работаете с фактической структурой репозитория, а GitHub сам формирует полный URL для просмотра.
+                            </p>
+                            
+                            <hr class="my-4">
+
+                            <h5 class="h5">Почему имя репозитория в URL меняется, а `blob` — нет?</h5>
+                            <p>
+                                <b>`blob`</b> — это постоянная часть адреса, которая показывает, что вы просматриваете содержимое файла. Она <b>не меняется</b>. Когда вы вводите название своего репозитория, меняется именно эта часть адреса. Они находятся в разных частях URL и служат для разных целей.
+                            </p>
+
+                            <hr class="my-4">
+
+                            <h5 class="h5">Используется ли `blob` при просмотре HTML-страницы?</h5>
+                            <p>
+                                Нет, когда вы просматриваете HTML-страницу как полноценный веб-сайт (например, через GitHub Pages), часть `blob` в пути **не используется**. Она нужна только для просмотра исходного кода файла в интерфейсе GitHub.
+                            </p>
+                            
+                            <hr class="my-4">
+
+                            <h5 class="h5">Что будет, если я переименую или перемещу файл изображения?</h5>
+                            <p>
+                                К сожалению, ссылка перестанет работать. URL-адрес, который мы генерируем, напрямую зависит от точного пути к файлу в вашем репозитории. Если вы переименуете файл или переместите его в другую папку, вам придётся обновить и ссылку в своём HTML-коде, чтобы она указывала на новое местоположение.
+                            </p>
+
+                            <hr class="my-4">
+
+                            <h5 class="h5">Почему моё изображение не отображается на странице?</h5>
+                            <p>
+                                Есть несколько распространённых причин:
+                            </p>
+                            <ul>
+                                <li><b>Неправильный путь:</b> Убедитесь, что вы правильно ввели имя пользователя, репозитория и файла. Регистр символов имеет значение!</li>
+                                <li><b>Неправильная ветка:</b> Убедитесь, что ваш файл находится в ветке <code>main</code> (или <code>master</code>), как указано в URL-адресе.</li>
+                                <li><b>Файл не закоммичен:</b> Если вы только что добавили файл в репозиторий, но не закоммитили и не отправили изменения (<code>commit</code>, <code>push</code>), он не будет доступен по ссылке.</li>
+                            </ul>
+                            
+                            <hr class="my-4">
+
+                            <h5 class="h5">Что будет, если я открою эту HTML-страницу в другом браузере?</h5>
+                            <p>
+                                Поскольку данные профилей хранятся локально в вашем браузере с помощью технологии <b>`localStorage`</b>, они **не будут доступны** в другом браузере. `localStorage` изолирован для каждого браузера. Если вы откроете страницу в другом браузере или на другом устройстве, список профилей будет пустым.
+                            </p>
+                             <p>
+                                Если вам нужно перенести профили на другой компьютер или в другой браузер, используйте функцию **«Экспорт в JSON»** на вкладке «Инструкция». Вы получите файл, который можно сохранить на компьютере. Затем вы сможете загрузить этот файл в новом браузере, чтобы восстановить все профили.
+                            </p>
+                        </div>
+                        
+                        <!-- Вкладка "Данные" -->
+                        <div class="tab-pane fade data-content" id="data" role="tabpanel" aria-labelledby="data-tab">
+                            <h4 class="mb-3">Управление данными</h4>
+                            <p>
+                                Приложение использует два разных способа сохранения данных, которые служат для разных целей. Важно понимать их различия.
+                            </p>
+
+                            <hr class="my-4">
+
+                            <h5 class="h5">1. Профили (Локальное хранилище в браузере)</h5>
+                            <p>
+                                Профили, которые вы сохраняете с помощью кнопки **«Сохранить»**, хранятся в вашем браузере с помощью технологии **`localStorage`**. Это встроенная функция, которая позволяет веб-сайтам сохранять небольшие объёмы данных прямо на вашем компьютере.
+                            </p>
+                            <ul>
+                                <li>**Цель:** Сохранение данных для быстрого доступа в текущем браузере.</li>
+                                <li>**Формат:** Данные сохраняются в виде **JSON-объекта** и остаются доступными даже после закрытия страницы или браузера.</li>
+                                <li>**Доступность:** Эти данные **не будут доступны** в другом браузере или на другом устройстве. `localStorage` полностью изолирован для каждого браузера.</li>
+                            </ul>
+                            
+                            <hr class="my-4">
+
+                            <h5 class="h5">2. Экспорт в JSON-файл (Портативное хранилище)</h5>
+                            <p>
+                                Кнопка **«Экспорт в JSON»** служит для другой цели. Она берёт текущие данные из полей ввода и сохраняет их в виде файла с расширением `.json`, который вы можете загрузить на свой компьютер.
+                            </p>
+                            <ul>
+                                <li>**Цель:** Обеспечение **переносимости** данных. Этот файл можно использовать для резервного копирования или для переноса информации на другой компьютер, в другой браузер или даже для обмена с другими пользователями.</li>
+                                <li>**Формат:** Стандартный текстовый файл **JSON**.</li>
+                                <li>**Доступность:** Файл сохраняется на вашем компьютере, и вы можете использовать его где угодно. Он не привязан к конкретному браузеру.</li>
+                            </ul>
+
+                            <hr class="my-4">
+                            
+                            <h5 class="h5">Ключевое различие</h5>
+                            <p>
+                                **Локальные профили** (`localStorage`) — это данные для вашего удобства, которые живут только в одном браузере.
+                            </p>
+                            <p>
+                                **JSON-файл** — это способ «упаковать» ваши данные для переноса и использования где угодно.
+                            </p>
+                        </div>
                     </div>
 
                 </div>
@@ -319,7 +455,19 @@
         </div>
     </div>
 
-    <!-- Custom Modal for Confirm -->
+    <!-- Модальное окно для сохранения профиля -->
+    <div id="saveProfileModal" class="modal-overlay d-none">
+        <div class="modal-content">
+            <h5 class="mb-3">Сохранить профиль как...</h5>
+            <input type="text" id="profileNameInput" class="form-control mb-3" placeholder="Введите имя профиля">
+            <div class="d-flex justify-content-center gap-3">
+                <button class="btn btn-primary" onclick="saveProfileFromModal()">Сохранить</button>
+                <button class="btn btn-outline-secondary" onclick="hideSaveModal()">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно для подтверждения удаления -->
     <div id="confirmModal" class="modal-overlay d-none">
         <div class="modal-content">
             <p id="confirmMessage" class="lead"></p>
@@ -337,10 +485,15 @@
         const userNameInput = document.getElementById('userName');
         const repoNameInput = document.getElementById('repoName');
         const fileNameInput = document.getElementById('fileName');
-        const urlCodeBlock = document.getElementById('urlCodeBlock');
+        const rawUrlCodeBlock = document.getElementById('rawUrlCodeBlock');
+        const githubUrlCodeBlock = document.getElementById('githubUrlCodeBlock');
         const codeBlock = document.getElementById('codeBlock');
         const statusMessage = document.getElementById('statusMessage');
         const profileSelect = document.getElementById('profileSelect');
+        const saveProfileModal = document.getElementById('saveProfileModal');
+        const profileNameInput = document.getElementById('profileNameInput');
+        const confirmModal = document.getElementById('confirmModal');
+        const confirmMessage = document.getElementById('confirmMessage');
 
         // Initial setup
         updateUrl();
@@ -350,9 +503,13 @@
             const userName = userNameInput.value.trim();
             const repoName = repoNameInput.value.trim();
             const fileName = fileNameInput.value.trim();
-            const url = `https://raw.githubusercontent.com/${userName}/${repoName}/main/${fileName}`;
-            urlCodeBlock.textContent = url;
-            codeBlock.textContent = `<img src="${url}" alt="Изображение" class="w-full h-auto rounded-lg shadow-md"/>`;
+
+            const rawUrl = `https://raw.githubusercontent.com/${userName}/${repoName}/main/${fileName}`;
+            const githubUrl = `https://github.com/${userName}/${repoName}/blob/main/${fileName}`;
+
+            rawUrlCodeBlock.textContent = rawUrl;
+            githubUrlCodeBlock.textContent = githubUrl;
+            codeBlock.textContent = `<img src="${rawUrl}" alt="Изображение" class="w-full h-auto rounded-lg shadow-md"/>`;
         }
 
         function copyCode(elementId) {
@@ -380,30 +537,6 @@
             setTimeout(() => {
                 statusMessage.classList.add('d-none');
             }, 3000);
-        }
-
-        function saveVariables() {
-            const data = {
-                userName: userNameInput.value,
-                repoName: repoNameInput.value,
-                fileName: fileNameInput.value
-            };
-            localStorage.setItem('ghb_image_vars', JSON.stringify(data));
-            showStatus('Переменные сохранены.', 'success');
-        }
-
-        function loadVariables() {
-            const data = localStorage.getItem('ghb_image_vars');
-            if (data) {
-                const vars = JSON.parse(data);
-                userNameInput.value = vars.userName;
-                repoNameInput.value = vars.repoName;
-                fileNameInput.value = vars.fileName;
-                updateUrl();
-                showStatus('Переменные загружены.', 'success');
-            } else {
-                showStatus('Сохранённые переменные не найдены.', 'warning');
-            }
         }
 
         function clearVariables() {
@@ -445,6 +578,53 @@
             }
         }
 
+        // Show the custom modal for saving a profile
+        function saveProfile() {
+            saveProfileModal.classList.remove('d-none');
+            profileNameInput.focus();
+        }
+
+        // Hide the custom modal for saving a profile
+        function hideSaveModal() {
+            saveProfileModal.classList.add('d-none');
+        }
+
+        // Save the profile from the custom modal
+        function saveProfileFromModal() {
+            const profileName = profileNameInput.value.trim();
+            if (profileName) {
+                const profiles = JSON.parse(localStorage.getItem('ghb_profiles') || '{}');
+                profiles[profileName] = {
+                    userName: userNameInput.value,
+                    repoName: repoNameInput.value,
+                    fileName: fileNameInput.value
+                };
+                localStorage.setItem('ghb_profiles', JSON.stringify(profiles));
+                loadProfiles();
+                hideSaveModal();
+                showStatus(`Профиль "${profileName}" сохранён.`, 'success');
+            } else {
+                showStatus('Имя профиля не может быть пустым.', 'danger');
+            }
+        }
+
+        function loadProfile() {
+            const profileName = profileSelect.value;
+            if (profileName) {
+                const profiles = JSON.parse(localStorage.getItem('ghb_profiles'));
+                const profile = profiles[profileName];
+                if (profile) {
+                    userNameInput.value = profile.userName;
+                    repoNameInput.value = profile.repoName;
+                    fileNameInput.value = profile.fileName;
+                    updateUrl();
+                    showStatus(`Профиль "${profileName}" загружен.`, 'success');
+                }
+            } else {
+                showStatus('Сначала выберите профиль для загрузки.', 'warning');
+            }
+        }
+
         let deleteProfileName = '';
 
         function showDeleteConfirm() {
@@ -454,12 +634,12 @@
                 return;
             }
             deleteProfileName = profileName;
-            document.getElementById('confirmMessage').textContent = `Вы уверены, что хотите удалить профиль "${profileName}"?`;
-            document.getElementById('confirmModal').classList.remove('d-none');
+            confirmMessage.textContent = `Вы уверены, что хотите удалить профиль "${profileName}"?`;
+            confirmModal.classList.remove('d-none');
         }
 
         function confirmAction(isConfirmed) {
-            document.getElementById('confirmModal').classList.add('d-none');
+            confirmModal.classList.add('d-none');
             if (isConfirmed && deleteProfileName) {
                 const profiles = JSON.parse(localStorage.getItem('ghb_profiles') || '{}');
                 delete profiles[deleteProfileName];
@@ -469,9 +649,6 @@
             }
             deleteProfileName = '';
         }
-
-        // Old deleteProfile function is now replaced by showDeleteConfirm and confirmAction
-        // function deleteProfile() { ... }
     </script>
 </body>
 </html>
