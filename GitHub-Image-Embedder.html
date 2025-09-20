@@ -85,10 +85,28 @@
 
         .nav-link {
             color: #e9ecef;
+            text-align: center;
         }
+        
+        .nav-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #4a5568;
+        }
+        
+        .nav-tabs .nav-item {
+            flex: 1 1 25%;
+            text-align: center;
+            /* Убрали min-width, чтобы flex-basis работал корректно */
+        }
+        
         .nav-link.active {
-            background-color: #007bff !important;
-            color: #fff !important;
+            background-color: transparent !important;
+            color: #007bff !important;
+            border-bottom: 3px solid #007bff;
+        }
+        .nav-link:hover {
+            color: #007bff !important;
         }
 
         .code-style {
@@ -203,18 +221,18 @@
                     <hr class="my-4">
 
                     <!-- Табы -->
-                    <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="instructions-tab" data-bs-toggle="tab" data-bs-target="#instructions" type="button" role="tab" aria-controls="instructions" aria-selected="true">Инструкция</button>
+                    <ul class="nav nav-tabs mb-4 justify-content-center" id="myTab" role="tablist">
+                        <li class="nav-item d-flex flex-grow-1" role="presentation">
+                            <button class="nav-link active flex-grow-1" id="instructions-tab" data-bs-toggle="tab" data-bs-target="#instructions" type="button" role="tab" aria-controls="instructions" aria-selected="true">Инструкция</button>
                         </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="theory-tab" data-bs-toggle="tab" data-bs-target="#theory" type="button" role="tab" aria-controls="theory" aria-selected="false">Теория</button>
+                        <li class="nav-item d-flex flex-grow-1" role="presentation">
+                            <button class="nav-link flex-grow-1" id="theory-tab" data-bs-toggle="tab" data-bs-target="#theory" type="button" role="tab" aria-controls="theory" aria-selected="false">Теория</button>
                         </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="faq-tab" data-bs-toggle="tab" data-bs-target="#faq" type="button" role="tab" aria-controls="faq" aria-selected="false">Вопросы и ответы</button>
+                        <li class="nav-item d-flex flex-grow-1" role="presentation">
+                            <button class="nav-link flex-grow-1" id="faq-tab" data-bs-toggle="tab" data-bs-target="#faq" type="button" role="tab" aria-controls="faq" aria-selected="false">Вопросы и ответы</button>
                         </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="data-tab" data-bs-toggle="tab" data-bs-target="#data" type="button" role="tab" aria-controls="data" aria-selected="false">Данные</button>
+                        <li class="nav-item d-flex flex-grow-1" role="presentation">
+                            <button class="nav-link flex-grow-1" id="data-tab" data-bs-toggle="tab" data-bs-target="#data" type="button" role="tab" aria-controls="data" aria-selected="false">Данные</button>
                         </li>
                     </ul>
 
