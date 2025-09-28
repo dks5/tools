@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Руководство по установке и управлению Xray</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --border-color: rgba(139, 92, 246, 0.2);
+            --text-main: #e6edf3;
+            --text-secondary: #7d8590;
+            --gradient: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            --glow-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+            --glow-shadow-hover: 0 0 30px rgba(99, 102, 241, 0.6);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        /* --- Navigation --- */
+        .main-nav {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background-color: rgba(22, 27, 34, 0.8);
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+        
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-main);
+            text-decoration: none;
+        }
+        
+        .nav-logo .icon {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-right: 0.5rem;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 1rem;
+            list-style: none;
+        }
+
+        .nav-tabs .nav-link {
+            color: var(--text-secondary);
+            font-weight: 500;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: color 0.3s, background-color 0.3s;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .nav-tabs .nav-link:hover {
+            color: var(--text-main);
+        }
+
+        .nav-tabs .nav-link.active {
+            color: var(--text-main);
+            background: var(--gradient);
+            box-shadow: var(--glow-shadow);
+        }
+        
+        /* --- Card --- */
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--glow-shadow-hover);
+        }
+
+        .card-header {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* --- Code Block --- */
+        .code-block {
+            position: relative;
+            background-color: #0d1117;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.25rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+        }
+
+        .code-block pre {
+            text-align: left;
+            margin: 0;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        
+        .code-block pre code {
+             color: var(--text-secondary);
+        }
+
+        #installation-script .highlight {
+            background-color: rgba(139, 92, 246, 0.2);
+            color: #f0f6fc;
+            font-weight: 500;
+            border-radius: 3px;
+            padding: 0.1em 0.3em;
+        }
+
+        #installation-script .highlight-yellow {
+            background-color: rgba(253, 242, 148, 0.2);
+            color: #fde047;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background-color: #21262d;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 0.3rem 0.6rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            color: var(--text-main);
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+        
+        /* --- Prompt Content Styling --- */
+        .prompt-content p, .prompt-content li {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        .prompt-content p { margin-bottom: 1rem; }
+        .prompt-content strong { color: var(--text-main); }
+        .prompt-content ul { list-style-position: inside; padding-left: 1rem; margin-bottom: 1rem; }
+        .prompt-content ul ul { margin-top: 0.5rem; padding-left: 1.5rem; }
+
+
+        /* --- Tabs --- */
+        .tab-pane { display: none; }
+        .tab-pane.active { display: block; }
+        
+        /* --- Scroll Animation --- */
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .scroll-animate.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* --- Accordion --- */
+        .accordion-item {
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        .accordion-header button {
+            background: var(--gradient);
+            color: white;
+            font-weight: 500;
+            border-radius: 8px;
+            width: 100%;
+            text-align: left;
+            padding: 1rem;
+            border: none;
+            cursor: pointer;
+        }
+        .accordion-content { padding: 1.5rem; display: none; }
+        .accordion-content p { color: var(--text-secondary); margin-bottom: 1rem; }
+        .accordion-item.active .accordion-content { display: block; }
+        
+        /* Utility */
+        h2 { margin-bottom: 1.5rem; }
+        p { color: var(--text-secondary); line-height: 1.6; }
+        .list-group-item { margin-bottom: 1rem; }
+        .form-label { display: block; margin-bottom: 0.5rem; color: var(--text-main); }
+        .form-select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background-color: #0d1117;
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+        .table { width: 100%; border-collapse: collapse; }
+        .table th, .table td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--border-color); }
+        .table thead { background-color: #161b22; }
+        :not(pre) > code { font-family: 'JetBrains Mono', monospace; background-color: rgba(139, 92, 246, 0.1); padding: 0.2em 0.4em; border-radius: 6px; color: #c9d1d9; }
+
+        /* --- Routing Scheme Diagram --- */
+        .routing-scheme {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: #0d1117;
+        }
+        .scheme-title {
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .scheme-flow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            text-align: center;
+        }
+        .flow-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .flow-icon {
+            font-size: 2rem;
+        }
+        .flow-icon.user { color: #3b82f6; }
+        .flow-icon.server { color: #8b5cf6; }
+        .flow-arrow {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+        }
+        .flow-box {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            border: 1px solid;
+        }
+        .flow-box.block { border-color: #f87171; background-color: rgba(248, 113, 113, 0.1); color: #f87171;}
+        .flow-box.direct { border-color: #34d399; background-color: rgba(52, 211, 153, 0.1); color: #34d399;}
+        .flow-box.proxy { border-color: #60a5fa; background-color: rgba(96, 165, 250, 0.1); color: #60a5fa;}
+        
+        .scheme-description {
+            color: var(--text-secondary);
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="main-nav">
+        <div class="nav-content">
+            <a href="#" class="nav-logo"><i class="bi bi-shield-lock-fill icon"></i>Xray Guide</a>
+            <ul class="nav-tabs" id="main-tabs">
+                <li><a class="nav-link active" data-tab="config">Конфигурация</a></li>
+                <li><a class="nav-link" data-tab="install">Установка</a></li>
+                <li><a class="nav-link" data-tab="manage">Управление</a></li>
+                <li><a class="nav-link" data-tab="routing">Модернизация</a></li>
+                <li><a class="nav-link" data-tab="prompt">ПРОМПТ</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- Tab Panes -->
+        <div id="tab-content">
+            
+            <div id="config" class="tab-pane active">
+                <div class="card scroll-animate">
+                    <h2 class="card-header">Панель быстрой конфигурации</h2>
+                    <p>Выберите параметры конфигурации. Скрипт на вкладке "Установка" будет обновлен автоматически в реальном времени.</p>
+                     <div class="list-group">
+                        <div class="list-group-item">
+                            <label for="port-select" class="form-label">Порт сервера:</label>
+                            <select id="port-select" class="form-select">
+                                <option value="443" selected>443 (Стандартный HTTPS)</option>
+                                <option value="8443">8443</option>
+                                <option value="2083">2083 (SSL cPanel)</option>
+                                <option value="2087">2087 (SSL WHM)</option>
+                            </select>
+                        </div>
+                        <div class="list-group-item">
+                            <label for="dest-select" class="form-label">Целевой домен для REALITY:</label>
+                            <select id="dest-select" class="form-select">
+                                <option value="github.com" selected>github.com</option>
+                                <option value="www.microsoft.com">www.microsoft.com</option>
+                                <option value="www.cloudflare.com">www.cloudflare.com</option>
+                            </select>
+                        </div>
+                        <div class="list-group-item">
+                            <label for="routing-select" class="form-label">Сценарий маршрутизации:</label>
+                            <select id="routing-select" class="form-select">
+                                <option value="scenario1" selected>По умолчанию (Блокировка рекламы и IP из РФ)</option>
+                                <option value="scenario2">Прямое соединение для РФ</option>
+                                <option value="scenario3">Прокси только для Google/YouTube</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Dynamic Routing Scheme Block -->
+                        <div id="routing-schemes">
+                            <div id="scheme-scenario1" class="routing-scheme">
+                                <h3 class="scheme-title">Схема: Блокировка рекламы и IP из РФ</h3>
+                                <div class="scheme-flow">
+                                    <div class="flow-item"><i class="bi bi-person-fill flow-icon user"></i><span>Вы</span></div>
+                                    <div class="flow-arrow">&rarr;</div>
+                                    <div class="flow-item"><i class="bi bi-server flow-icon server"></i><span>Прокси</span></div>
+                                    <div class="flow-arrow">&rarr;</div>
+                                    <div class="flow-item">
+                                        <div class="flow-box block">Реклама / РФ IP &rarr; Блок</div>
+                                        <div class="flow-box proxy">Остальной трафик &rarr; Интернет</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="scheme-scenario2" class="routing-scheme" style="display: none;">
+                                <h3 class="scheme-title">Схема: Прямое соединение для РФ</h3>
+                                 <div class="scheme-flow">
+                                    <div class="flow-item"><i class="bi bi-person-fill flow-icon user"></i><span>Вы</span></div>
+                                    <div class="flow-arrow">&rarr;</div>
+                                    <div class="flow-item"><i class="bi bi-server flow-icon server"></i><span>Прокси</span></div>
+                                    <div class="flow-arrow">&rarr;</div>
+                                    <div class="flow-item">
+                                        <div class="flow-box block">Реклама &rarr; Блок</div>
+                                        <div class="flow-box direct">РФ IP &rarr; Напрямую</div>
+                                        <div class="flow-box proxy">Остальной трафик &rarr; Интернет</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="scheme-scenario3" class="routing-scheme" style="display: none;">
+                                <h3 class="scheme-title">Схема: Прокси только для Google/YouTube</h3>
+                                <div class="scheme-flow">
+                                    <div class="flow-item"><i class="bi bi-person-fill flow-icon user"></i><span>Вы</span></div>
+                                    <div class="flow-arrow">&rarr;</div>
+                                    <div class="flow-item"><i class="bi bi-server flow-icon server"></i><span>Прокси</span></div>
+                                    <div class="flow-arrow">&rarr;</div>
+                                    <div class="flow-item">
+                                        <div class="flow-box block">Реклама &rarr; Блок</div>
+                                        <div class="flow-box proxy">Google/YouTube &rarr; Интернет</div>
+                                        <div class="flow-box direct">Остальной трафик &rarr; Напрямую</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="install" class="tab-pane">
+                 <div class="card scroll-animate">
+                     <h2 class="card-header">Установка и исходный скрипт</h2>
+                     <p>Для установки подключитесь к серверу по SSH, создайте файл (например, <code>install.sh</code>), вставьте в него код ниже и выполните команду <code>bash install.sh</code>.</p>
+                     <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+                        <pre><code id="installation-script"><!-- This will be populated by JavaScript --></code></pre>
+                    </div>
+                 </div>
+            </div>
+
+            <div id="manage" class="tab-pane">
+                 <div class="card scroll-animate">
+                     <h2 class="card-header">Управление сервером</h2>
+                     <p>Скрипт создает несколько удобных команд для управления пользователями. Они доступны глобально, просто введите их в терминале.</p>
+                     <div class="table-responsive">
+                         <table class="table">
+                             <thead><tr><th>Команда</th><th>Описание</th></tr></thead>
+                             <tbody>
+                                 <tr><td><code>mainuser</code></td><td>Выводит ссылку и QR-код для основного пользователя.</td></tr>
+                                 <tr><td><code>newuser</code></td><td>Запускает интерактивное создание нового пользователя.</td></tr>
+                                 <tr><td><code>rmuser</code></td><td>Показывает список пользователей и предлагает удалить одного из них.</td></tr>
+                                 <tr><td><code>sharelink</code></td><td>Генерирует ссылку/QR-код для выбранного пользователя.</td></tr>
+                                 <tr><td><code>userlist</code></td><td>Выводит список всех клиентов.</td></tr>
+                             </tbody>
+                         </table>
+                     </div>
+                 </div>
+            </div>
+            
+            <div id="routing" class="tab-pane">
+                 <div class="card scroll-animate">
+                     <h2 class="card-header">Сценарии маршрутизации</h2>
+                     <p>Измените логику работы прокси, заменив блок <code>"routing"</code> в файле <code>/usr/local/etc/xray/config.json</code>. Не забудьте перезапустить Xray: <code>systemctl restart xray</code>.</p>
+                     
+                     <div class="accordion" id="routingAccordion">
+                         <div class="accordion-item active">
+                             <h3 class="accordion-header"><button>Сценарий 1: Блокировка рекламы и IP из РФ (По умолчанию)</button></h3>
+                             <div class="accordion-content">
+                                 <p>Стандартная конфигурация. Трафик на рекламные домены и российские IP-адреса блокируется.</p>
+                                 <div class="code-block">
+                                     <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+                                     <pre><code>"routing": {
+    "domainStrategy": "IPIfNonMatch",
+    "rules": [
+        { "type": "field", "domain": ["geosite:category-ads-all"], "outboundTag": "block" },
+        { "type": "field", "ip": ["geoip:ru"], "outboundTag": "block" }
+    ]
+}</code></pre>
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="accordion-item">
+                             <h3 class="accordion-header"><button>Сценарий 2: Прямое соединение для РФ</button></h3>
+                             <div class="accordion-content">
+                                 <p>Реклама блокируется, трафик на российские IP идёт напрямую, остальной — через прокси.</p>
+                                 <div class="code-block">
+                                     <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+                                     <pre><code>"routing": {
+    "domainStrategy": "IPIfNonMatch",
+    "rules": [
+        { "type": "field", "domain": ["geosite:category-ads-all"], "outboundTag": "block" },
+        { "type": "field", "ip": ["geoip:ru"], "outboundTag": "direct" }
+    ]
+}</code></pre>
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="accordion-item">
+                             <h3 class="accordion-header"><button>Сценарий 3: Прокси только для Google/YouTube</button></h3>
+                             <div class="accordion-content">
+                                 <p>Реклама блокируется. Трафик на Google/YouTube идёт через прокси. Остальной трафик — напрямую.</p>
+                                 <div class="code-block">
+                                     <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+                                     <pre><code>"routing": {
+    "domainStrategy": "IPIfNonMatch",
+    "rules": [
+        { "type": "field", "domain": ["geosite:category-ads-all"], "outboundTag": "block" },
+        { "type": "field", "domain": ["geosite:google", "geosite:youtube"], "outboundTag": "direct" }
+    ]
+}</code></pre>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+            </div>
+
+            <div id="prompt" class="tab-pane">
+                <div class="card scroll-animate">
+                    <h2 class="card-header">Промпт для генерации</h2>
+                    <p>Этот промпт использовался для создания текущей HTML-страницы. Его можно использовать для воссоздания или модификации данного руководства.</p>
+                    <div class="prompt-content">
+                        <p><strong>Задача:</strong> Создать единый, стильный, одностраничный HTML-документ (SPA) для технической документации по установке скрипта Xray.</p>
+                        
+                        <p><strong>1. Общий стиль и дизайн (CSS):</strong></p>
+                        <ul>
+                            <li><strong>Тема:</strong> Футуристическая, тёмная.</li>
+                            <li><strong>Цветовая палитра:</strong>
+                                <ul>
+                                    <li>Фон: <code>--bg-color: #0d1117;</code></li>
+                                    <li>Фон карточек: <code>--card-bg: #161b22;</code></li>
+                                    <li>Цвет границ и акцентов: <code>--border-color: rgba(139, 92, 246, 0.2);</code></li>
+                                    <li>Основной текст: <code>--text-main: #e6edf3;</code></li>
+                                    <li>Вторичный текст: <code>--text-secondary: #7d8590;</code></li>
+                                </ul>
+                            </li>
+                            <li><strong>Градиент:</strong> Для заголовков и активных элементов используй линейный градиент от синего к фиолетовому: <code>--gradient: linear-gradient(90deg, #3b82f6, #8b5cf6);</code></li>
+                            <li><strong>Эффекты:</strong>
+                                <ul>
+                                    <li>Мягкое свечение для активных элементов и границ: <code>--glow-shadow: 0 0 20px rgba(139, 92, 246, 0.4);</code></li>
+                                    <li>Усиленное свечение и эффект подъёма для карточек при наведении курсора.</li>
+                                </ul>
+                            </li>
+                             <li><strong>Типографика:</strong>
+                                <ul>
+                                    <li>Основной шрифт: 'Inter' (без засечек).</li>
+                                    <li>Моноширинный шрифт для кода: 'JetBrains Mono'.</li>
+                                    <li>Подключить шрифты через Google Fonts.</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                        <p><strong>2. Структура и макет (HTML):</strong></p>
+                         <ul>
+                            <li><strong>Формат:</strong> Единый HTML-файл. Весь CSS и JS должны быть встроены.</li>
+                            <li><strong>Навигация:</strong>
+                                <ul>
+                                     <li>Создать "липкую" (sticky) верхнюю навигационную панель.</li>
+                                     <li>Реализовать навигацию как систему вкладок (tabs) для эмуляции SPA.</li>
+                                     <li>Вкладки: "Конфигурация", "Установка", "Управление", "Модернизация", "ПРОМПТ".</li>
+                                </ul>
+                            </li>
+                            <li><strong>Контентные блоки:</strong>
+                                 <ul>
+                                    <li>Каждый раздел должен быть обёрнут в компонент "карточка" (<code>.card</code>) с закруглёнными углами и анимированным появлением при прокрутке.</li>
+                                    <li>Блоки с кодом (<code>.code-block</code>) должны иметь тёмный фон, рамку в цвет акцента и кнопку "Копировать" (<code>&lt;button&gt;</code>).</li>
+                                </ul>
+                            </li>
+                             <li><strong>Интерактивные элементы:</strong>
+                                 <ul>
+                                    <li>В разделе "Модернизация" использовать компонент "аккордеон" для переключения между сценариями.</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                        <p><strong>3. Содержание разделов:</strong></p>
+                        <ul>
+                            <li><strong>Вкладка "Конфигурация":</strong> Информационная панель с ключевыми переменными из скрипта (<code>port</code>, <code>dest</code>, <code>serverNames</code>). Подчеркнуть, что панель не является интерактивной.</li>
+                            <li><strong>Вкладка "Установка":</strong> Разместить ПОЛНЫЙ и НЕМОДИФИЦИРОВАННЫЙ исходный bash-скрипт в блоке для кода.</li>
+                            <li><strong>Вкладка "Управление":</strong> Создать таблицу с описанием команд управления: <code>mainuser</code>, <code>newuser</code>, <code>rmuser</code>, <code>sharelink</code>, <code>userlist</code>.</li>
+                            <li><strong>Вкладка "Модернизация":</strong> Предоставить 3 готовых JSON-фрагмента для блока "routing" в виде аккордеона, как описано в исходной задаче.</li>
+                            <li><strong>Вкладка "ПРОМПТ":</strong> Текущий текст этого промпта.</li>
+                        </ul>
+
+                        <p><strong>4. Функциональность (JavaScript):</strong></p>
+                        <ul>
+                             <li>Реализовать логику переключения вкладок.</li>
+                             <li>Написать функцию для копирования содержимого блоков с кодом в буфер обмена.</li>
+                             <li>Написать логику для работы аккордеона.</li>
+                             <li>Реализовать анимацию появления элементов при скролле с помощью <code>IntersectionObserver</code>.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // --- Tab functionality ---
+        const tabs = document.getElementById('main-tabs');
+        const tabContent = document.getElementById('tab-content');
+        
+        tabs.addEventListener('click', (e) => {
+            if (e.target.classList.contains('nav-link')) {
+                const tabId = e.target.getAttribute('data-tab');
+                
+                // Update active link
+                tabs.querySelector('.active').classList.remove('active');
+                e.target.classList.add('active');
+                
+                // Update active content
+                tabContent.querySelector('.active').classList.remove('active');
+                tabContent.querySelector('#' + tabId).classList.add('active');
+            }
+        });
+        
+        // --- Copy to clipboard ---
+        function copyCode(button) {
+            const code = button.nextElementSibling.textContent; // Use textContent for better consistency
+            const textarea = document.createElement('textarea');
+            textarea.value = code;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                button.innerHTML = '<i class="bi bi-check-lg"></i>';
+            } catch (err) {
+                console.error('Failed to copy text: ', err);
+                button.innerHTML = '<i class="bi bi-x-lg"></i>'; // Optional: show an error icon
+            }
+            document.body.removeChild(textarea);
+            
+            setTimeout(() => {
+                button.innerHTML = '<i class="bi bi-clipboard"></i>';
+            }, 2000);
+        }
+        
+        // --- Accordion functionality ---
+        const accordion = document.getElementById('routingAccordion');
+        accordion.addEventListener('click', (e) => {
+             if (e.target.tagName === 'BUTTON') {
+                const item = e.target.closest('.accordion-item');
+                 // Close other items
+                 accordion.querySelectorAll('.accordion-item').forEach(otherItem => {
+                     if (otherItem !== item) otherItem.classList.remove('active');
+                 });
+                item.classList.toggle('active');
+             }
+        });
+
+        // --- Scroll animation ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.scroll-animate').forEach(el => {
+            observer.observe(el);
+        });
+
+        // --- Dynamic Script Update ---
+        const portSelect = document.getElementById('port-select');
+        const destSelect = document.getElementById('dest-select');
+        const scriptCodeElement = document.getElementById('installation-script');
+        const routingSelect = document.getElementById('routing-select');
+
+        // --- Templates ---
+
+        const bashScriptTemplate = `#!/bin/bash
+apt update
+apt install qrencode curl jq -y
+
+# Включаем bbr
+bbr=$(sysctl -a | grep net.ipv4.tcp_congestion_control)
+if [ "$bbr" = "net.ipv4.tcp_congestion_control = bbr" ]; then
+echo "bbr уже включен"
+else
+echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf
+echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.conf
+sysctl -p
+echo "bbr включен"
+fi
+
+# Устанавливаем ядро Xray
+bash -c "$(curl -4 -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
+[ -f /usr/local/etc/xray/.keys ] && rm /usr/local/etc/xray/.keys
+touch /usr/local/etc/xray/.keys
+echo "shortsid: $(openssl rand -hex 8)" >> /usr/local/etc/xray/.keys
+echo "uuid: $(xray uuid)" >> /usr/local/etc/xray/.keys
+xray x25519 >> /usr/local/etc/xray/.keys
+
+export uuid=$(cat /usr/local/etc/xray/.keys | awk -F': ' '/uuid/ {print $2}')
+export privatekey=$(cat /usr/local/etc/xray/.keys | awk -F': ' '/PrivateKey/ {print $2}')
+export shortsid=$(cat /usr/local/etc/xray/.keys | awk -F': ' '/shortsid/ {print $2}')
+
+# Создаем файл конфигурации Xray
+touch /usr/local/etc/xray/config.json
+%%JSON_CONFIG_BLOCK%%
+
+# Исполняемый файл для списка клиентов
+touch /usr/local/bin/userlist
+cat << 'EOF' > /usr/local/bin/userlist
+#!/bin/bash
+emails=($(jq -r '.inbounds[0].settings.clients[].email' "/usr/local/etc/xray/config.json"))
+
+if [[ \${#emails[@]} -eq 0 ]]; then
+    echo "Список клиентов пуст"
+    exit 1
+fi
+
+echo "Список клиентов:"
+for i in "\${!emails[@]}"; do
+    echo "$((\$i+1)). \${emails[\$i]}"
+done
+EOF
+chmod +x /usr/local/bin/userlist
+
+# исполняемый файл для ссылки основного пользователя
+touch /usr/local/bin/mainuser
+cat << 'EOF' > /usr/local/bin/mainuser
+#!/bin/bash
+protocol=$(jq -r '.inbounds[0].protocol' /usr/local/etc/xray/config.json)
+port=$(jq -r '.inbounds[0].port' /usr/local/etc/xray/config.json)
+uuid=$(cat /usr/local/etc/xray/.keys | awk -F': ' '/uuid/ {print $2}')
+pbk=$(cat /usr/local/etc/xray/.keys | awk -F': ' '/Password/ {print $2}')
+sid=$(cat /usr/local/etc/xray/.keys | awk -F': ' '/shortsid/ {print $2}')
+sni=$(jq -r '.inbounds[0].streamSettings.realitySettings.serverNames[0]' /usr/local/etc/xray/config.json)
+ip=$(timeout 3 curl -4 -s icanhazip.com)
+link="$protocol://$uuid@$ip:$port?security=reality&sni=$sni&fp=firefox&pbk=$pbk&sid=$sid&spx=/&type=tcp&flow=xtls-rprx-vision&encryption=none#vless-$ip"
+echo ""
+echo "Ссылка для подключения":
+echo "$link"
+echo ""
+echo "QR-код:"
+echo \${link} | qrencode -t ansiutf8
+EOF
+chmod +x /usr/local/bin/mainuser
+
+# Исполняемый файл для создания новых клиентов
+touch /usr/local/bin/newuser
+cat << 'EOF' > /usr/local/bin/newuser
+#!/bin/bash
+read -p "Введите имя пользователя (email): " email
+
+    if [[ -z "$email" || "$email" == *" "* ]]; then
+    echo "Имя пользователя не может быть пустым или содержать пробелы. Попробуйте снова."
+    exit 1
+    fi
+user_json=$(jq --arg email "$email" '.inbounds[0].settings.clients[] | select(.email == $email)' /usr/local/etc/xray/config.json)
+
+if [[ -z "$user_json" ]]; then
+uuid=$(xray uuid)
+jq --arg email "$email" --arg uuid "$uuid" '.inbounds[0].settings.clients += [{"email": "$email", "id": "$uuid", "flow": "xtls-rprx-vision"}]' /usr/local/etc/xray/config.json > tmp.json && mv tmp.json /usr/local/etc/xray/config.json
+systemctl restart xray
+index=$(jq --arg email "$email" '.inbounds[0].settings.clients | to_entries[] | select(.value.email == $email) | .key'  /usr/local/etc/xray/config.json)
+protocol=$(jq -r '.inbounds[0].protocol' /usr/local/etc/xray/config.json)
+port=$(jq -r '.inbounds[0].port' /usr/local/etc/xray/config.json)
+uuid=$(jq --argjson index "$index" -r '.inbounds[0].settings.clients[$index].id' /usr/local/etc/xray/config.json)
+pbk=$(cat /usr/local/etc/xray/.keys | awk -F': ' '/Password/ {print $2}')
+sid=$(cat /usr/local/etc/xray/.keys | awk -F': ' '/shortsid/ {print $2}')
+username=$(jq --argjson index "$index" -r '.inbounds[0].settings.clients[$index].email' /usr/local/etc/xray/config.json)
+sni=$(jq -r '.inbounds[0].streamSettings.realitySettings.serverNames[0]' /usr/local/etc/xray/config.json)
+ip=$(curl -4 -s icanhazip.com)
+link="$protocol://$uuid@$ip:$port?security=reality&sni=$sni&fp=firefox&pbk=$pbk&sid=$sid&spx=/&type=tcp&flow=xtls-rprx-vision&encryption=none#$username"
+echo ""
+echo "Ссылка для подключения":
+echo "$link"
+echo ""
+echo "QR-код:"
+echo \${link} | qrencode -t ansiutf8
+else
+echo "Пользователь с таким именем уже существует. Попробуйте снова." 
+fi
+EOF
+chmod +x /usr/local/bin/newuser
+
+# Исполняемый файл для удаления клиентов
+touch /usr/local/bin/rmuser
+cat << 'EOF' > /usr/local/bin/rmuser
+#!/bin/bash
+emails=($(jq -r '.inbounds[0].settings.clients[].email' "/usr/local/etc/xray/config.json"))
+
+if [[ \${#emails[@]} -eq 0 ]]; then
+    echo "Нет клиентов для удаления."
+    exit 1
+fi
+
+echo "Список клиентов:"
+for i in "\${!emails[@]}"; do
+    echo "$(($i+1)). \${emails[$i]}"
+done
+
+read -p "Введите номер клиента для удаления: " choice
+
+if ! [[ "$choice" =~ ^[0-9]+$ ]] || (( choice < 1 || choice > \${#emails[@]} )); then
+    echo "Ошибка: номер должен быть от 1 до \${#emails[@]}"
+    exit 1
+fi
+
+selected_email="\${emails[$(($choice - 1))]}"
+
+jq --arg email "$selected_email" \
+   '(.inbounds[0].settings.clients) |= map(select(.email != $email))' \
+   "/usr/local/etc/xray/config.json" > tmp && mv tmp "/usr/local/etc/xray/config.json"
+
+systemctl restart xray
+
+echo "Клиент $selected_email удалён."
+EOF
+chmod +x /usr/local/bin/rmuser
+
+# Исполняемый файл для вывода списка пользователей и создания ссылкок
+touch /usr/local/bin/sharelink
+cat << 'EOF' > /usr/local/bin/sharelink
+#!/bin/bash
+emails=($(jq -r '.inbounds[0].settings.clients[].email' /usr/local/etc/xray/config.json))
+
+for i in "\${!emails[@]}"; do
+   echo "$(($i + 1)). \${emails[$i]}"
+done
+
+read -p "Выберите клиента: " client
+
+if ! [[ "$client" =~ ^[0-9]+$ ]] || (( client < 1 || client > \${#emails[@]} )); then
+    echo "Ошибка: номер должен быть от 1 до \${#emails[@]}"
+    exit 1
+fi
+
+selected_email="\${emails[$(($client - 1))]}"
+
+
+index=$(jq --arg email "$selected_email" '.inbounds[0].settings.clients | to_entries[] | select(.value.email == $email) | .key'  /usr/local/etc/xray/config.json)
+protocol=$(jq -r '.inbounds[0].protocol' /usr/local/etc/xray/config.json)
+port=$(jq -r '.inbounds[0].port' /usr/local/etc/xray/config.json) 
+uuid=$(jq --argjson index "$index" -r '.inbounds[0].settings.clients[$index].id' /usr/local/etc/xray/config.json)
+pbk=$(cat /usr/local/etc/xray/.keys | awk -F': ' '/Password/ {print $2}')
+sid=$(cat /usr/local/etc/xray/.keys | awk -F': ' '/shortsid/ {print $2}')
+username=$(jq --argjson index "$index" -r '.inbounds[0].settings.clients[$index].email' /usr/local/etc/xray/config.json)
+sni=$(jq -r '.inbounds[0].streamSettings.realitySettings.serverNames[0]' /usr/local/etc/xray/config.json)
+ip=$(curl -4 -s icanhazip.com)
+link="$protocol://$uuid@$ip:$port?security=reality&sni=$sni&fp=firefox&pbk=$pbk&sid=$sid&spx=/&type=tcp&flow=xtls-rprx-vision&encryption=none#$username"
+echo ""
+echo "Ссылка для подключения":
+echo "$link"
+echo ""
+echo "QR-код:"
+echo \${link} | qrencode -t ansiutf8
+EOF
+chmod +x /usr/local/bin/sharelink
+
+systemctl restart xray
+
+echo "Xray-core успешно установлен"
+mainuser
+
+# Создаем файл с подсказками
+touch $HOME/help
+cat << 'EOF' > $HOME/help
+
+Команды для управления пользователями Xray:
+
+    mainuser - выводит ссылку для подключения основного пользователя
+    newuser - создает нового пользователя
+    rmuser - удаление пользователей
+    sharelink - выводит список пользователей и позволяет создать для них ссылки для подключения
+    userlist - выводит список клиентов
+
+
+
+Файл конфигурации находится по адресу:
+
+    /usr/local/etc/xray/config.json
+
+Команда для перезагрузки ядра Xray:
+
+    systemctl restart xray
+
+EOF`;
+
+        const routingRules = {
+            scenario1: `
+            {
+                "type": "field",
+                "domain": [
+                    "geosite:category-ads-all"
+                ],
+                "outboundTag": "block"
+            },
+            {
+                "type": "field",
+                "ip": [
+                    "geoip:ru"
+                ],
+                "outboundTag": "block"
+            }`,
+            scenario2: `
+            {
+                "type": "field",
+                "domain": [
+                    "geosite:category-ads-all"
+                ],
+                "outboundTag": "block"
+            },
+            {
+                "type": "field",
+                "ip": [
+                    "geoip:ru"
+                ],
+                "outboundTag": "direct"
+            }`,
+            scenario3: `
+            {
+                "type": "field",
+                "domain": [
+                    "geosite:category-ads-all"
+                ],
+                "outboundTag": "block"
+            },
+            {
+                "type": "field",
+                "domain": [
+                    "geosite:google",
+                    "geosite:youtube"
+                ],
+                "outboundTag": "direct"
+            }`
+        };
+
+        function updateScript() {
+            const port = portSelect.value;
+            const destHost = destSelect.value;
+            const routingScenario = routingSelect.value;
+            
+            // 1. Build the JSON config string
+            const primaryName = destHost;
+            const secondaryName = destHost.startsWith("www.") ? destHost.substring(4) : `www.${destHost}`;
+            const selectedRoutingRules = routingRules[routingScenario];
+
+            const jsonConfig = `{
+    "log": {
+        "loglevel": "warning"
+    },
+    "routing": {
+        "domainStrategy": "IPIfNonMatch",
+        "rules": [${selectedRoutingRules}
+        ]
+    },
+    "inbounds": [
+        {
+            "listen": "0.0.0.0",
+            "port": ${port},
+            "protocol": "vless",
+            "settings": {
+                "clients": [
+                    {
+                        "email": "main",
+                        "id": "$uuid",
+                        "flow": "xtls-rprx-vision"
+                    }
+                ],
+                "decryption": "none"
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "reality",
+                "realitySettings": {
+                    "show": false,
+                    "dest": "${destHost}:443",
+                    "xver": 0,
+                    "serverNames": [
+                        "${primaryName}",
+                        "${secondaryName}"
+                    ],
+                    "privateKey": "$privatekey",
+                    "minClientVer": "",
+                    "maxClientVer": "",
+                    "maxTimeDiff": 0,
+                    "shortIds": [
+                        "$shortsid"
+                    ]
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls"
+                ]
+            }
+        }
+    ],
+    "outbounds": [
+        { "protocol": "freedom", "tag": "direct" },
+        { "protocol": "blackhole", "tag": "block" }
+    ],
+    "policy": { "levels": { "0": { "handshake": 3, "connIdle": 180 } } }
+}`;
+
+            const jsonConfigBlock = `#--------------Начало блока JSON-конфигурации-------------
+cat << EOF > /usr/local/etc/xray/config.json
+${jsonConfig}
+EOF
+#--------------Конец блока JSON-конфигурации-------------`;
+
+            let finalScript = bashScriptTemplate.replace('%%JSON_CONFIG_BLOCK%%', jsonConfigBlock);
+
+            // 2. Apply highlighting
+            let scriptHtml = finalScript.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+            scriptHtml = scriptHtml.replace(new RegExp(`"port": ${port}`), `"port": <span class="highlight">${port}</span>`);
+            scriptHtml = scriptHtml.replace(new RegExp(`"dest": "${destHost}:443"`), `"dest": "<span class="highlight">${destHost}</span>:443"`);
+            scriptHtml = scriptHtml.replace(new RegExp(`"${primaryName}"`), `"<span class="highlight">${primaryName}</span>"`);
+            scriptHtml = scriptHtml.replace(new RegExp(`"${secondaryName}"`), `"<span class="highlight">${secondaryName}</span>"`);
+
+            const highlightedRules = `<span class="highlight">${selectedRoutingRules.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</span>`;
+            scriptHtml = scriptHtml.replace(selectedRoutingRules.replace(/</g, '&lt;').replace(/>/g, '&gt;'), highlightedRules);
+
+            scriptHtml = scriptHtml.replace(/#--------------Начало блока JSON-конфигурации-------------/g, `<span class="highlight-yellow">#--------------Начало блока JSON-конфигурации-------------</span>`);
+            scriptHtml = scriptHtml.replace(/#--------------Конец блока JSON-конфигурации-------------/g, `<span class="highlight-yellow">#--------------Конец блока JSON-конфигурации-------------</span>`);
+            
+            // 3. Display results
+            scriptCodeElement.innerHTML = scriptHtml;
+            
+            // Show the correct routing scheme diagram
+            document.querySelectorAll('.routing-scheme').forEach(scheme => {
+                scheme.style.display = 'none';
+            });
+            document.getElementById(`scheme-${routingScenario}`).style.display = 'block';
+        }
+
+        portSelect.addEventListener('change', updateScript);
+        destSelect.addEventListener('change', updateScript);
+        routingSelect.addEventListener('change', updateScript);
+
+        // Initial call to set highlighting on page load
+        updateScript();
+    </script>
+</body>
+</html>
