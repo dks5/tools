@@ -63,6 +63,16 @@
             margin: 0 auto;
         }
         
+        .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-main);
+            font-size: 2rem;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
         .nav-logo {
             font-size: 1.5rem;
             font-weight: 700;
@@ -305,6 +315,29 @@
             color: var(--text-secondary);
             margin-top: 1rem;
         }
+
+        @media (max-width: 800px) {
+            .nav-tabs {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background-color: var(--card-bg);
+                flex-direction: column;
+                padding: 1rem;
+                border-bottom: 1px solid var(--border-color);
+                box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            }
+
+            .nav-tabs.is-open {
+                display: flex;
+            }
+
+            .nav-toggle {
+                display: block;
+            }
+        }
     </style>
 </head>
 <body>
@@ -312,6 +345,7 @@
     <nav class="main-nav">
         <div class="nav-content">
             <a href="#" class="nav-logo"><i class="bi bi-shield-lock-fill icon"></i>Xray Guide</a>
+            <button class="nav-toggle" aria-label="Toggle navigation"><i class="bi bi-list"></i></button>
             <ul class="nav-tabs" id="main-tabs">
                 <li><a class="nav-link active" data-tab="config">Конфигурация</a></li>
                 <li><a class="nav-link" data-tab="install">Установка</a></li>
@@ -593,6 +627,24 @@
             }
         });
         
+        // --- Mobile Navigation ---
+        const navToggle = document.querySelector('.nav-toggle');
+        const navMenu = document.getElementById('main-tabs');
+
+        navToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('is-open');
+        });
+
+        // Close mobile menu when a link is clicked
+        navMenu.addEventListener('click', (e) => {
+            if (e.target.classList.contains('nav-link')) {
+                if (navMenu.classList.contains('is-open')) {
+                    navMenu.classList.remove('is-open');
+                }
+            }
+        });
+
+
         // --- Copy to clipboard ---
         function copyCode(button) {
             const code = button.nextElementSibling.textContent; // Use textContent for better consistency
@@ -1020,4 +1072,3 @@ EOF
     </script>
 </body>
 </html>
-
