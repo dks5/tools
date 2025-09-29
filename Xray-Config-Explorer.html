@@ -379,8 +379,8 @@
                  <div class="d-flex align-items-center w-100" id="desktop-nav-container">
                     <i class="bi bi-chevron-left arrow-nav me-2 d-none d-lg-block" id="nav-arrow-left"></i>
                     <ul class="nav nav-tabs flex-nowrap w-100" id="myTab" role="tablist">
-                        <li class="nav-item" role="presentation"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#config" type="button"><span class="d-none d-lg-inline">Config</span><span class="d-lg-none">Конфигурационный файл: <code>config.json</code></span></button></li>
-                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#description" type="button"><span class="d-none d-lg-inline">Info</span><span class="d-lg-none">Полное описание конфигурации</span></button></li>
+                        <li class="nav-item" role="presentation"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#description" type="button"><span class="d-none d-lg-inline">Info</span><span class="d-lg-none">Полное описание конфигурации</span></button></li>
+                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#config" type="button"><span class="d-none d-lg-inline">Config</span><span class="d-lg-none">Конфигурационный файл: <code>config.json</code></span></button></li>
                         <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q1" type="button"><span class="d-none d-lg-inline">Q1</span><span class="d-lg-none">Вопрос 1: Файлы <code>geosite.dat</code></span></button></li>
                         <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q2" type="button"><span class="d-none d-lg-inline">Q2</span><span class="d-lg-none">Вопрос 2: Файлы <code>geoip.dat</code></span></button></li>
                         <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q3" type="button"><span class="d-none d-lg-inline">Q3</span><span class="d-lg-none">Вопрос 3: Ключ REALITY <code>privateKey</code></span></button></li>
@@ -403,7 +403,7 @@
     <div class="container my-4">
         <div class="tab-content" id="myTabContent">
             
-            <div class="tab-pane fade show active" id="config" role="tabpanel">
+            <div class="tab-pane fade" id="config" role="tabpanel">
                 <h3><span>Конфигурационный файл: <code>config.json</code></span></h3>
                 <div class="content-card">
                     <p>Ниже представлен исходный код вашего конфигурационного файла Xray. Для удобства чтения код разделен на логические секции.</p>
@@ -487,10 +487,12 @@
                 </div>
             </div>
 
-            <div class="tab-pane fade" id="description" role="tabpanel">
+            <div class="tab-pane fade show active" id="description" role="tabpanel">
                 <h3><span>Полное описание конфигурации</span></h3>
                 <div class="content-card">
-                    <p>Этот файл настраивает Xray как защищенный прокси-сервер, использующий протокол VLESS с технологией REALITY для маскировки трафика. В базовой конфигурации, создаваемой вашим скриптом, реализованы две основные функции маршрутизации.</p>
+                    <h5>Добро пожаловать в интерактивное руководство по Xray!</h5>
+                    <p>Этот документ — ваш персональный гид по конфигурации прокси-сервера Xray, созданной на основе вашего установочного скрипта. Мы разберем все аспекты работы сервера: от базовых настроек и логики маршрутизации по умолчанию до продвинутых тем, таких как мониторинг, ротация логов и создание кастомных правил для трафика.</p>
+                    <p>Цель этого руководства — дать вам полное понимание того, как работает ваш сервер, и предоставить готовые решения для его модификации под ваши конкретные задачи.</p>
                 </div>
                 <div class="content-card">
                     <h5>Логика конфигурации по умолчанию</h5>
