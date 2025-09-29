@@ -141,6 +141,23 @@
         .arrow-nav:hover {
             color: var(--text-primary);
         }
+        
+        .navbar .d-lg-none.d-flex {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .mobile-nav-prompt {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+            white-space: nowrap;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
         .navbar-brand {
             font-weight: 700;
@@ -325,9 +342,9 @@
                 Xray Explorer
             </a>
             
-            <div class="d-lg-none ms-auto d-flex align-items-center">
+            <div class="d-lg-none d-flex align-items-center">
                  <i class="bi bi-chevron-left arrow-nav me-2" id="mobile-nav-arrow-left"></i>
-                 <span style="font-size: 0.7rem; color: var(--text-secondary); white-space: nowrap;">жмякни на стрелку</span>
+                 <span class="mobile-nav-prompt">жмякни на стрелку</span>
                  <i class="bi bi-chevron-right arrow-nav ms-2 me-3" id="mobile-nav-arrow-right"></i>
             </div>
 
