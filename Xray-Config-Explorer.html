@@ -142,10 +142,11 @@
             color: var(--text-primary);
         }
         
-        .navbar .d-lg-none.d-flex {
+        .navbar .mobile-nav-block {
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
+            transition: opacity 0.3s ease;
         }
 
         .mobile-nav-prompt {
@@ -179,6 +180,7 @@
             border-radius: 0.5rem;
             background-clip: padding-box;
             border-image: var(--gradient) 1;
+            z-index: 5; /* Ensure toggler is above centered nav */
         }
         .navbar-toggler:focus {
             box-shadow: 0 0 10px var(--glow-color);
@@ -342,10 +344,10 @@
                 Xray Explorer
             </a>
             
-            <div class="d-lg-none d-flex align-items-center">
+            <div class="d-lg-none d-flex align-items-center mobile-nav-block">
                  <i class="bi bi-chevron-left arrow-nav me-2" id="mobile-nav-arrow-left"></i>
-                 <span class="mobile-nav-prompt">жмякни на стрелку</span>
-                 <i class="bi bi-chevron-right arrow-nav ms-2 me-3" id="mobile-nav-arrow-right"></i>
+                 <span class="mobile-nav-prompt">👈жмякни👉</span>
+                 <i class="bi bi-chevron-right arrow-nav ms-2" id="mobile-nav-arrow-right"></i>
             </div>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -961,6 +963,16 @@
                 });
             });
             
+            // --- Hide mobile nav controls when menu is open ---
+            const mobileNavControls = document.querySelector('.mobile-nav-block');
+            if (mobileNavControls && navMenu) {
+                navMenu.addEventListener('show.bs.collapse', function () {
+                    mobileNavControls.style.opacity = '0';
+                });
+                navMenu.addEventListener('hide.bs.collapse', function () {
+                    mobileNavControls.style.opacity = '1';
+                });
+            }
         });
     </script>
 </body>
