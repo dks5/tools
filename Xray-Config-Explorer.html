@@ -7,7 +7,7 @@
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     
     <!-- Bootstrap CSS (Full version) -->
@@ -46,7 +46,7 @@
             margin-bottom: 0;
              /* For sticky header */
              position: sticky;
-             top: 68px; /* Approx height of sticky navbar */
+             top: 77px; /* Approx height of sticky navbar for desktop */
              z-index: 10;
              padding: 1rem 2rem;
              border-bottom: 1px solid var(--border-color);
@@ -58,7 +58,6 @@
             -webkit-text-fill-color: transparent;
         }
 
-        /* For sticky header background */
         h3::before {
            display: none;
         }
@@ -71,6 +70,13 @@
         a {
             color: #7B68EE;
             text-decoration: none;
+        }
+
+        .highlight-text {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 600;
         }
 
         /* --- Layout & Card Styles --- */
@@ -98,6 +104,8 @@
             background-color: rgba(21, 20, 30, 0.8);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--border-color);
+            padding-top: 1rem;
+            padding-bottom: 1rem;
         }
         
         .nav-tabs {
@@ -109,8 +117,8 @@
             font-weight: 500;
             border: none;
             position: relative;
-            padding: 0.75rem 0.8rem; /* Adjusted padding */
-            letter-spacing: -0.5px; /* Condensed letter spacing */
+            padding: 0.75rem 0.8rem;
+            letter-spacing: -0.5px;
         }
 
         .nav-link:hover {
@@ -143,7 +151,30 @@
         .navbar-brand:hover {
             color: #fff;
         }
+
+        .navbar-toggler {
+            border: 2px solid transparent;
+            border-radius: 0.5rem;
+            background-clip: padding-box;
+            border-image: var(--gradient) 1;
+        }
+        .navbar-toggler:focus {
+            box-shadow: 0 0 10px var(--glow-color);
+        }
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(224, 224, 224, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
         
+        #myTab {
+            overflow-x: auto; /* Only allow horizontal scrolling */
+            overflow-y: hidden; /* Hide vertical scrolling */
+            scrollbar-width: none; /* For Firefox */
+            -ms-overflow-style: none; /* For Internet Explorer and Edge */
+        }
+        #myTab::-webkit-scrollbar {
+            display: none; /* For Chrome, Safari, and Opera */
+        }
+
         /* --- Code Block Styles --- */
         .code-block-wrapper {
             position: relative;
@@ -187,6 +218,14 @@
             background-color: rgba(241, 196, 15, 0.1);
             padding: 0.1em 0.4em;
             border-radius: 0.3em;
+        }
+        
+        .highlight-green {
+            background-color: rgba(40, 167, 69, 0.15);
+            display: block;
+            border-left: 3px solid #28a745;
+            padding: 0.5em;
+            margin: 0.5em 0;
         }
         
         /* --- Numbered Steps --- */
@@ -251,6 +290,25 @@
             font-size: 0.8rem;
             color: var(--text-primary);
          }
+        
+        /* --- Responsive Adjustments --- */
+        @media (max-width: 991.98px) {
+            h3 {
+                top: 76px; /* Adjusted for mobile navbar height */
+            }
+            .navbar-collapse .nav-tabs {
+                flex-direction: column;
+                width: 100%;
+                padding-top: 1rem;
+            }
+            .navbar-collapse .nav-item {
+                 width: 100%;
+            }
+            .navbar-collapse .nav-link {
+                 text-align: center;
+                 padding: 0.8rem 1rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -258,24 +316,37 @@
     <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container-fluid">
             <a class="navbar-brand d-flex align-items-center" href="#">
-                <i class="bi bi-diagram-3" style="font-size: 1.5rem; margin-right: 0.5rem; -webkit-text-fill-color: initial;"></i>
+                <i class="bi bi-diagram-3" style="font-size: 1.5rem; margin-right: 0.5rem;"></i>
                 Xray Explorer
             </a>
+            
+            <div class="d-lg-none ms-auto d-flex align-items-center">
+                 <i class="bi bi-chevron-left arrow-nav me-3" id="mobile-nav-arrow-left"></i>
+                 <i class="bi bi-chevron-right arrow-nav me-3" id="mobile-nav-arrow-right"></i>
+            </div>
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            
             <div class="collapse navbar-collapse" id="navbarNav">
-                 <div class="d-flex align-items-center w-100">
+                 <div class="d-flex align-items-center w-100" id="desktop-nav-container">
                     <i class="bi bi-chevron-left arrow-nav me-2 d-none d-lg-block" id="nav-arrow-left"></i>
-                    <ul class="nav nav-tabs flex-nowrap overflow-auto" id="myTab" role="tablist">
-                        <li class="nav-item" role="presentation"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#config" type="button">Конфигурация</button></li>
-                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#description" type="button">Описание</button></li>
-                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q1" type="button">Вопрос 1</button></li>
-                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q2" type="button">Вопрос 2</button></li>
-                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q3" type="button">Вопрос 3</button></li>
-                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q4" type="button">Вопрос 4</button></li>
-                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q5" type="button">Вопрос 5</button></li>
-                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q6" type="button">Вопрос 6</button></li>
+                    <ul class="nav nav-tabs flex-nowrap w-100" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#config" type="button">Config</button></li>
+                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#description" type="button">Info</button></li>
+                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q1" type="button">Q1</button></li>
+                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q2" type="button">Q2</button></li>
+                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q3" type="button">Q3</button></li>
+                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q4" type="button">Q4</button></li>
+                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q5" type="button">Q5</button></li>
+                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q6" type="button">Q6</button></li>
+                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q7" type="button">Q7</button></li>
+                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q8" type="button">Q8</button></li>
+                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q9" type="button">Q9</button></li>
+                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q10" type="button">Q10</button></li>
+                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q11" type="button">Q11</button></li>
+                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q12" type="button">Q12</button></li>
                     </ul>
                     <i class="bi bi-chevron-right arrow-nav ms-2 d-none d-lg-block" id="nav-arrow-right"></i>
                  </div>
@@ -324,9 +395,10 @@
             "protocol": "vless",
             "settings": {
                 "clients": [
+                    <span class="comment-highlight">// --- Здесь находится основной пользователь ---</span>
                     {
                         "email": "main",
-                        "id": "895fd3f7-71c3-4e41-9bfe-07777d4098ac",
+                        "id": "895fd3f7-71c3-4e41-bfe-07777d4098ac",
                         "flow": "xtls-rprx-vision"
                     }
                 ],
@@ -372,17 +444,29 @@
             <div class="tab-pane fade" id="description" role="tabpanel">
                 <h3><span>Полное описание конфигурации</span></h3>
                 <div class="content-card">
-                    <p>Этот файл настраивает Xray как защищенный прокси-сервер, использующий протокол VLESS с технологией REALITY для маскировки трафика. Он также включает базовую блокировку рекламы и трафика на российские IP-адреса.</p>
+                    <p>Этот файл настраивает Xray как защищенный прокси-сервер, использующий протокол VLESS с технологией REALITY для маскировки трафика. В базовой конфигурации, создаваемой вашим скриптом, реализованы две основные функции маршрутизации.</p>
                 </div>
                 <div class="content-card">
-                    <h5><i class="bi bi-card-list"></i> Основные секции</h5>
-                    <ul>
-                        <li><strong><code>log</code> (Логирование):</strong> Установлен уровень <code>warning</code> для записи только ошибок и предупреждений.</li>
-                        <li><strong><code>routing</code> (Маршрутизация):</strong> Определяет, как обрабатывать трафик. Два правила блокируют рекламные домены и российские IP.</li>
-                        <li><strong><code>inbounds</code> (Входящие соединения):</strong> Сервер принимает соединения на порту <code>443</code> по протоколу <code>vless</code> и использует <code>REALITY</code> для маскировки под <code>github.com</code>.</li>
-                        <li><strong><code>outbounds</code> (Исходящие соединения):</strong> Настроено два потока: <code>direct</code> для разрешенного трафика и <code>block</code> (<code>blackhole</code>) для заблокированного.</li>
-                        <li><strong><code>policy</code> (Политики):</strong> Установлены базовые таймауты для соединений.</li>
-                    </ul>
+                    <h5>Логика конфигурации по умолчанию</h5>
+                    <p><strong>Вопрос:</strong> Почему конфигурация по умолчанию блокирует не только рекламу, но и весь трафик, идущий в российскую зону (`.ru`)?</p>
+                    <p>Это сделано не по технической, а по <span class="highlight-text">идеологической и практической</span> причине. Скрипты, подобные вашему, чаще всего создаются для решения конкретной задачи: <span class="highlight-text">безопасного обхода блокировок и доступа к зарубежным интернет-ресурсам</span>.</p>
+                    <p>С точки зрения этой задачи, проксирование трафика на локальные (в данном случае российские) ресурсы не имеет смысла. Блокировка этого трафика на сервере выполняет сразу три полезные функции:</p>
+                    <ol class="step-list">
+                        <li>
+                            <span class="highlight-text">Предотвращение утечек.</span>
+                            Гарантирует, что локальный трафик случайно не "просочится" через зарубежный сервер, что могло бы раскрыть IP-адрес сервера местным сайтам и сервисам.
+                        </li>
+                        <li>
+                            <span class="highlight-text">Экономия ресурсов.</span>
+                            Не тратит трафик и мощность вашего сервера на обработку запросов к сайтам, которые и так доступны пользователю напрямую.
+                        </li>
+                         <li>
+                            <span class="highlight-text">Упрощение для пользователя.</span>
+                            Пользователю не нужно настраивать сложные правила маршрутизации на своем устройстве. Сервер сам выступает в роли "умного фильтра", отсекая весь трафик, для которого прокси не предназначен.
+                        </li>
+                    </ol>
+                    <p>Таким образом, эта конфигурация создана для максимального удобства и безопасности в рамках своей основной цели — быть "ключом" к глобальному интернету, а не просто промежуточным звеном для всего трафика подряд.</p>
+                    <p class="mt-4"><span class="comment-highlight"><strong>Важный нюанс:</strong> Чтобы трафик на российские ресурсы шел напрямую (в обход прокси), соответствующую настройку нужно выполнять <span class="highlight-text">на стороне клиента</span> (в приложении v2rayN, Nekoray и т.д.). Серверная конфигурация лишь определяет, как обрабатывать трафик, который на нее уже поступил.</span></p>
                 </div>
             </div>
             
@@ -391,22 +475,12 @@
                 <div class="content-card">
                     <p><strong>Вопрос:</strong> Где хранятся списки Geosite.dat и как они формируются? Обновляются ли они или они статичны, учитывая мой скрипт установки?</p>
                     <h5>Ответ</h5>
-                    <p>Файлы <code>geosite.dat</code> — это скомпилированные бинарные файлы со списками доменов. В вашем случае они **устанавливаются один раз и не обновляются автоматически**.</p>
+                    <p>Файлы <code>geosite.dat</code> — это скомпилированные бинарные файлы со списками доменов. В вашем случае они <span class="highlight-text">устанавливаются один раз и не обновляются автоматически</span>.</p>
                     <ol class="step-list">
                         <li><strong>Хранение:</strong> Официальный установочный скрипт, который вы используете, помещает файл <code>geosite.dat</code> в <code>/usr/local/share/xray/</code>.</li>
                         <li><strong>Формирование:</strong> Списки поддерживаются сообществом в репозитории <a href="https://github.com/v2fly/domain-list-community" target="_blank">domain-list-community</a> и компилируются в бинарный формат.</li>
-                        <li><strong>Обновление:</strong> Ваш скрипт **не предусматривает автоматического обновления** этих файлов. Чтобы обновить списки (например, для блокировки новой рекламы), вам нужно сделать это вручную, выполнив команду <code>bash -c "..." @ install</code> еще раз. Это обновит и ядро Xray, и файлы баз данных.</li>
+                        <li><strong>Обновление:</strong> Ваш скрипт <span class="highlight-text">не предусматривает автоматического обновления</span> этих файлов. Чтобы обновить списки, вам нужно вручную выполнить команду установки Xray еще раз. Эта команда безопасно обновит ядро и базы данных, не трогая вашу конфигурацию (см. **Вопрос 7** для полного разбора).</li>
                     </ol>
-                    <h6>Блок-схема: Жизненный цикл <code>geosite.dat</code> (в вашем случае)</h6>
-                    <div class="diagram">
-                        <div class="diagram-box">1. Репозиторий Xray (GitHub)</div>
-                        <div class="diagram-arrow">↓ <span>(Запуск вашего скрипта)</span></div>
-                        <div class="diagram-box">2. Скрипт <code>install-release.sh</code> скачивает <code>geosite.dat</code></div>
-                        <div class="diagram-arrow">↓ <span>(Размещение на сервере)</span></div>
-                        <div class="diagram-box">3. Файл используется Xray для маршрутизации</div>
-                        <div class="diagram-arrow">↓ <span>(Требуется ручное обновление)</span></div>
-                        <div class="diagram-box">4. Повторный запуск скрипта для получения новой версии</div>
-                    </div>
                 </div>
             </div>
 
@@ -415,22 +489,12 @@
                 <div class="content-card">
                     <p><strong>Вопрос:</strong> Где находятся списки geoip.dat и как они обновляются, исходя из моего скрипта?</p>
                     <h5>Ответ</h5>
-                    <p>Аналогично `geosite.dat`, файл `geoip.dat` с базами IP-адресов **устанавливается один раз и не обновляется автоматически** вашим скриптом.</p>
+                    <p>Аналогично `geosite.dat`, файл `geoip.dat` с базами IP-адресов <span class="highlight-text">устанавливается один раз и не обновляется автоматически</span> вашим скриптом.</p>
                     <ol class="step-list">
                         <li><strong>Хранение:</strong> Файл <code>geoip.dat</code> также размещается в <code>/usr/local/share/xray/</code>.</li>
                         <li><strong>Формирование:</strong> Данные берутся из публичных GeoIP баз, компилируются и включаются в дистрибутив Xray.</li>
-                        <li><strong>Обновление:</strong> Для обновления базы IP-адресов (например, если изменились диапазоны IP для какой-то страны) вам необходимо **повторно запустить установочный скрипт**, как и в случае с `geosite.dat`.</li>
+                        <li><strong>Обновление:</strong> Для обновления базы IP-адресов вам необходимо <span class="highlight-text">повторно запустить ту же команду установки Xray</span>, как и в случае с `geosite.dat`. Это безопасная операция, которая не затронет ваши настройки (подробности в **Вопросе 7**).</li>
                     </ol>
-                    <h6>Блок-схема: Жизненный цикл <code>geoip.dat</code> (в вашем случае)</h6>
-                    <div class="diagram">
-                        <div class="diagram-box">1. Публичные базы данных GeoIP</div>
-                        <div class="diagram-arrow">↓ <span>(Компиляция разработчиками)</span></div>
-                        <div class="diagram-box">2. Репозиторий Xray (GitHub)</div>
-                        <div class="diagram-arrow">↓ <span>(Запуск вашего скрипта)</span></div>
-                        <div class="diagram-box">3. Скрипт <code>install-release.sh</code> скачивает <code>geoip.dat</code></div>
-                        <div class="diagram-arrow">↓ <span>(Файл используется Xray)</span></div>
-                        <div class="diagram-box">4. Требуется ручной перезапуск скрипта для обновления</div>
-                    </div>
                 </div>
             </div>
 
@@ -442,24 +506,9 @@
                      <p>Ваш скрипт полностью автоматизирует процесс генерации и использования ключей REALITY.</p>
                      <ol class="step-list">
                          <li><strong>Генерация:</strong> Скрипт выполняет команду <code>xray x25519 >> /usr/local/etc/xray/.keys</code>. Эта команда генерирует пару (приватный и публичный) ключей и дописывает их в файл <code>.keys</code>.</li>
-                         <li><strong>Использование на сервере:</strong> Приватный ключ (`PrivateKey`) считывается из файла <code>.keys</code> и подставляется в `config.json` при создании конфигурации. **Он никогда не покидает сервер**.</li>
-                         <li><strong>Получение клиентом:</strong> Ваши скрипты (`mainuser`, `newuser` и др.) читают **публичный ключ** (`PublicKey`, который в ссылке называется `pbk`) из того же файла <code>.keys</code> и встраивают его в VLESS-ссылку для подключения, которую вы передаете клиенту.</li>
+                         <li><strong>Использование на сервере:</strong> Приватный ключ (`PrivateKey`) считывается из файла <code>.keys</code> и подставляется в `config.json` при создании конфигурации. <span class="highlight-text">Он никогда не покидает сервер</span>.</li>
+                         <li><strong>Получение клиентом:</strong> Ваши скрипты (`mainuser`, `newuser` и др.) читают <span class="highlight-text">публичный ключ</span> (`PublicKey`, который в ссылке называется `pbk`) из того же файла <code>.keys</code> и встраивают его в VLESS-ссылку для подключения, которую вы передаете клиенту.</li>
                      </ol>
-                     <h6>Блок-схема: Процесс в вашем скрипте</h6>
-                     <div class="diagram">
-                        <div class="diagram-box">1. Скрипт выполняет <code>xray x25519</code></div>
-                        <div class="diagram-arrow">↓ <span>(Ключи сохраняются в <code>.keys</code>)</span></div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="diagram-box">Приватный ключ → config.json</div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="diagram-box">Публичный ключ → VLESS ссылка</div>
-                            </div>
-                        </div>
-                        <div class="diagram-arrow mt-3">↓ <span>(Ссылка передается клиенту)</span></div>
-                        <div class="diagram-box">Защищенное соединение установлено</div>
-                     </div>
                  </div>
             </div>
 
@@ -471,51 +520,19 @@
                     <p>Процесс генерации и передачи `shortId` в вашем скрипте также полностью автоматизирован.</p>
                     <ol class="step-list">
                         <li><strong>Генерация:</strong> Ваш скрипт выполняет команду <code>openssl rand -hex 8</code>, которая создает случайную 8-байтную (16 символов) шестнадцатеричную строку. Этот `shortId` сохраняется в файл <code>/usr/local/etc/xray/.keys</code>.</li>
-                        <li><strong>Нахождение у клиента:</strong> Да, <strong>клиент должен его знать</strong>. Скрипты `mainuser` и `newuser` считывают этот `shortId` (в ссылке он называется `sid`) из файла <code>.keys</code> и добавляют его в конфигурационную ссылку.</li>
+                        <li><strong>Нахождение у клиента:</strong> Да, <span class="highlight-text">клиент должен его знать</span>. Скрипты `mainuser` и `newuser` считывают этот `shortId` (в ссылке он называется `sid`) из файла <code>.keys</code> и добавляют его в конфигурационную ссылку.</li>
                         <li><strong>Идентификация:</strong> Клиент использует этот `sid` для своего первого TLS-сообщения, что позволяет серверу быстро отличить "своего" от "чужого", не прибегая к дорогостоящей криптографии.</li>
                     </ol>
-                    <h6>Блок-схема: Проверка <code>shortId</code></h6>
-                     <div class="diagram">
-                        <div class="diagram-box">Клиент отправляет TLS ClientHello (с shortId)</div>
-                        <div class="diagram-arrow">↓</div>
-                        <div class="diagram-box">Сервер проверяет Session ID</div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="diagram-arrow">↙ <span>ДА</span></div>
-                                <div class="diagram-box">Это "свой" → Аутентификация</div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="diagram-arrow">↘ <span>НЕТ</span></div>
-                                <div class="diagram-box">Это "чужой" → Прокси на github.com</div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
             
             <div class="tab-pane fade" id="q5" role="tabpanel">
-                 <h3><span>Вопрос 5: Настройка <code>sniffing</code> (прослушивание)</span></h3>
+                 <h3><span>Вопрос 5: Настройка <code>sniffing</code></span></h3>
                  <div class="content-card">
                      <p><strong>Вопрос:</strong> Для чего нужен sniffing, как он работает и как используется?</p>
                      <h5>Ответ</h5>
                      <p><code>sniffing</code> — это процесс анализа трафика для определения его реального назначения на уровне приложений (например, домена), а не только по IP-адресу.</p>
                      <p>Это позволяет правилам маршрутизации, основанным на доменах (как <code>geosite:category-ads-all</code>), работать точно и эффективно. Xray "подсматривает" имя домена (SNI) в начале TLS-сессии и использует его для маршрутизации вместо IP-адреса, благодаря опции <code>"destOverride": ["http", "tls"]</code>.</p>
-                     <h6>Блок-схема: Маршрутизация с <code>sniffing</code></h6>
-                     <div class="diagram">
-                        <div class="diagram-box">Запрос (на IP: X.X.X.X, внутри SNI: example.com)</div>
-                        <div class="diagram-arrow">↓</div>
-                        <div class="diagram-box">Sniffing включен?</div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="diagram-arrow">↙ <span>НЕТ</span></div>
-                                <div class="diagram-box">Маршрутизация по IP: X.X.X.X</div>
-                            </div>
-                             <div class="col-md-6">
-                                <div class="diagram-arrow">↘ <span>ДА</span></div>
-                                <div class="diagram-box">Маршрутизация по домену: example.com</div>
-                            </div>
-                        </div>
-                     </div>
                  </div>
             </div>
 
@@ -524,31 +541,322 @@
                  <div class="content-card">
                      <p><strong>Вопрос:</strong> По какому принципу происходит блокировка трафика через `blackhole`?</p>
                      <h5>Ответ</h5>
-                     <p>Протокол <code>blackhole</code> ("черная дыра") — это простейший способ блокировки. Он не отправляет сообщений об ошибке, а просто **"молча" отбрасывает** все пакеты, которые на него направляются.</p>
+                     <p>Протокол <code>blackhole</code> ("черная дыра") — это простейший способ блокировки. Он не отправляет сообщений об ошибке, а просто <span class="highlight-text">"молча" отбрасывает</span> все пакеты, которые на него направляются.</p>
                      <p>В вашей конфигурации модуль `routing` находит трафик, идущий на рекламные домены или российские IP, и направляет его на `outbound` с тегом `"block"`. Этот `outbound` использует протокол `blackhole`, и трафик просто исчезает. Для клиента это выглядит как недоступность сервера (таймаут соединения).</p>
-                     <h6>Блок-схема: Процесс блокировки</h6>
+                 </div>
+            </div>
+
+            <div class="tab-pane fade" id="q7" role="tabpanel">
+                <h3><span>Вопрос 7: Команда <code>bash -c "..." @ install</code></span></h3>
+                <div class="content-card">
+                    <p>Этот раздел полностью раскрывает тему обновления Xray и безопасности ваших данных.</p>
+                    
+                    <h5 class="mt-4">1. Разбор команды обновления</h5>
+                    <p>Команда для обновления, которая является частью вашего установочного скрипта, выглядит так:</p>
+                    <div class="code-block-wrapper">
+                        <button class="copy-btn" title="Копировать"><i class="bi bi-clipboard"></i></button>
+                        <pre><code>bash -c "$(curl -4 -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install</code></pre>
+                    </div>
+                    <p>Она скачивает и запускает официальный скрипт установки с GitHub. Скрипт спроектирован так, чтобы быть "неразрушающим".</p>
+
+                    <h5 class="mt-4">2. Безопасность пользователей и конфигурации</h5>
+                     <p><span class="highlight-text">Ваши пользователи и настройки в полной безопасности.</span> Причина проста: информация о пользователях хранится в <code>/usr/local/etc/xray/config.json</code>. Скрипт обновления <span class="highlight-text">целенаправленно игнорирует</span> всю директорию <code>/usr/local/etc/xray/</code>, чтобы защитить ваши персональные настройки.</p>
+                    <ul>
+                        <li><strong style="color: #28a745;">БУДЕТ ОБНОВЛЕНО:</strong> Ядро Xray, <code>geosite.dat</code>, <code>geoip.dat</code>.</li>
+                        <li><strong style="color: #dc3545;">НЕ БУДЕТ ЗАТРОНУТО:</strong> Ваш <code>config.json</code>, файл с ключами <code>.keys</code>, скрипты управления.</li>
+                    </ul>
+                </div>
+                <div class="content-card">
+                    <h5 class="mt-4">3. Почему `install`, а не `update`?</h5>
+                    <p>Ваше замечание по поводу логики справедливо. Однако официальный скрипт Xray использует команду <code>install</code> как <span class="highlight-text">универсальную</span>.</p>
+                     <p>Ее задача — привести вашу систему в актуальное состояние. Скрипт сам определяет, что нужно сделать:</p>
+                    <ul class="step-list">
+                        <li><strong>Если Xray не установлен:</strong> Скрипт выполнит полную <span class="highlight-text">установку</span>.</li>
+                        <li><strong>Если Xray уже установлен:</strong> Скрипт поймет это и выполнит <span class="highlight-text">обновление</span>.</li>
+                    </ul>
+                    <p>Таким образом, для этого скрипта <span class="highlight-text">`install` — это правильная и единственная команда как для установки, так и для обновления</span>.</p>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="q8" role="tabpanel">
+                <h3><span>Вопрос 8: Просмотр файлов <code>.dat</code></span></h3>
+                <div class="content-card">
+                    <p><strong>Вопрос:</strong> Как я могу посмотреть список файлов `geoip.dat` и `geosite.dat`?</p>
+                    <h5>Ответ</h5>
+                    <p>Вы не можете просмотреть эти файлы напрямую, как текстовые, потому что они представляют собой скомпилированные бинарные данные. После наших проверок стало ясно, что ваша версия Xray не имеет встроенной команды для их просмотра на сервере.</p>
+                </div>
+                <div class="content-card">
+                    <h5>Единственный надежный способ: Посмотреть исходные списки на GitHub</h5>
+                    <p>Самый простой и правильный способ — посмотреть на текстовые файлы, из которых эти <code>.dat</code> файлы компилируются.</p>
+                     <ul class="step-list">
+                        <li><strong>Для <code>geosite.dat</code> (домены):</strong><br>Исходники хранятся в репозитории <a href="https://github.com/v2fly/domain-list-community" target="_blank">domain-list-community</a>. Например, используемый вами список рекламных сайтов <code>category-ads-all</code> можно посмотреть <a href="https://github.com/v2fly/domain-list-community/blob/master/data/category-ads-all" target="_blank">здесь</a>.</li>
+                        <li><strong>Для <code>geoip.dat</code> (IP-адреса):</strong><br>Исходники хранятся в репозитории <a href="https://github.com/v2fly/geoip" target="_blank">geoip</a>. Например, используемый вами список IP-адресов для России (<code>ru</code>) можно посмотреть <a href="https://github.com/v2fly/geoip/blob/release/text/ru.txt" target="_blank">здесь</a>.</li>
+                    </ul>
+                </div>
+            </div>
+            
+             <div class="tab-pane fade" id="q9" role="tabpanel">
+                <h3><span>Вопрос 9: Мониторинг и ротация логов</span></h3>
+                <div class="content-card">
+                    <p><strong>Вопрос:</strong> Можно ли отслеживать трафик и что делать с постоянно растущим файлом лога?</p>
+                    <h5>Ответ</h5>
+                    <p>Да, вы можете отслеживать весь трафик, проходящий через Xray, с помощью логов доступа. А чтобы лог-файл не занимал всё место на диске, используется стандартный системный инструмент `logrotate`.</p>
+                </div>
+
+                <div class="content-card">
+                    <h5>Часть 1: Включение и просмотр логов</h5>
+                    <p>Чтобы увидеть, как Xray обрабатывает запросы, нужно включить подробное логирование.</p>
+                    <ol class="step-list">
+                        <li><strong>Включите логирование доступа.</strong><br>Откройте <code>/usr/local/etc/xray/config.json</code> и измените секцию <code>"log"</code>.
+                             <div class="code-block-wrapper">
+                                <button class="copy-btn" title="Копировать"><i class="bi bi-clipboard"></i></button>
+                                <pre><code>"log": {
+    "access": "/var/log/xray/access.log",
+    "loglevel": "info"
+},</code></pre>
+                            </div>
+                        </li>
+                         <li><strong>Перезапустите Xray.</strong><br>
+                             <div class="code-block-wrapper">
+                                <button class="copy-btn" title="Копировать"><i class="bi bi-clipboard"></i></button>
+                                <pre><code>systemctl restart xray</code></pre>
+                            </div>
+                        </li>
+                         <li><strong>Просматривайте лог в реальном времени.</strong><br>
+                             <div class="code-block-wrapper">
+                                <button class="copy-btn" title="Копировать"><i class="bi bi-clipboard"></i></button>
+                                <pre><code>tail -f /var/log/xray/access.log</code></pre>
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+
+                <div class="content-card">
+                    <h5>Часть 2: Настройка ротации логов с помощью `logrotate`</h5>
+                    <p>Представленная вами конфигурация `logrotate` — это отличное и правильное решение. Давайте рассмотрим его с учётом всех нюансов для создания идеальной, отказоустойчивой системы.</p>
+
+                    <h6 class="mt-4">1. Базовая и рекомендуемая конфигурация</h6>
+                    <p>Это надёжная отправная точка, которая будет работать в большинстве случаев.</p>
+                    <div class="code-block-wrapper">
+                        <button class="copy-btn" title="Копировать"><i class="bi bi-clipboard"></i></button>
+                        <pre><code># Шаг 1: Создайте файл /etc/logrotate.d/xray
+# Шаг 2: Вставьте в него следующий текст
+
+/var/log/xray/access.log {
+    daily
+    rotate 7
+    compress
+    missingok
+    notifempty
+    postrotate
+        /bin/systemctl kill -s SIGUSR1 xray.service > /dev/null 2>&1 || true
+    endscript
+}</code></pre>
+                    </div>
+
+                    <h6 class="mt-4">2. Важные нюансы и улучшения (профессиональный подход)</h6>
+                    <ul>
+                        <li><span class="highlight-text">Обработка сигнала (SIGUSR1):</span> Этот метод идеален, если Xray поддерживает сигнал `SIGUSR1` для переоткрытия логов (что является стандартом для многих сервисов). Если нет, сервис продолжит писать в старый, переименованный файл до перезапуска.</li>
+                        <li><span class="highlight-text">Альтернатива (`copytruncate`):</span> Если поддержка сигналов неизвестна, можно использовать `copytruncate` вместо `postrotate`. Этот метод сначала копирует данные, а потом обрезает исходный файл. Минус — возможна потеря логов, записанных в момент между копированием и обрезкой.</li>
+                        <li><span class="highlight-text">Права доступа (рекомендуется):</span> `logrotate` работает от `root` и создаёт новый лог с правами `root`. Если Xray работает от другого пользователя (например, `xray`), он может потерять доступ на запись. Решение — явно указать владельца и права.</li>
+                    </ul>
+                    
+                    <h6 class="mt-4">3. Идеальная конфигурация (с учётом прав)</h6>
+                    <p>Эта версия добавляет директиву `create`, чтобы избежать проблем с правами доступа.</p>
+                     <div class="code-block-wrapper">
+                        <button class="copy-btn" title="Копировать"><i class="bi bi-clipboard"></i></button>
+                        <pre><code>/var/log/xray/access.log {
+    daily
+    rotate 7
+    compress
+    missingok
+    notifempty
+    # Создать новый файл от пользователя/группы 'xray' с правами 640
+    create 0640 xray xray 
+    postrotate
+        /bin/systemctl kill -s SIGUSR1 xray.service > /dev/null 2>&1 || true
+    endscript
+}</code></pre>
+                        <p class="mt-2"><small>Примечание: Убедитесь, что пользователь и группа `xray` существуют в вашей системе, или замените их на правильные.</small></p>
+                    </div>
+
+                    <h6 class="mt-4">4. Тестирование</h6>
+                     <p>Не ждите ночи, чтобы проверить ротацию. Выполните команды вручную:</p>
+                     <ul class="step-list">
+                        <li><strong>Проверка синтаксиса (сухой запуск):</strong>
+                            <div class="code-block-wrapper"><pre><code>logrotate -d /etc/logrotate.d/xray</code></pre></div>
+                        </li>
+                        <li><strong>Принудительный запуск:</strong>
+                            <div class="code-block-wrapper"><pre><code>logrotate --force /etc/logrotate.d/xray</code></pre></div>
+                        </li>
+                     </ul>
+                </div>
+            </div>
+            
+            <div class="tab-pane fade" id="q10" role="tabpanel">
+                <h3><span>Вопрос 10: Конфигурация для Google-трафика</span></h3>
+                <div class="content-card">
+                    <p><strong>Задача:</strong> Настроить Xray так, чтобы все сервисы Google (включая Gemini, NotebookLM, YouTube) проходили через прокси, реклама блокировалась, а весь остальной трафик (включая российские сайты) шел напрямую (т.е. также обрабатывался прокси, но не блокировался).</p>
+                    <h5>Логика изменений</h5>
+                    <p>На серверной конфигурации задача сводится к тому, чтобы убрать ненужные блокировки, оставив только блокировку рекламы.</p>
+                    <ol class="step-list">
+                        <li><strong>Удаляем блокировку российских IP:</strong> Мы полностью убираем правило, которое блокировало трафик на основе <code>geoip:ru</code>.</li>
+                        <li><strong>Оставляем блокировку рекламы:</strong> Правило для <code>geosite:category-ads-all</code> остается первым и неизменным.</li>
+                        <li><strong>Добавляем явное правило для Google:</strong> Хотя Xray по умолчанию отправит весь не заблокированный трафик через <code>direct</code>, мы добавим явное правило для <code>geosite:google</code>. Это делает конфигурацию более читаемой и гарантирует правильную обработку всего трафика Google.</li>
+                    </ol>
+                    <p>Ниже представлен полный конфигурационный файл с необходимыми изменениями. Вам нужно просто заменить содержимое вашего <code>/usr/local/etc/xray/config.json</code> на код ниже и перезапустить Xray командой <code>systemctl restart xray</code>.</p>
+                </div>
+                <div class="content-card">
+                    <h5>Новый конфигурационный файл</h5>
+                    <div class="code-block-wrapper">
+                        <button class="copy-btn" title="Копировать"><i class="bi bi-clipboard"></i></button>
+                        <pre><code>
+{
+    <span class="comment-highlight">// --- Секция log (Логирование) ---</span>
+    "log": {
+        "loglevel": "warning"
+    },
+
+<span class="highlight-green">    <span class="comment-highlight">// --- Секция routing (Маршрутизация) - МОДИФИЦИРОВАНА ---</span>
+    "routing": {
+        "domainStrategy": "IPIfNonMatch",
+        "rules": [
+            <span class="comment-highlight">// --- Правило 1: Блокировка рекламы (без изменений) ---</span>
+            {
+                "type": "field",
+                "domain": [ "geosite:category-ads-all" ],
+                "outboundTag": "block"
+            },
+            <span class="comment-highlight">// --- ДОБАВЛЕНО: Правило 2 для Google ---</span>
+            <span class="comment-highlight">// Явно направляем весь трафик, относящийся к Google (включая YouTube, Gemini и т.д.),
+            // на исходящее соединение с тегом "direct", то есть через прокси.</span>
+            {
+                "type": "field",
+                "domain": [ "geosite:google" ],
+                "outboundTag": "direct"
+            }
+            <span class="comment-highlight">// --- УДАЛЕНО: Правило блокировки российских IP-адресов ---</span>
+            <span class="comment-highlight">// Правило { "type": "field", "ip": [ "geoip:ru" ], "outboundTag": "block" } было удалено.</span>
+            <span class="comment-highlight">// Теперь весь остальной трафик (включая .ru) будет автоматически направлен
+            // на исходящее соединение по умолчанию (первое в списке outbounds), то есть "direct".</span>
+        ]
+    },</span>
+
+    <span class="comment-highlight">// --- Секция inbounds (Входящие соединения) ---</span>
+    "inbounds": [
+        {
+            "listen": "0.0.0.0",
+            "port": 443,
+            "protocol": "vless",
+            "settings": {
+                "clients": [
+                    <span class="comment-highlight">// --- Здесь находится основной пользователь ---</span>
+                    {
+                        "email": "main",
+                        "id": "895fd3f7-71c3-4e41-bfe-07777d4098ac",
+                        "flow": "xtls-rprx-vision"
+                    }
+                ],
+                "decryption": "none"
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "reality",
+                "realitySettings": {
+                    "show": false,
+                    "dest": "github.com:443",
+                    "xver": 0,
+                    "serverNames": [ "github.com", "www.github.com" ],
+                    "privateKey": "8ORpKDpsrWs33G2lpzwQQUkgVNZPgCtzl-ndIMk9o3k",
+                    "shortIds": [ "7832618be2c6b250" ]
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [ "http", "tls" ]
+            }
+        }
+    ],
+
+    <span class="comment-highlight">// --- Секция outbounds (Исходящие соединения) ---</span>
+    "outbounds": [
+        { "protocol": "freedom", "tag": "direct" },
+        { "protocol": "blackhole", "tag": "block" }
+    ],
+
+    <span class="comment-highlight">// --- Секция policy (Политики) ---</span>
+    "policy": {
+        "levels": {
+            "0": { "handshake": 3, "connIdle": 180 }
+        }
+    }
+}
+                        </code></pre>
+                    </div>
+                </div>
+            </div>
+
+             <div class="tab-pane fade" id="q11" role="tabpanel">
+                <h3><span>Вопрос 11: Обход прокси (прямое соединение)</span></h3>
+                <div class="content-card">
+                    <p><strong>Вопрос:</strong> Существует ли такое же правило, как `direct` и `block`, для полного обхода прокси и направления трафика напрямую от клиента в интернет?</p>
+                    <h5>Ответ: Место решает всё</h5>
+                    <p>Это отличный и очень логичный вопрос! Краткий ответ: на уровне <span class="highlight-text">серверной</span> конфигурации `config.json` такого правила нет и быть не может. Разделение трафика на "через прокси" и "в обход прокси" всегда происходит на стороне <span class="highlight-text">клиента</span>.</p>
+                    <p>Представьте, что ваш прокси-сервер — это почтовое отделение в другой стране. Когда вы отправляете письмо (сетевой трафик), вы можете либо отправить его на адрес этого почтового отделения (через прокси), либо отправить его напрямую получателю (в обход прокси). Решение, куда отправить письмо, вы принимаете у себя дома (на клиенте), а не в самом почтовом отделении.</p>
+                </div>
+                <div class="content-card">
+                    <h5>Как это работает на самом деле</h5>
+                    <p>Когда вы видите `outboundTag: "direct"` в <span class="highlight-text">серверной</span> конфигурации, это означает, что <span class="highlight-text">сервер</span>, получив ваш трафик, отправит его дальше в интернет "напрямую" (используя протокол `freedom`), а не на какой-то другой прокси-сервер. Для вас, как для пользователя, это и есть "проксирование".</p>
+                    <p>Чтобы реализовать то, что вы хотите (часть трафика в обход прокси), вам нужно настроить <span class="highlight-text">правила маршрутизации в вашем клиентском приложении</span> (v2rayN, Nekoray, Clash и т.д.).</p>
+                    
+                    <h6 class="mt-4">Практический пример: что происходит с трафиком `.ru`?</h6>
+                    <p>В конфигурации из **Q10** мы удалили правило, которое блокировало российские IP (`geoip:ru`). Теперь, когда ваш клиент отправляет запрос на сайт в зоне `.ru` <span class="highlight-text">на сервер</span>, сервер его больше не блокирует, а обрабатывает по правилу по умолчанию — <span class="comment-highlight">отправляет через `outbound` с тегом `direct`. Это означает, что <span class="highlight-text">трафик для сайтов `.ru` теперь тоже проксируется</span></span>.</p>
+
+                     <h6>Схема маршрутизации на СЕРВЕРЕ</h6>
                      <div class="diagram">
-                        <div class="diagram-box">Новое соединение</div>
-                        <div class="diagram-arrow">↓</div>
-                        <div class="diagram-box">Модуль Routing: Домен рекламный ИЛИ IP российский?</div>
+                        <div class="diagram-box">Трафик от клиента УЖЕ пришел на сервер</div>
+                        <div class="diagram-arrow">↓ <span>(Сервер смотрит в routing.rules)</span></div>
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="diagram-arrow">↙ <span>ДА</span></div>
-                                <div class="diagram-box">Направить на outbound "block" (blackhole)</div>
-                                 <div class="diagram-arrow">↓</div>
-                                <div class="diagram-box">Трафик отброшен</div>
+                               <div class="diagram-box">Правило совпало с `block` → Трафик отброшен</div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="diagram-arrow">↘ <span>НЕТ</span></div>
-                                <div class="diagram-box">Направить на outbound "direct" (freedom)</div>
-                                 <div class="diagram-arrow">↓</div>
-                                <div class="diagram-box">Трафик отправлен в интернет</div>
+                             <div class="col-md-6">
+                                <div class="diagram-box">Правило совпало с `direct` → Трафик отправлен в интернет</div>
                             </div>
                         </div>
                      </div>
-                 </div>
+                     <h6 class="mt-4">Схема маршрутизации на КЛИЕНТЕ</h6>
+                     <div class="diagram">
+                        <div class="diagram-box">Приложение (например, браузер) хочет выйти в интернет</div>
+                        <div class="diagram-arrow">↓ <span>(Клиент Xray смотрит в СВОИ правила)</span></div>
+                        <div class="row">
+                            <div class="col-md-6">
+                               <div class="diagram-box">Правило "Отправлять .ru напрямую" → Трафик идет в интернет в обход прокси</div>
+                            </div>
+                             <div class="col-md-6">
+                                <div class="diagram-box">Правило "Отправлять всё остальное через прокси" → Трафик идет на ваш сервер</div>
+                            </div>
+                        </div>
+                     </div>
+                </div>
             </div>
-            
+
+            <div class="tab-pane fade" id="q12" role="tabpanel">
+                <h3><span>Вопрос 12: Безопасность комментариев и JSONC</span></h3>
+                <div class="content-card">
+                    <p><strong>Вопрос:</strong> Как Xray определяет, что формат JSON с комментариями, а не строгий JSON? Не вызовет ли это ошибок?</p>
+                    <h5>Ответ: Xray изначально "умнее"</h5>
+                     <p>Ваши опасения абсолютно справедливы! В стандартном, строгом формате JSON комментарии действительно запрещены и вызывают ошибку. Однако здесь есть важный нюанс: Xray использует не строгий JSON, а его популярное расширение — <span class="highlight-text">JSONC (JSON with Comments)</span>.</p>
+                    <p>Представьте это на аналогии:</p>
+                    <ul>
+                        <li><span class="highlight-text">Стандартный JSON-парсер</span> — это очень строгий библиотекарь. Если он видит в книге хоть одну пометку на полях (комментарий), он считает всю книгу испорченной и отказывается её принимать.</li>
+                        <li><span class="highlight-text">Парсер Xray (JSONC)</span> — это обычный читатель. Он видит пометку на полях, понимает, что это не часть основного текста, просто пропускает её и продолжает читать книгу дальше.</li>
+                    </ul>
+                     <h6 class="mt-4">Как это работает технически?</h6>
+                     <p>Парсер Xray читает файл и, встречая символы `//`, просто игнорирует всё до конца строки, после чего продолжает обычную обработку JSON. Таким образом, для ядра Xray ваша конфигурация выглядит так, как будто в ней комментариев никогда и не было.</p>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -558,30 +866,61 @@
             // --- Tab navigation arrows ---
             const tabContainer = document.querySelector('#myTab');
             const navLinks = Array.from(tabContainer.querySelectorAll('.nav-link'));
-            const arrowLeft = document.getElementById('nav-arrow-left');
-            const arrowRight = document.getElementById('nav-arrow-right');
+            const desktopArrowLeft = document.getElementById('nav-arrow-left');
+            const desktopArrowRight = document.getElementById('nav-arrow-right');
+            const mobileArrowLeft = document.getElementById('mobile-nav-arrow-left');
+            const mobileArrowRight = document.getElementById('mobile-nav-arrow-right');
 
             function getActiveIndex() { return navLinks.findIndex(link => link.classList.contains('active')); }
+            
             function setActiveTab(index) {
                 if (index >= 0 && index < navLinks.length) {
                     new bootstrap.Tab(navLinks[index]).show();
-                    tabContainer.scrollLeft = navLinks[index].offsetLeft - tabContainer.offsetWidth / 2 + navLinks[index].offsetWidth / 2;
+                    // Scroll logic for desktop tabs
+                    if(window.innerWidth > 992) {
+                        tabContainer.scrollLeft = navLinks[index].offsetLeft - tabContainer.offsetWidth / 2 + navLinks[index].offsetWidth / 2;
+                    }
                 }
             }
-            arrowLeft.addEventListener('click', () => setActiveTab(getActiveIndex() - 1));
-            arrowRight.addEventListener('click', () => setActiveTab(getActiveIndex() + 1));
+            
+            desktopArrowLeft.addEventListener('click', () => setActiveTab(getActiveIndex() - 1));
+            desktopArrowRight.addEventListener('click', () => setActiveTab(getActiveIndex() + 1));
+            mobileArrowLeft.addEventListener('click', () => setActiveTab(getActiveIndex() - 1));
+            mobileArrowRight.addEventListener('click', () => setActiveTab(getActiveIndex() + 1));
 
             // --- Copy to clipboard ---
             document.querySelectorAll('.copy-btn').forEach(button => {
                 button.addEventListener('click', () => {
                     const pre = button.nextElementSibling;
                     const code = pre.querySelector('code');
-                    navigator.clipboard.writeText(code.innerText).then(() => {
-                        button.innerHTML = '<i class="bi bi-check-lg"></i>';
-                        setTimeout(() => {
-                            button.innerHTML = '<i class="bi bi-clipboard"></i>';
-                        }, 2000);
-                    });
+                    const textToCopy = code.innerText;
+
+                    const textArea = document.createElement('textarea');
+                    textArea.value = textToCopy;
+                    
+                    textArea.style.position = 'fixed';
+                    textArea.style.top = '0';
+                    textArea.style.left = '0';
+                    textArea.style.opacity = '0';
+
+                    document.body.appendChild(textArea);
+                    textArea.focus();
+                    textArea.select();
+
+                    try {
+                        const successful = document.execCommand('copy');
+                        if (successful) {
+                             button.innerHTML = '<i class="bi bi-check-lg"></i>';
+                             setTimeout(() => {
+                                 button.innerHTML = '<i class="bi bi-clipboard"></i>';
+                             }, 2000);
+                        }
+                    } catch (err) {
+                        // In case of error, you can add a user notification here
+                        console.error('Fallback: Oops, unable to copy', err);
+                    }
+
+                    document.body.removeChild(textArea);
                 });
             });
             
