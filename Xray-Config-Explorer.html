@@ -151,6 +151,11 @@
         .navbar-brand:hover {
             color: #fff;
         }
+        .navbar-brand .bi {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
         .navbar-toggler {
             border: 2px solid transparent;
@@ -305,7 +310,7 @@
                  width: 100%;
             }
             .navbar-collapse .nav-link {
-                 text-align: center;
+                 text-align: left;
                  padding: 0.8rem 1rem;
             }
         }
@@ -321,8 +326,9 @@
             </a>
             
             <div class="d-lg-none ms-auto d-flex align-items-center">
-                 <i class="bi bi-chevron-left arrow-nav me-3" id="mobile-nav-arrow-left"></i>
-                 <i class="bi bi-chevron-right arrow-nav me-3" id="mobile-nav-arrow-right"></i>
+                 <i class="bi bi-chevron-left arrow-nav me-2" id="mobile-nav-arrow-left"></i>
+                 <span style="font-size: 0.7rem; color: var(--text-secondary); white-space: nowrap;">жмякни на стрелку</span>
+                 <i class="bi bi-chevron-right arrow-nav ms-2 me-3" id="mobile-nav-arrow-right"></i>
             </div>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -333,20 +339,20 @@
                  <div class="d-flex align-items-center w-100" id="desktop-nav-container">
                     <i class="bi bi-chevron-left arrow-nav me-2 d-none d-lg-block" id="nav-arrow-left"></i>
                     <ul class="nav nav-tabs flex-nowrap w-100" id="myTab" role="tablist">
-                        <li class="nav-item" role="presentation"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#config" type="button">Config</button></li>
-                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#description" type="button">Info</button></li>
-                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q1" type="button">Q1</button></li>
-                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q2" type="button">Q2</button></li>
-                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q3" type="button">Q3</button></li>
-                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q4" type="button">Q4</button></li>
-                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q5" type="button">Q5</button></li>
-                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q6" type="button">Q6</button></li>
-                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q7" type="button">Q7</button></li>
-                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q8" type="button">Q8</button></li>
-                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q9" type="button">Q9</button></li>
-                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q10" type="button">Q10</button></li>
-                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q11" type="button">Q11</button></li>
-                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q12" type="button">Q12</button></li>
+                        <li class="nav-item" role="presentation"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#config" type="button"><span class="d-none d-lg-inline">Config</span><span class="d-lg-none">Конфигурационный файл: <code>config.json</code></span></button></li>
+                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#description" type="button"><span class="d-none d-lg-inline">Info</span><span class="d-lg-none">Полное описание конфигурации</span></button></li>
+                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q1" type="button"><span class="d-none d-lg-inline">Q1</span><span class="d-lg-none">Вопрос 1: Файлы <code>geosite.dat</code></span></button></li>
+                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q2" type="button"><span class="d-none d-lg-inline">Q2</span><span class="d-lg-none">Вопрос 2: Файлы <code>geoip.dat</code></span></button></li>
+                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q3" type="button"><span class="d-none d-lg-inline">Q3</span><span class="d-lg-none">Вопрос 3: Ключ REALITY <code>privateKey</code></span></button></li>
+                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q4" type="button"><span class="d-none d-lg-inline">Q4</span><span class="d-lg-none">Вопрос 4: Идентификаторы <code>shortIds</code></span></button></li>
+                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q5" type="button"><span class="d-none d-lg-inline">Q5</span><span class="d-lg-none">Вопрос 5: Настройка <code>sniffing</code></span></button></li>
+                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q6" type="button"><span class="d-none d-lg-inline">Q6</span><span class="d-lg-none">Вопрос 6: Принцип работы <code>blackhole</code></span></button></li>
+                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q7" type="button"><span class="d-none d-lg-inline">Q7</span><span class="d-lg-none">Вопрос 7: Команда <code>bash -c "..." @ install</code></span></button></li>
+                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q8" type="button"><span class="d-none d-lg-inline">Q8</span><span class="d-lg-none">Вопрос 8: Просмотр файлов <code>.dat</code></span></button></li>
+                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q9" type="button"><span class="d-none d-lg-inline">Q9</span><span class="d-lg-none">Вопрос 9: Мониторинг и ротация логов</span></button></li>
+                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q10" type="button"><span class="d-none d-lg-inline">Q10</span><span class="d-lg-none">Вопрос 10: Конфигурация для Google-трафика</span></button></li>
+                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q11" type="button"><span class="d-none d-lg-inline">Q11</span><span class="d-lg-none">Вопрос 11: Обход прокси (прямое соединение)</span></button></li>
+                        <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#q12" type="button"><span class="d-none d-lg-inline">Q12</span><span class="d-lg-none">Вопрос 12: Безопасность комментариев и JSONC</span></button></li>
                     </ul>
                     <i class="bi bi-chevron-right arrow-nav ms-2 d-none d-lg-block" id="nav-arrow-right"></i>
                  </div>
@@ -921,6 +927,20 @@
                     }
 
                     document.body.removeChild(textArea);
+                });
+            });
+
+            // --- Auto-close mobile navbar on link click ---
+            const navMenu = document.getElementById('navbarNav');
+            const navMenuLinks = navMenu.querySelectorAll('.nav-link');
+            const bsCollapse = new bootstrap.Collapse(navMenu, {
+                toggle: false
+            });
+            navMenuLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (navMenu.classList.contains('show')) {
+                        bsCollapse.hide();
+                    }
                 });
             });
             
