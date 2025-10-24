@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Инструкция по настройке Firebase</title>
+    <!-- Подключение Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Основной шрифт Inter -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7fafc; /* gray-100 */
+            color: #2d3748; /* gray-800 */
+        }
+        /* Стили для кода */
+        code {
+            background-color: #edf2f7; /* gray-200 */
+            color: #c53030; /* red-700 */
+            padding: 0.1rem 0.3rem;
+            border-radius: 0.25rem;
+            font-size: 0.9em;
+            font-family: 'Courier New', Courier, monospace;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+        }
+        pre > code {
+            display: block;
+            padding: 1rem;
+            color: #e2e8f0; /* gray-300 */
+            background-color: #2d3748; /* gray-800 */
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            border-radius: 0.375rem; /* rounded-md */
+        }
+         /* Добавляем класс language-html для подсветки, если нужно */
+         pre > code.language-html { /* Пример */ }
+         pre > code.language-javascript { /* Пример */ }
+         /* Добавлен класс для правил Firestore */
+         pre > code.language-plaintext { /* Пример */ }
+
+
+        h1, h2, h3 {
+            font-weight: 600; /* semibold */
+            margin-bottom: 0.5rem;
+            margin-top: 1.5rem;
+        }
+        /* Убираем верхний отступ у заголовков h2 внутри .tab-content для компактности */
+        /* .tab-content h2 { margin-top: 0; } */ /* УДАЛЕНО, т.к. h2 удалены из контента */
+
+        h1 { font-size: 1.875rem; line-height: 2.25rem; /* text-3xl */ border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; }
+        /* h2 { font-size: 1.5rem; line-height: 2rem; /* text-2xl */ border-bottom: 1px solid #e2e8f0; padding-bottom: 0.3rem; } */ /* УДАЛЕНО, т.к. h2 удалены из контента */
+        h3 { font-size: 1.25rem; line-height: 1.75rem; /* text-xl */ }
+        p { margin-bottom: 1rem; line-height: 1.6; }
+        ul, ol { margin-left: 1.5rem; margin-bottom: 1rem; list-style-position: outside; }
+        ul { list-style-type: disc; }
+        ol { list-style-type: decimal; }
+        li { margin-bottom: 0.5rem; }
+        a { color: #2b6cb0; /* blue-700 */ text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        /* Стили для Placeholder/Image с обтеканием */
+        .image-placeholder-float, .image-float {
+            display: block;
+            float: right;
+            width: 45%;
+            max-width: 300px;
+            margin: 0.5rem 0 0.5rem 1rem;
+            border-radius: 0.375rem; /* rounded-md */
+            clear: right;
+        }
+        .image-placeholder-float {
+            background-color: #e2e8f0; /* gray-300 */
+            border: 1px dashed #a0aec0; /* gray-500 */
+            padding: 1rem;
+            text-align: center;
+            color: #4a5568; /* gray-700 */
+            min-height: 100px; /* Чтобы пустой блок был виден */
+        }
+         .image-float {
+             border: 1px solid #cbd5e0; /* gray-400 */
+             box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* shadow-sm */
+        }
+        .clearfix::after { content: ""; clear: both; display: table; }
+
+        /* Скрытие контента вкладок */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Стили для бургер-меню и выпадающего списка */
+        #burger-menu-list {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        #burger-menu-list.hidden {
+            opacity: 0;
+            transform: translateY(-10px);
+            pointer-events: none; /* Чтобы не мешало кликам под ним */
+        }
+        .nav-item-link.active {
+            background-color: #ebf8ff; /* blue-100 */
+            color: #2b6cb0; /* blue-700 */
+            font-weight: 600;
+        }
+
+        /* Стили для стрелок навигации */
+        .nav-arrow:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        /* Добавлено: стили для блока с примечанием о тестовом режиме */
+        .test-mode-note {
+            background-color: #fffaf0; /* orange-100 */
+            border-left: 4px solid #f6ad55; /* orange-400 */
+            padding: 1rem;
+            margin-top: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.9em;
+            color: #744210; /* orange-900 */
+        }
+         /* Стили для подзаголовков внутри примечания */
+         .test-mode-note h4 {
+             font-weight: bold;
+             margin-top: 1em;
+             margin-bottom: 0.5em;
+             color: #dd6b20; /* orange-600 */
+         }
+
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg">
+
+        <!-- ОБЕРТКА ДЛЯ ФИКСАЦИИ ШАПКИ И НАВИГАЦИИ -->
+        <div class="sticky top-0 z-20 bg-white shadow-sm">
+            <header class="bg-gray-800 text-white p-4 flex justify-between items-center relative">
+                <h1 class="text-xl sm:text-2xl font-bold mb-0 border-none pb-0">Инструкция по настройке Firebase</h1>
+                <!-- Кнопка Бургер-меню -->
+                <button id="burger-menu-button" class="p-2 rounded hover:bg-gray-700 focus:outline-none focus:bg-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+                <!-- Выпадающий список бургер-меню -->
+                <div id="burger-menu-list" class="hidden absolute top-full right-0 mt-1 w-64 bg-white rounded-md shadow-lg border border-gray-200 z-50">
+                    <nav class="p-2">
+                        <!-- Ссылки будут добавлены сюда через JS -->
+                    </nav>
+                </div>
+            </header>
+
+            <!-- Панель навигации (Заголовок + Стрелки) -->
+            <div id="step-navigation" class="flex items-center justify-between p-4 border-b border-gray-200 bg-gray-50">
+                <button id="top-prev-step" class="nav-arrow p-2 rounded-full hover:bg-gray-200 text-gray-600 transition" aria-label="Предыдущий шаг">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                </button>
+                <h2 id="current-step-title" class="text-lg font-semibold text-center mx-4 flex-grow truncate">
+                    <!-- Заголовок будет вставлен сюда через JS -->
+                </h2>
+                <button id="top-next-step" class="nav-arrow p-2 rounded-full hover:bg-gray-200 text-gray-600 transition" aria-label="Следующий шаг">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+            </div>
+        </div> <!-- КОНЕЦ ОБЕРТКИ ДЛЯ ФИКСАЦИИ -->
+
+        <!-- Контент -->
+        <div class="p-6 sm:p-10">
+            <!-- Контейнер для контента -->
+            <div id="tab-content-container">
+                <!-- Индикатор загрузки, если Firebase еще не готов -->
+                <div id="global-loading" class="text-center p-8 text-gray-500 hidden">Загрузка...</div>
+
+                <!-- Tab: Intro -->
+                <div id="tab-intro" class="tab-content active" data-index="0">
+                    <!-- H2 удален -->
+                    <p>Это пошаговое руководство поможет вам настроить <strong>Firebase</strong> для вашего веб-приложения. Мы пройдем этапы создания проекта, получения конфигурации, настройки аутентификации и инициализации Firebase в вашем HTML-коде, используя примеры данных из проекта <code>kommunalka-web</code>.</p>
+                    <p>Используйте меню (☰) в правом верхнем углу или стрелки для навигации по шагам.</p>
+
+                    <h3>Что такое Firebase?</h3>
+                    <p>Firebase — это платформа от Google ("бэкенд как услуга", BaaS), предоставляющая разработчикам готовые инструменты для создания веб- и мобильных приложений. Она позволяет быстро добавлять такие функции, как:</p>
+                    <ul>
+                        <li>Вход пользователей (аутентификация)</li>
+                        <li>Хранение и синхронизация данных в реальном времени (базы данных Firestore, Realtime Database)</li>
+                        <li>Размещение сайтов (хостинг)</li>
+                        <li>Выполнение серверного кода (Cloud Functions)</li>
+                        <li>Хранение файлов (Storage)</li>
+                        <li>Аналитика, Push-уведомления и многое другое.</li>
+                    </ul>
+
+                    <h3>Стоимость и "Тестовый режим"</h3>
+                    <p>Firebase предлагает <strong>бесплатный тарифный план (Spark Plan)</strong> с щедрыми лимитами на использование большинства сервисов. Для многих проектов, особенно на этапе разработки, этого достаточно.</p>
+                    <ul>
+                        <li><strong>"Тестовый режим"</strong> обычно означает использование именно этого бесплатного плана.</li>
+                        <li><strong>Период использования:</strong> Бесплатный план <strong>не ограничен по времени</strong>. Вы можете использовать его бесплатно, пока не превысите установленные лимиты (см. <a href="https://firebase.google.com/pricing" target="_blank">firebase.google.com/pricing</a>).</li>
+                        <li><strong>Платный план (Blaze Plan):</strong> Если ваше приложение станет популярным и потребует больше ресурсов, вы можете перейти на план с оплатой по факту использования (pay-as-you-go).</li>
+                        <li><strong>Продление бесплатного режима:</strong> Увеличить бесплатные лимиты нельзя. Если они превышены, нужно либо оптимизировать использование, либо перейти на платный план.</li>
+                    </ul>
+                </div>
+
+                <!-- Tab: Step 1 -->
+                <div id="tab-step1" class="tab-content" data-index="1">
+                    <!-- H2 удален -->
+                    <ol>
+                        <li>
+                            <strong>Перейдите в консоль Firebase:</strong> Откройте <a href="https://console.firebase.google.com/" target="_blank">https://console.firebase.google.com/</a> и войдите в свой Google аккаунт.
+                        </li>
+                        <li class="clearfix">
+                            <span class="image-placeholder-float">[Изображение экрана приветствия Firebase с кнопкой Create project]</span>
+                            <strong>Начало работы:</strong> Нажмите на карточку/кнопку <strong>"Create a new Firebase project"</strong> (Создать проект). Если у вас уже есть проекты, кнопка может называться "Добавить проект" (Add project).
+                        </li>
+                        <li class="clearfix">
+                             <span class="image-placeholder-float">[Изображение экрана "Create a project" - ввод имени]</span>
+                            <strong>Введите имя проекта:</strong> На экране "Let's start with a name for your project" введите желаемое имя (например, <code>kommunalka-web</code>). Уникальный ID будет предложен ниже. Нажмите <strong>"Continue"</strong> (Продолжить).
+                             <!-- Примечание: Шаг с принятием условий и Google Developer Program может появляться здесь или позже, в зависимости от аккаунта/региона. Если появляется, примите условия. -->
+                        </li>
+                        <li class="clearfix">
+                             <span class="image-placeholder-float">[Изображение экрана "AI assistance for your Firebase project"]</span>
+                            <strong>AI assistance (Опционально):</strong> Вам может быть предложено включить ИИ-помощника Gemini. Галочка <strong>"Enable Gemini in Firebase"</strong> обычно включена. Можете оставить ее или снять. Нажмите <strong>"Continue"</strong> (Продолжить).
+                        </li>
+                        <li class="clearfix">
+                             <span class="image-placeholder-float">[Изображение экрана "Google Analytics for your Firebase project"]</span>
+                            <strong>Google Analytics (Рекомендуется):</strong> На следующем экране предложат включить Google Analytics. Галочка <strong>"Enable Google Analytics for this project"</strong> включена по умолчанию и <strong>рекомендуется</strong>. Лучше оставить её. Нажмите <strong>"Continue"</strong> (Продолжить) / <strong>"Создать проект"</strong> (Create project).
+                        </li>
+                        <li>
+                            <strong>Дождитесь создания проекта.</strong>
+                        </li>
+                        <li class="clearfix">
+                             <span class="image-placeholder-float">[Изображение экрана подтверждения создания проекта Firebase]</span>
+                            <strong>Проект готов:</strong> Вы увидите сообщение "Your Firebase project is ready". Нажмите <strong>"Продолжить"</strong> (Continue).
+                        </li>
+                    </ol>
+                </div>
+
+                <!-- Tab: Step 2 -->
+                <div id="tab-step2" class="tab-content" data-index="2">
+                    <!-- H2 удален -->
+                     <ol>
+                        <li>
+                            <strong>Добавьте приложение:</strong> На главной странице проекта (Project Overview):
+                            <ul class="clearfix">
+                                <li>
+                                     <span class="image-placeholder-float">[Изображение страницы обзора проекта Firebase с кнопкой Add app]</span>
+                                    Найдите кнопку <strong>"+ Add app"</strong> и нажмите её.
+                                </li>
+                                <li class="clearfix">
+                                     <span class="image-placeholder-float">[Изображение страницы обзора проекта Firebase с иконками платформ]</span>
+                                    Либо, если видите ряд иконок платформ, сразу нажмите на иконку веб-приложения (<code>&lt;/&gt;</code>).
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>Выберите платформу:</strong> Если нажали "+ Add app", выберите иконку веб-приложения (<code>&lt;/&gt;</code>).
+                        </li>
+                        <li>
+                            <strong>Зарегистрируйте приложение:</strong>
+                            <ul class="clearfix">
+                                <li>
+                                     <span class="image-placeholder-float">[Изображение модального окна добавления веб-приложения Firebase]</span>
+                                    Введите псевдоним приложения (App nickname), например, <code>kommunalka-180.html</code>.
+                                </li>
+                                <li>
+                                    <strong>(Опционально) Also set up Firebase Hosting...:</strong> Эту галочку ставить <strong>не нужно</strong>, если вы будете размещать приложение на GitHub Pages. Она нужна только для хостинга Firebase.
+                                </li>
+                                <li>Нажмите <strong>"Зарегистрировать приложение"</strong> (Register app).</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+
+                 <!-- НОВЫЙ ШАГ: Step 3 - Firestore -->
+                 <!-- ИЗМЕНЕНО: Вставлено подробное объяснение режимов -->
+                 <div id="tab-step3" class="tab-content" data-index="3">
+                    <!-- H2 удален -->
+                    <ol>
+                        <li class="clearfix">
+                            <span class="image-placeholder-float">[Изображение меню Firebase: Раздел Build, пункт Firestore Database]</span>
+                            <strong>Перейдите в Firestore:</strong> В консоли проекта (например, "kommunalka-web") на левой панели навигации разверните раздел <strong>"Build"</strong> (Сборка) и выберите <strong>"Firestore database"</strong> (База данных Firestore).
+                        </li>
+                        <li class="clearfix">
+                            <span class="image-placeholder-float">[Изображение экрана Firestore с кнопкой Create database]</span>
+                            <strong>Создайте базу данных:</strong> Нажмите <strong>"Create database"</strong> (Создать базу данных).
+                        </li>
+                        <li>
+                            <strong>Выберите режим безопасности:</strong>
+                            <ul class="clearfix">
+                                <span class="image-placeholder-float">[Изображение экрана выбора режима безопасности Firestore]</span>
+                                <li>Вам будет предложено выбрать режим правил безопасности. Для начала выберите <strong>"Start in test mode"</strong> (Начать в тестовом режиме).</li>
+                                <!-- ИЗМЕНЕНО: Вставлено подробное объяснение -->
+                                <div class="test-mode-note">
+                                    <h4>Правила в Тестовом Режиме (по умолчанию):</h4>
+                                    <p>Эти правила автоматически устанавливаются, когда вы выбираете "Start in test mode". Они разрешают <strong>любому</strong> читать и записывать данные в <strong>любую</strong> часть вашей базы данных до определенной даты (обычно 30 дней).</p>
+                                    <pre><code class="language-plaintext">rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if request.time < timestamp.date(ГГГГ, ММ, ДД); // Дата ~ через 30 дней
+    }
+  }
+}</code></pre>
+                                    <p><strong>Важно:</strong> Эти правила опасны, используйте их только для самого начала разработки.</p>
+
+                                    <h4>Правила для "Продления Навсегда" (НЕ РЕКОМЕНДУЕТСЯ):</h4>
+                                    <p>Чтобы снять временное ограничение для <strong>личного</strong> тестирования, разрешив доступ <strong>всем и всегда</strong>, можно использовать:</p>
+                                     <pre><code class="language-plaintext">rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if true; // Разрешает доступ всем всегда. Небезопасно!
+    }
+  }
+}</code></pre>
+                                     <p><strong>Крайне небезопасно:</strong> Никогда не используйте эти правила для приложений с реальными или конфиденциальными данными.</p>
+
+                                    <h4>Рекомендуемые Правила (для доступа вошедшим пользователям):</h4>
+                                    <p>Эти правила (которые мы установим в Шаге 7) разрешают доступ только аутентифицированным пользователям (включая анонимных) к <strong>определенной</strong> коллекции:</p>
+                                     <pre><code class="language-plaintext">rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /artifacts/{appId}/public/data/{document=**} {
+      allow read, write: if request.auth != null; // Только для аутентифицированных
+    }
+  }
+}</code></pre>
+                                     <p><code>if request.auth != null</code> проверяет, вошел ли пользователь в систему. Это базовый, но гораздо более безопасный подход.</p>
+                                </div>
+                                <li>Нажмите <strong>"Next"</strong> (Далее).</li>
+                            </ul>
+                        </li>
+                        <li class="clearfix">
+                            <span class="image-placeholder-float">[Изображение экрана выбора региона Firestore]</span>
+                            <strong>Выберите регион (Location):</strong> Выберите географический регион для хранения данных.
+                            <ul>
+                                <li><strong>Важно:</strong> Этот выбор <strong>окончателен</strong> и влияет на задержку доступа к данным. Выберите регион, ближайший к вашим пользователям (например, один из регионов <code>europe-west</code> или <code>europe-north1</code>).</li>
+                            </ul>
+                             Нажмите <strong>"Enable"</strong> (Включить).
+                        </li>
+                        <li>
+                             <strong>Дождитесь создания базы данных.</strong> После этого можно переходить к следующему шагу.
+                        </li>
+                    </ol>
+                 </div>
+
+                 <!-- Tab: Step 4 (бывший 3) - Конфигурация -->
+                 <div id="tab-step4" class="tab-content" data-index="4">
+                    <!-- H2 удален -->
+                    <ol>
+                        <li>
+                            <strong>Вернитесь к настройкам веб-приложения:</strong> Если вы все еще находитесь в разделе Firestore, вернитесь к обзору проекта (Project Overview), нажав на иконку шестеренки рядом с "Project Overview" и выбрав "Project settings", затем прокрутите вниз до раздела "Your apps" и кликните на ваше веб-приложение (<code>kommunalka-180.html</code>). Либо, если вы не закрывали вкладку после регистрации приложения (Шаг 2), она может быть еще открыта.
+                        </li>
+                        <li>
+                            <strong>Скопируйте конфигурацию:</strong> В настройках вашего веб-приложения найдите раздел "Firebase SDK snippet" (Фрагмент Firebase SDK).
+                            <ul>
+                                <span class="image-placeholder-float">[Изображение настроек веб-приложения с выбором тега script]</span>
+                                <li>Убедитесь, что выбрана опция <strong>"Config"</strong> (Конфигурация) или <strong>"Use a &lt;script&gt; tag"</strong>.</li>
+                                <li>
+                                    Скопируйте <strong>только JSON-объект</strong> внутри <code>const firebaseConfig = { ... };</code>. Пример для <code>kommunalka-web</code>:
+                                    <pre><code>{
+      apiKey: "AIzaSyDc8jODJCdUBdzoampsUN5m7KcCP59yhe0", // Ваш ключ
+      authDomain: "kommunalka-web.firebaseapp.com",
+      projectId: "kommunalka-web",
+      storageBucket: "kommunalka-web.firebasestorage.app",
+      messagingSenderId: "186335218379",
+      appId: "1:186335218379:web:4fc430c4031f6581e2294e",
+      measurementId: "G-H3CNXBW7BF"
+    }</code></pre>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>Сохраните этот объект.</strong> Он понадобится в следующем шаге.
+                        </li>
+                    </ol>
+                 </div>
+
+                <!-- Tab: Step 5 (бывший 4) - Аутентификация -->
+                <div id="tab-step5" class="tab-content" data-index="5">
+                     <!-- H2 удален -->
+                     <p>Для взаимодействия с базой данных (Firestore) нужен вход пользователя. Включим самый простой способ — анонимный вход.</p>
+                    <ol>
+                        <li class="clearfix">
+                             <span class="image-placeholder-float">[Изображение меню Firebase: Раздел Build, пункт Authentication]</span>
+                            <strong>Перейдите в раздел Authentication:</strong> В меню слева разверните секцию <strong>Build</strong> и выберите <strong>Authentication</strong>.
+                        </li>
+                        <li class="clearfix">
+                             <span class="image-placeholder-float">[Изображение начального экрана Authentication с кнопкой Get started]</span>
+                             <strong>Начните настройку:</strong> Нажмите кнопку <strong>"Начать"</strong> (Get started).
+                        </li>
+                        <li class="clearfix">
+                             <span class="image-placeholder-float">[Изображение вкладки Sign-in method со списком провайдеров]</span>
+                            <strong>Выберите провайдера:</strong> Убедитесь, что выбрана вкладка <strong>"Способы входа"</strong> (Sign-in method). В списке "Native providers" найдите и нажмите на <strong>"Anonymous"</strong> (Анонимный вход).
+                        </li>
+                         <li class="clearfix">
+                             <span class="image-placeholder-float">[Изображение окна настройки Anonymous с ползунком Enable]</span>
+                            <strong>Включите и сохраните:</strong> В появившемся окне переключите ползунок <strong>"Enable"</strong> (Включить) в активное положение. Нажмите кнопку <strong>"Save"</strong> (Сохранить).
+                        </li>
+                    </ol>
+                </div>
+
+                 <!-- Tab: Step 6 (бывший 5) - Код HTML -->
+                 <div id="tab-step6" class="tab-content" data-index="6">
+                    <!-- H2 удален -->
+                    <p>Добавьте конфигурацию и код инициализации в ваш HTML-файл.</p>
+                     <ol>
+                        <li>
+                            <strong>Откройте ваш HTML-файл.</strong>
+                        </li>
+                        <li>
+                            <strong>Добавьте JavaScript:</strong> Весь следующий код должен находиться внутри <strong>одного</strong> тега <code>&lt;script type="module"&gt;</code>, размещенного перед закрывающим тегом <code>&lt;/body&gt;</code>. Замените содержимое вашего текущего скрипта на этот код.
+                            <pre><code class="language-javascript">// Импорты Firebase SDK (ДОЛЖНЫ БЫТЬ В САМОМ НАЧАЛЕ СКРИПТА)
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, setPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+import { getFirestore, collection, query, onSnapshot, addDoc, serverTimestamp, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+// --- Глобальные переменные и конфигурация ---
+const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+let firebaseConfig = {};
+const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+const FIREBASE_CONFIG_MANUAL = {
+    apiKey: "AIzaSyDc8jODJCdUBdzoampsUN5m7KcCP59yhe0",
+    authDomain: "kommunalka-web.firebaseapp.com",
+    projectId: "kommunalka-web",
+    storageBucket: "kommunalka-web.firebasestorage.app",
+    messagingSenderId: "186335218379",
+    appId: "1:186335218379:web:4fc430c4031f6581e2294e",
+    measurementId: "G-H3CNXBW7BF"
+};
+let db;
+let auth;
+let isAuthReady = false;
+// ... остальные глобальные переменные для навигации ...
+
+// --- Логика выбора конфигурации ---
+// ... (без изменений) ...
+
+// --- Основные функции Firebase ---
+function initializeFirebase() {
+     // ... (без изменений, но убедитесь, что getFirestore() вызывается) ...
+     try {
+        if (!firebaseConfig || !firebaseConfig.apiKey) {
+            throw new Error("Config missing.");
+        }
+        const app = initializeApp(firebaseConfig);
+        db = getFirestore(app); // Убедитесь, что эта строка есть
+        auth = getAuth(app);
+        // ... остальной код initializeFirebase ...
+     } catch (error) {
+        // ... обработка ошибок ...
+     }
+}
+
+// Заглушка, т.к. в инструкции нет реальной работы с данными
+function setupRealtimeListeners() {
+    console.log("Firebase ready, Firestore listener would start here if needed.");
+     // Здесь будет ваш код для onSnapshot, если вы работаете с данными
+     // if (!isAuthReady || !db) return;
+     // const collectionRef = collection(db, getCollectionPath());
+     // const q = query(collectionRef);
+     // onSnapshot(q, (snapshot) => { ... });
+}
+
+// Заглушка, т.к. в инструкции нет реальной работы с данными
+function getCollectionPath() {
+     // Укажите реальный путь к вашей коллекции
+     return `/artifacts/${appId}/public/data/utility_readings`;
+}
+
+// --- Функции навигации ---
+// ... (без изменений) ...
+
+// --- Инициализация при загрузке DOM ---
+// ... (без изменений) ...
+&lt;/script></code></pre>
+                        </li>
+                    </ol>
+                 </div>
+
+                <!-- Tab: Step 7 (бывший 6) - Правила Firestore -->
+                <div id="tab-step7" class="tab-content" data-index="7">
+                     <!-- H2 удален -->
+                    <p>Настроим правила безопасности Firestore, чтобы разрешить доступ аутентифицированным пользователям.</p>
+                    <ol>
+                        <li>
+                            <strong>Перейдите в Firestore Database:</strong> В меню слева: <strong>Build</strong> -> <strong>Firestore Database</strong>.
+                        </li>
+                        <li>
+                            <strong>Перейдите на вкладку "Правила" (Rules).</strong>
+                        </li>
+                        <li>
+                            <strong>Отредактируйте правила:</strong> Замените существующие правила (которые разрешали доступ всем в тестовом режиме) на следующие:
+                            <pre><code>rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Доступ к публичным данным разрешен любому аутентифицированному пользователю
+    match /artifacts/{appId}/public/data/{document=**} {
+      allow read, write: if request.auth != null;
+    }
+    // (Пример) Доступ к личным данным только владельцу (если понадобится)
+    // match /artifacts/{appId}/users/{userId}/{document=**} {
+    //   allow read, write: if request.auth != null && request.auth.uid == userId;
+    // }
+  }
+}</code></pre>
+                            <p><strong>Пояснение:</strong> Эти правила разрешают чтение и запись в коллекцию <code>/artifacts/{appId}/public/data/</code> (где <code>{appId}</code> - ID вашего приложения) только тем пользователям, которые вошли в систему (включая анонимных, которых мы настроили ранее). Доступ неавторизованным пользователям будет запрещен.</p>
+                        </li>
+                        <li>
+                            <strong>Опубликуйте правила:</strong> Нажмите <strong>"Опубликовать"</strong> (Publish).
+                        </li>
+                    </ol>
+                </div>
+
+                 <!-- Tab: Step 8 (бывший 7) - Изображения -->
+                 <div id="tab-step8" class="tab-content" data-index="8">
+                    <!-- H2 удален -->
+                    <p>Замените серые блоки-заполнители <code>[Изображение ...]</code> на скриншоты.</p>
+
+                    <h3>Способ 1: Ссылки на файлы (Рекомендуется для GitHub)</h3>
+                    <ol>
+                        <li><strong>Подготовьте и загрузите PNG изображения</strong> в папку <code>images</code> вашего репозитория.</li>
+                        <li><strong>Найдите placeholder</strong> вида <code>&lt;span class="image-placeholder-float"&gt;[Описание]&lt;/span&gt;</code>.</li>
+                        <li>
+                            <strong>Замените на тег <code>&lt;img&gt;</code>:</strong>
+                            <pre><code class="language-html">&lt;!-- Пример: --&gt;
+&lt;!-- БЫЛО: --&gt;
+&lt;span class="image-placeholder-float"&gt;[Описание]&lt;/span&gt;
+
+&lt;!-- СТАЛО: --&gt;
+&lt;img src="images/имя_файла.png" alt="Описание" class="image-float"&gt;</code></pre>
+                             <p class="mt-2 text-sm text-gray-600"><strong>Пояснение:</strong> Класс <code>image-float</code> применяется, чтобы изображение располагалось справа, а текст обтекал его слева, как мы настроили в CSS.</p>
+                             (Укажите правильный путь, имя файла и описание).
+                        </li>
+                    </ol>
+
+                    <h3>Способ 2: Встраивание Base64 (Менее рекомендуется)</h3>
+                    <ol>
+                        <li>
+                            <strong>Сгенерируйте Base64 код</strong> из PNG файла (онлайн-конвертером или через PowerShell):
+                            <pre><code>[System.Convert]::ToBase64String([System.IO.File]::ReadAllBytes('C:\путь\к\файлу.png'))</code></pre>
+                        </li>
+                         <li><strong>Найдите placeholder</strong> вида <code>&lt;span class="image-placeholder-float"&gt;[Описание]&lt;/span&gt;</code> в вашем HTML.</li>
+                         <li>
+                            <strong>Замените его на тег <code>&lt;img&gt;</code> с Base64.</strong>
+                            <p><strong>Пример:</strong></p>
+                            <pre><code class="language-html">&lt;!-- БЫЛО: --&gt;
+&lt;span class="image-placeholder-float"&gt;[Изображение экрана приветствия Firebase]&lt;/span&gt;
+
+&lt;!-- СТАЛО (Base64 строка сильно сокращена для примера): --&gt;
+&lt;img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA..." alt="Экран приветствия Firebase" class="image-float"&gt;</code></pre>
+                             <p class="mt-2 text-sm text-gray-600"><strong>Пояснение:</strong> Класс <code>image-float</code> применяется здесь по той же причине – чтобы текст обтекал изображение, расположенное справа.</p>
+                             Вставьте вашу полную строку Base64 после <code>data:image/png;base64,</code> и укажите правильное описание в <code>alt</code>.
+                         </li>
+                    </ol>
+                    <p><strong>Примечание:</strong> Base64 увеличивает размер HTML. Для скриншотов лучше ссылки.</p>
+                 </div>
+
+                 <!-- Tab: Note (бывший 8) -->
+                 <div id="tab-note" class="tab-content" data-index="9">
+                    <!-- H2 удален -->
+                    <p>Запрос Firestore с <code>orderBy('createdAt', 'desc')</code> требует создания <strong>индекса</strong> в консоли Firebase. Без индекса запрос не работает.</p>
+                    <p><strong>Решение, которое мы применили:</strong></p>
+                    <ul>
+                        <li>Убрать <code>orderBy</code> из запроса <code>query()</code>.</li>
+                        <li>Получить все документы.</li>
+                        <li>Отсортировать их в браузере с помощью JavaScript (<code>docs.sort(...)</code>) перед отображением.</li>
+                    </ul>
+                    <p>Это стандартный способ обхода необходимости индексов для простой сортировки.</p>
+                    <hr class="my-8">
+                    <p class="text-center text-sm text-gray-500">Теперь эта инструкция должна быть полной и соответствовать тому коду, который у вас работает.</p>
+                 </div>
+            </div> <!-- Конец tab-content-container -->
+
+        </div> <!-- Конец p-6 -->
+    </div> <!-- Конец max-w-4xl -->
+
+    <!-- ВЕСЬ JavaScript -->
+    <!-- ИЗМЕНЕНО: Обновлен массив navItems -->
+    <script type="module">
+        // Импорты Firebase SDK (ДОЛЖНЫ БЫТЬ В САМОМ НАЧАЛЕ СКРИПТА)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, setPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, query, onSnapshot, addDoc, serverTimestamp, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- Глобальные переменные и конфигурация ---
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        let firebaseConfig = {};
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        const FIREBASE_CONFIG_MANUAL = {
+            apiKey: "AIzaSyDc8jODJCdUBdzoampsUN5m7KcCP59yhe0",
+            authDomain: "kommunalka-web.firebaseapp.com",
+            projectId: "kommunalka-web",
+            storageBucket: "kommunalka-web.firebasestorage.app",
+            messagingSenderId: "186335218379",
+            appId: "1:186335218379:web:4fc430c4031f6581e2294e",
+            measurementId: "G-H3CNXBW7BF"
+        };
+        let db;
+        let auth;
+        let isAuthReady = false;
+        let currentTabIndex = 0; // Для навигации
+        const tabOrder = []; // Для навигации
+        // ИЗМЕНЕНО: Добавлены fullTitle, заголовки h2 удалены из контента
+        const navItems = [
+            { id: 'tab-intro', text: 'Введение', fullTitle: 'Введение' },
+            { id: 'tab-step1', text: 'Шаг 1: Проект', fullTitle: 'Шаг 1: Создание проекта Firebase' },
+            { id: 'tab-step2', text: 'Шаг 2: Веб-прилож.', fullTitle: 'Шаг 2: Регистрация Веб-приложения' },
+            { id: 'tab-step3', text: 'Шаг 3: Firestore', fullTitle: 'Шаг 3: Включение Cloud Firestore' }, // ИЗМЕНЕНО: Добавлен полный заголовок
+            { id: 'tab-step4', text: 'Шаг 4: Конфиг', fullTitle: 'Шаг 4: Получение Конфигурации Firebase' },
+            { id: 'tab-step5', text: 'Шаг 5: Аутентиф.', fullTitle: 'Шаг 5: Настройка Аутентификации' },
+            { id: 'tab-step6', text: 'Шаг 6: Код HTML', fullTitle: 'Шаг 6: Добавление Firebase в HTML' },
+            { id: 'tab-step7', text: 'Шаг 7: Правила', fullTitle: 'Шаг 7: Настройка правил Firestore' },
+            { id: 'tab-step8', text: 'Шаг 8: Изображ.', fullTitle: 'Шаг 8: Вставка изображений' },
+            { id: 'tab-note', text: 'Примеч.', fullTitle: 'Примечание: Сортировка Firestore' },
+        ];
+
+
+        // --- Логика выбора конфигурации ---
+        if (FIREBASE_CONFIG_MANUAL && FIREBASE_CONFIG_MANUAL.apiKey) {
+             firebaseConfig = FIREBASE_CONFIG_MANUAL;
+             console.log("Using MANUAL Firebase Config.");
+        } else {
+             console.warn("Manual config missing, trying Canvas config.");
+             firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        }
+
+        // --- Основные функции Firebase ---
+        function initializeFirebase() {
+             try {
+                if (!firebaseConfig || !firebaseConfig.apiKey) {
+                    throw new Error("Config missing.");
+                }
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                setPersistence(auth, browserSessionPersistence);
+
+                // Обработчик изменения состояния аутентификации
+                onAuthStateChanged(auth, (user) => {
+                    const loadingElement = document.getElementById('global-loading');
+                    if (user) {
+                        console.log("Auth OK. UID:", user.uid);
+                        isAuthReady = true;
+                        if(loadingElement) loadingElement.classList.add('hidden');
+                        // Вызываем setupRealtimeListeners ТОЛЬКО после успешной аутентификации
+                        // setupRealtimeListeners(); // Пока не вызываем, т.к. инструкция не работает с данными
+                    } else {
+                        console.log("No user signed in. Attempting anonymous sign-in...");
+                        isAuthReady = false;
+                         if(loadingElement) loadingElement.classList.remove('hidden'); // Показываем загрузку, пока идет анонимный вход
+                        // Попытка анонимного входа, если пользователь не вошел (включая случай ошибки custom token)
+                         signInAnonymously(auth).catch(anonError => {
+                            console.error("Anonymous sign-in failed:", anonError);
+                            // Показываем ошибку пользователю
+                            const titleElement = document.getElementById('current-step-title');
+                            let msg = `Ошибка анонимного входа (${anonError.code || anonError.message}).`;
+                            if (anonError.code === 'auth/operation-not-allowed' || anonError.code === 'auth/configuration-not-found') {
+                                msg = 'Включите Анонимный вход в консоли Firebase.';
+                            }
+                            if (titleElement) {
+                                titleElement.textContent = msg;
+                                titleElement.classList.add('text-red-600', 'text-sm');
+                            }
+                            if(loadingElement) loadingElement.classList.add('hidden'); // Скрываем загрузку при ошибке
+                         });
+                    }
+                });
+
+                // Первоначальная попытка входа (Custom token ИЛИ просто запуск onAuthStateChanged для анонимного)
+                if (initialAuthToken) {
+                     signInWithCustomToken(auth, initialAuthToken).catch(error => {
+                        // Ошибку custom token обрабатываем тихо, т.к. onAuthStateChanged вызовет анонимный вход
+                        if (error.code !== 'auth/custom-token-mismatch') {
+                             console.error("Custom token sign-in failed:", error);
+                        }
+                        // Не вызываем signInAnonymously здесь, onAuthStateChanged сделает это
+                     });
+                }
+                // Если initialAuthToken нет, onAuthStateChanged сам инициирует анонимный вход
+
+            } catch (error) {
+                console.error("Firebase Init Error:", error);
+                 let msg = `Ошибка инициализации (${error.message}). Проверьте конфигурацию.`;
+                 const titleElement = document.getElementById('current-step-title');
+                 if (titleElement) {
+                     titleElement.textContent = msg;
+                     titleElement.classList.add('text-red-600', 'text-sm');
+                 }
+                 document.getElementById('global-loading')?.classList.add('hidden');
+            }
+        }
+
+        // Заглушка, т.к. в инструкции нет реальной работы с данными
+        function setupRealtimeListeners() {
+            console.log("Firebase ready, Firestore listener would start here if needed.");
+        }
+
+        // Заглушка, т.к. в инструкции нет реальной работы с данными
+        function getCollectionPath() {
+             return `/artifacts/${appId}/public/data/dummy_path`; // Пример пути
+        }
+
+        // --- Функции навигации ---
+        // ИЗМЕНЕНО: Использует fullTitle для заголовка
+        function switchTab(index) {
+            if (index < 0 || index >= tabOrder.length) return;
+
+            const targetId = tabOrder[index];
+            currentTabIndex = index;
+
+            // Обновляем видимость контента
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            const activeContent = document.getElementById(targetId);
+            if (activeContent) activeContent.classList.add('active');
+
+             // Обновляем активное состояние ссылок в бургер-меню
+             document.querySelectorAll('.nav-item-link').forEach(l => {
+                l.classList.remove('active');
+                if (parseInt(l.dataset.index) === index) l.classList.add('active');
+             });
+
+             // Обновляем заголовок текущего шага, используя ПОЛНЫЙ заголовок
+             const currentStepTitleElement = document.getElementById('current-step-title');
+             if (currentStepTitleElement) {
+                 currentStepTitleElement.textContent = navItems[index].fullTitle; // Используем fullTitle
+                 currentStepTitleElement.classList.remove('text-red-600', 'text-sm');
+             }
+
+            // Обновляем состояние стрелок
+            updateArrows();
+        }
+
+        function updateArrows() {
+             const isFirst = currentTabIndex === 0;
+             const isLast = currentTabIndex === tabOrder.length - 1;
+             document.getElementById('top-prev-step').disabled = isFirst;
+             document.getElementById('top-next-step').disabled = isLast;
+        }
+
+        // --- Инициализация при загрузке DOM ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const burgerButton = document.getElementById('burger-menu-button');
+            const burgerMenuList = document.getElementById('burger-menu-list');
+            const burgerNavContainer = burgerMenuList.querySelector('nav');
+            const prevButton = document.getElementById('top-prev-step');
+            const nextButton = document.getElementById('top-next-step');
+            const loadingElement = document.getElementById('global-loading');
+
+            // Показываем индикатор загрузки в начале
+            if(loadingElement) loadingElement.classList.remove('hidden');
+
+            // Создаем ссылки для бургер-меню (используем короткий text)
+            navItems.forEach((item, index) => {
+                tabOrder.push(item.id);
+                const link = document.createElement('a');
+                link.href = '#';
+                link.textContent = item.text; // Используем короткое название для меню
+                link.dataset.target = item.id;
+                link.dataset.index = index;
+                link.classList.add('nav-item-link', 'block', 'w-full', 'text-left', 'px-4', 'py-2', 'text-sm', 'text-gray-700', 'hover:bg-gray-100', 'rounded');
+                if (index === 0) link.classList.add('active');
+                link.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    switchTab(parseInt(link.dataset.index));
+                    burgerMenuList.classList.add('hidden');
+                });
+                burgerNavContainer.appendChild(link);
+            });
+
+            // Слушатели для стрелок
+            prevButton.addEventListener('click', () => switchTab(currentTabIndex - 1));
+            nextButton.addEventListener('click', () => switchTab(currentTabIndex + 1));
+
+            // Слушатель для бургер-кнопки
+            burgerButton.addEventListener('click', (event) => {
+                event.stopPropagation();
+                burgerMenuList.classList.toggle('hidden');
+            });
+
+             // Закрытие бургер-меню при клике вне его
+             document.addEventListener('click', (event) => {
+                if (!burgerMenuList.contains(event.target) && !burgerButton.contains(event.target)) {
+                    burgerMenuList.classList.add('hidden');
+                }
+             });
+
+            // Инициализация UI (показываем первый шаг)
+            switchTab(0);
+
+            // Инициализация Firebase (происходит асинхронно)
+            initializeFirebase();
+        });
+    </script>
+</body>
+</html>
