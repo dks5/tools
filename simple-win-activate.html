@@ -3,142 +3,392 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Активация Windows</title>
+    <title>Активация Windows | macOS Style</title>
     <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            --accent-blue: #007AFF;
+            --accent-green: #34C759;
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --code-bg: rgba(0, 0, 0, 0.06);
+        }
+
         body {
-            font-family: sans-serif;
-            line-height: 1.6;
-            margin: 20px;
-            background-color: #f4f4f4;
-            color: #333;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1, h2 {
-            color: #337ab7;
-        }
-        .instruction-step {
-            margin-bottom: 20px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            background-color: #f9f9f9;
-        }
-        .command-block {
-            background-color: #e0f7fa;
-            padding: 15px;
-            border-radius: 4px;
-            margin-bottom: 15px;
+            margin: 0;
+            padding: 40px 20px;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            /* Абстрактный фон в стиле macOS */
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%), 
+                        radial-gradient(circle at top left, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            background-blend-mode: overlay;
+            background-attachment: fixed;
+            background-size: cover;
+            min-height: 100vh;
+            color: var(--text-primary);
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        /* Основной контейнер - Окно */
+        .mac-window {
+            width: 100%;
+            max-width: 820px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 18px;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            overflow: hidden;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        /* Заголовок окна со "светофором" */
+        .window-header {
+            height: 52px;
+            display: flex;
             align-items: center;
-            border: 1px solid #b2ebf2;
+            padding: 0 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            background: rgba(255, 255, 255, 0.4);
         }
-        .command {
-            font-family: monospace;
-            font-size: 1em;
-            color: #00796b;
-            margin-right: 10px;
+
+        .traffic-lights {
+            display: flex;
+            gap: 8px;
+            margin-right: 20px;
+        }
+
+        .traffic-light {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .close { background-color: #ff5f57; border: 1px solid #e0443e; }
+        .minimize { background-color: #febc2e; border: 1px solid #d89e24; }
+        .maximize { background-color: #28c840; border: 1px solid #1aab29; }
+
+        .window-title {
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--text-primary);
             flex-grow: 1;
-        }
-        .copy-button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 8px 15px;
             text-align: center;
-            text-decoration: none;
+            margin-right: 60px; /* Компенсация светофора для центровки */
+            opacity: 0.8;
+        }
+
+        /* Контент */
+        .content {
+            padding: 40px;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-top: 0;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        h2 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        p {
+            line-height: 1.6;
+            color: #424245;
+            margin-bottom: 15px;
+        }
+
+        /* Блок предупреждения */
+        .warning-card {
+            background: rgba(255, 59, 48, 0.1);
+            border: 1px solid rgba(255, 59, 48, 0.2);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 30px;
+            display: flex;
+            gap: 12px;
+            align-items: start;
+        }
+
+        .warning-icon {
+            font-size: 20px;
+        }
+
+        .warning-text {
+            font-size: 14px;
+            color: #d63031;
+        }
+
+        /* Карточки шагов */
+        .step-card {
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 14px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            transition: transform 0.2s ease;
+        }
+
+        .step-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+        }
+
+        .step-badge {
             display: inline-block;
-            font-size: 0.9em;
-            border-radius: 4px;
+            background: var(--accent-blue);
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Блоки кода */
+        .code-container {
+            display: flex;
+            align-items: center;
+            background: var(--code-bg);
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin: 12px 0;
+            border: 1px solid rgba(0,0,0,0.05);
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .code-text {
+            font-family: "SF Mono", "Menlo", "Monaco", "Courier New", monospace;
+            font-size: 14px;
+            color: #333;
+            word-break: break-all;
+        }
+
+        /* Кнопки */
+        .btn-copy {
+            background: white;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 8px;
+            padding: 6px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent-blue);
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: all 0.2s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            white-space: nowrap;
         }
-        .copy-button:hover {
-            background-color: #45a049;
+
+        .btn-copy:hover {
+            background: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
         }
-        .note {
-            color: #777;
-            font-size: 0.9em;
-            margin-top: 10px;
-            font-style: italic;
+
+        .btn-copy:active {
+            transform: scale(0.96);
         }
-        .success {
-            color: green;
-            font-weight: bold;
+
+        /* Табы для выбора версии */
+        .version-selector {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .version-block {
+            flex: 1;
+            min-width: 280px;
+            background: rgba(255,255,255,0.6);
+            padding: 15px;
+            border-radius: 12px;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .version-block.home {
+            border-color: rgba(52, 199, 89, 0.3); /* Green tint */
+        }
+        
+        .version-block.pro {
+            border-color: rgba(88, 86, 214, 0.3); /* Purple tint */
+        }
+
+        .version-title {
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .home .version-title { color: #248a3d; }
+        .pro .version-title { color: #5856d6; }
+
+        kbd {
+            background: white;
+            border: 1px solid #d1d1d1;
+            border-radius: 5px;
+            box-shadow: 0 2px 0 #e5e5e5;
+            color: #555;
+            display: inline-block;
+            font-size: 0.85em;
+            font-weight: 600;
+            line-height: 1;
+            padding: 4px 6px;
+            white-space: nowrap;
+            font-family: -apple-system, sans-serif;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.98) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .content { padding: 20px; }
+            .window-title { display: none; }
+            .code-container { flex-direction: column; align-items: stretch; }
+            .btn-copy { width: 100%; text-align: center; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Активация Windows</h1>
 
-        <div class="instruction-step">
-            <p><span class="success">✅</span> Этим ключом 13/12/2023 активировал W10</p>
-            <p class="note">Обратите внимание, что данный ключ был использован ранее и может не подойти для новой активации.</p>
+    <div class="mac-window">
+        <!-- Заголовок окна -->
+        <div class="window-header">
+            <div class="traffic-lights">
+                <div class="traffic-light close"></div>
+                <div class="traffic-light minimize"></div>
+                <div class="traffic-light maximize"></div>
+            </div>
+            <div class="window-title">Terminal — Activation Assistant</div>
         </div>
 
-        <h2>Инструкция по активации Windows через командную строку</h2>
+        <!-- Контент -->
+        <div class="content">
+            <h1>Активация Windows</h1>
+            <p style="color: var(--text-secondary);">Простой способ активировать систему через командную строку (KMS).</p>
 
-        <div class="instruction-step">
-            <p><strong>Шаг 1:</strong> Запустите командную строку от имени администратора.</p>
-            <p>Для этого:</p>
-            <ul>
-                <li>Нажмите правой кнопкой мыши на кнопку "Пуск".</li>
-                <li>Выберите "Windows PowerShell (администратор)" или "Командная строка (администратор)".</li>
-                <li>Если появится запрос контроля учетных записей пользователей, нажмите "Да".</li>
-            </ul>
-        </div>
-
-        <div class="instruction-step">
-            <p><strong>Шаг 2:</strong> Введите поочередно следующие команды. После ввода каждой команды нажимайте клавишу <kbd>Enter</kbd>.</p>
-
-            <div class="command-block">
-                <span class="command">slmgr /ipk W269N-WFGWX-YVC9B-4J6C9-T83GX</span>
-                <button class="copy-button" onclick="copyToClipboard('slmgr /ipk W269N-WFGWX-YVC9B-4J6C9-T83GX')">Копировать</button>
+            <div class="warning-card">
+                <span class="warning-icon">⚠️</span>
+                <div class="warning-text">
+                    <strong>Важно для новых ноутбуков:</strong><br>
+                    Если у вас новый ноутбук с предустановленной Windows, сначала просто подключите интернет. Система должна активироваться сама официальным ключом из BIOS. Используйте этот метод только если официальная активация не сработала.
+                </div>
             </div>
 
-            <div class="command-block">
-                <span class="command">slmgr /skms kms.digiboy.ir</span>
-                <button class="copy-button" onclick="copyToClipboard('slmgr /skms kms.digiboy.ir')">Копировать</button>
+            <!-- Шаг 1 -->
+            <div class="step-card">
+                <span class="step-badge">Шаг 1</span>
+                <h3>Запуск терминала</h3>
+                <p>Откройте командную строку от имени администратора:</p>
+                <ol style="padding-left: 20px; color: #424245;">
+                    <li>Нажмите <kbd>Win</kbd> + <kbd>R</kbd></li>
+                    <li>Введите <code>cmd</code></li>
+                    <li>Нажмите <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Enter</kbd></li>
+                </ol>
             </div>
 
-            <div class="command-block">
-                <span class="command">slmgr /ato</span>
-                <button class="copy-button" onclick="copyToClipboard('slmgr /ato')">Копировать</button>
+            <!-- Шаг 2 -->
+            <div class="step-card">
+                <span class="step-badge">Шаг 2</span>
+                <h3>Установка ключа продукта</h3>
+                <p>Выберите версию вашей Windows и скопируйте соответствующую команду:</p>
+
+                <div class="version-selector">
+                    <!-- Home -->
+                    <div class="version-block home">
+                        <span class="version-title">Windows Home / Core</span>
+                        <div class="code-container">
+                            <span class="code-text">slmgr /ipk TX9XD-98N7V-6WMQ6-BX7FG-H8Q99</span>
+                        </div>
+                        <button class="btn-copy" onclick="copyText(this, 'slmgr /ipk TX9XD-98N7V-6WMQ6-BX7FG-H8Q99')">Копировать</button>
+                    </div>
+
+                    <!-- Pro -->
+                    <div class="version-block pro">
+                        <span class="version-title">Windows Professional</span>
+                        <div class="code-container">
+                            <span class="code-text">slmgr /ipk W269N-WFGWX-YVC9B-4J6C9-T83GX</span>
+                        </div>
+                        <button class="btn-copy" onclick="copyText(this, 'slmgr /ipk W269N-WFGWX-YVC9B-4J6C9-T83GX')">Копировать</button>
+                    </div>
+                </div>
             </div>
 
-            <p class="note">Каждая команда выполняет определенное действие:</p>
-            <ul>
-                <li><code>slmgr /ipk [ключ продукта]</code> - устанавливает ключ продукта.</li>
-                <li><code>slmgr /skms [KMS-сервер]</code> - устанавливает имя или IP-адрес KMS-сервера.</li>
-                <li><code>slmgr /ato</code> - активирует Windows, обращаясь к KMS-серверу.</li>
-            </ul>
-        </div>
+            <!-- Шаг 3 -->
+            <div class="step-card">
+                <span class="step-badge">Шаг 3</span>
+                <h3>Активация</h3>
+                <p>Введите эти две команды по очереди для завершения процесса:</p>
 
-        <div class="instruction-step">
-            <p><strong>Шаг 3:</strong> Дождитесь сообщения об успешной активации Windows.</p>
-            <p>После выполнения команды <code>slmgr /ato</code> вы должны увидеть сообщение, подтверждающее успешную активацию.</p>
-        </div>
+                <div class="code-container">
+                    <span class="code-text">slmgr /skms kms.digiboy.ir</span>
+                    <button class="btn-copy" onclick="copyText(this, 'slmgr /skms kms.digiboy.ir')">Копировать</button>
+                </div>
 
-        <p class="note"><strong>Важно:</strong> Для успешной активации ваш компьютер должен быть подключен к интернету, чтобы иметь возможность связаться с указанным KMS-сервером.</p>
+                <div class="code-container">
+                    <span class="code-text">slmgr /ato</span>
+                    <button class="btn-copy" onclick="copyText(this, 'slmgr /ato')">Копировать</button>
+                </div>
+                
+                <p style="font-size: 13px; color: var(--text-secondary); margin-top: 10px;">
+                    После ввода последней команды подождите 10-15 секунд до появления окна "Product activated successfully".
+                </p>
+            </div>
+
+        </div>
     </div>
 
     <script>
-        function copyToClipboard(text) {
+        function copyText(btn, text) {
+            // Создаем временный элемент
             const tempInput = document.createElement('input');
             tempInput.value = text;
             document.body.appendChild(tempInput);
             tempInput.select();
-            document.execCommand('copy');
+            tempInput.setSelectionRange(0, 99999); // Для мобильных
+
+            try {
+                document.execCommand('copy');
+                
+                // Анимация кнопки
+                const originalText = btn.innerText;
+                btn.innerText = "Скопировано!";
+                btn.style.background = "#34C759"; // Зеленый цвет успеха
+                btn.style.color = "white";
+                btn.style.borderColor = "#34C759";
+
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.style.background = "";
+                    btn.style.color = "";
+                    btn.style.borderColor = "";
+                }, 2000);
+
+            } catch (err) {
+                alert('Ошибка копирования');
+            }
+
             document.body.removeChild(tempInput);
-            alert('Команда скопирована в буфер обмена!');
         }
     </script>
 </body>
