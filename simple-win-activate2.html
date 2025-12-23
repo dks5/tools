@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Автоматическая активация Office</title>
+    <title>Активация Office (CMD Версия)</title>
     <style>
         body {
             font-family: sans-serif;
@@ -20,108 +20,95 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        h1 {
-            color: #d9534f; /* Красный, чтобы привлечь внимание */
-        }
+        h1 { color: #337ab7; }
+        h2 { color: #d9534f; border-bottom: 2px solid #d9534f; padding-bottom: 10px; }
+        
         .instruction-step {
             margin-bottom: 20px;
-            padding: 15px;
-            border: 2px solid #337ab7;
+            padding: 20px;
+            border: 2px solid #333;
             border-radius: 4px;
-            background-color: #e6f3ff;
+            background-color: #fffbe6; /* Желтоватый фон для внимания */
         }
         .command-block {
-            background-color: #333;
-            color: #fff;
+            background-color: #222; /* Черный фон как в CMD */
+            color: #0f0; /* Зеленый текст */
             padding: 15px;
             border-radius: 4px;
             margin-bottom: 15px;
-            overflow-x: auto;
-        }
-        .command {
             font-family: monospace;
-            font-size: 0.9em;
-            white-space: pre-wrap; /* Сохраняет переносы строк */
+            white-space: pre-wrap;
+            word-break: break-all;
+            border-left: 5px solid #0f0;
         }
         .copy-button {
-            background-color: #d9534f;
+            background-color: #333;
             color: white;
             border: none;
-            padding: 15px 30px;
+            padding: 12px 25px;
             text-align: center;
-            text-decoration: none;
-            display: block;
-            width: 100%;
-            font-size: 1.2em;
+            font-size: 1em;
             font-weight: bold;
             border-radius: 4px;
             cursor: pointer;
-            margin-top: 10px;
-            transition: background-color 0.3s ease;
+            width: 100%;
+            transition: background-color 0.2s;
         }
-        .copy-button:hover {
-            background-color: #c9302c;
-        }
-        .note {
-            color: #555;
-            font-size: 0.9em;
-            margin-top: 10px;
-        }
+        .copy-button:hover { background-color: #555; }
+        .note { font-size: 0.9em; color: #555; margin-top: 5px; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Финальное исправление (PowerShell)</h1>
+        <h1>Активация Office (Метод CMD)</h1>
+        
+        <p class="note"><strong>Важно:</strong> Этот метод работает ТОЛЬКО в черном окне "Командная строка" (CMD). <br>Не используйте PowerShell (синее окно).</p>
 
         <div class="instruction-step">
-            <p><strong>Инструкция:</strong></p>
-            <ol>
-                <li>Запустите <strong>PowerShell</strong> от имени администратора.</li>
-                <li>Нажмите большую красную кнопку ниже.</li>
-                <li>Вставьте скопированный код в PowerShell (нажмите правую кнопку мыши в окне консоли или Ctrl+V).</li>
-                <li>Нажмите <strong>Enter</strong>.</li>
-            </ol>
-            
-            <p class="note">Скрипт сам определит версию вашего Office, установит нужные файлы лицензий и выполнит активацию. Процесс займет около 1-2 минут. Просто дождитесь окончания.</p>
+            <h2>ШАГ 1: Переход в папку</h2>
+            <p>Скопируйте и вставьте эту команду. Если первая выдаст "Системе не удается найти указанный путь", попробуйте вторую.</p>
 
-            <div class="command-block">
-<pre class="command" id="script-code">
-$officePath = "C:\Program Files\Microsoft Office\root\Office16";
-$licensePath = "C:\Program Files\Microsoft Office\root\Licenses16";
-if (-not (Test-Path $officePath)) {
-    $officePath = "C:\Program Files (x86)\Microsoft Office\root\Office16";
-    $licensePath = "C:\Program Files (x86)\Microsoft Office\root\Licenses16";
-}
-if (Test-Path $officePath) {
-    Write-Host "Папка Office найдена: $officePath" -ForegroundColor Green;
-    Write-Host "Установка лицензий (подождите)..." -ForegroundColor Yellow;
-    $ospp = "$officePath\ospp.vbs";
-    Get-ChildItem "$licensePath\*.xrm-ms" | ForEach-Object {
-        cscript $ospp /inslic:$_.FullName
-    };
-    Write-Host "Активация..." -ForegroundColor Yellow;
-    cscript $ospp /sethst:kms.digiboy.ir;
-    cscript $ospp /act;
-} else {
-    Write-Host "Не удалось найти папку Office автоматически." -ForegroundColor Red;
-}
-</pre>
-            </div>
+            <p><strong>Вариант 1 (Для большинства):</strong></p>
+            <div class="command-block">cd /d "%ProgramFiles%\Microsoft Office\Office16"</div>
+            <button class="copy-button" onclick="copyToClipboard('cd /d &quot;%ProgramFiles%\\Microsoft Office\\Office16&quot;')">Копировать Вариант 1</button>
 
-            <button class="copy-button" onclick="copyScript()">🔴 КОПИРОВАТЬ ВЕСЬ СКРИПТ ИСПРАВЛЕНИЯ</button>
+            <br><br>
+            <p><strong>Вариант 2 (Если у вас 32-бит Office):</strong></p>
+            <div class="command-block">cd /d "%ProgramFiles(x86)%\Microsoft Office\Office16"</div>
+            <button class="copy-button" onclick="copyToClipboard('cd /d &quot;%ProgramFiles(x86)%\\Microsoft Office\\Office16&quot;')">Копировать Вариант 2</button>
         </div>
+
+        <div class="instruction-step">
+            <h2>ШАГ 2: Конвертация и Ключ</h2>
+            <p>Это самая важная часть. Скопируйте этот блок целиком и вставьте в черное окно. Он найдет файлы лицензий, установит их и пропишет ключ.</p>
+            
+            <div class="command-block">for /f %x in ('dir /b ..\root\Licenses16\ProPlus*.xrm-ms') do cscript ospp.vbs /inslic:"..\root\Licenses16\%x"</div>
+            <button class="copy-button" onclick="copyToClipboard('for /f %x in (\'dir /b ..\\root\\Licenses16\\ProPlus*.xrm-ms\') do cscript ospp.vbs /inslic:&quot;..\\root\\Licenses16\\%x&quot;')">1. Копировать команду конвертации</button>
+            
+            <p class="note" style="margin-top:15px">После того как пробегут строчки, выполните эту команду, чтобы принудительно задать ключ (это устраняет ошибку "No licenses found"):</p>
+            <div class="command-block">cscript ospp.vbs /inpkey:XQNVK-8JYDB-WJ9W3-YJ8YR-WFG99</div>
+            <button class="copy-button" onclick="copyToClipboard('cscript ospp.vbs /inpkey:XQNVK-8JYDB-WJ9W3-YJ8YR-WFG99')">2. Копировать установку ключа</button>
+        </div>
+
+        <div class="instruction-step">
+            <h2>ШАГ 3: Активация</h2>
+            <p>Теперь финал.</p>
+            <div class="command-block">cscript ospp.vbs /sethst:kms.digiboy.ir & cscript ospp.vbs /act</div>
+            <button class="copy-button" onclick="copyToClipboard('cscript ospp.vbs /sethst:kms.digiboy.ir & cscript ospp.vbs /act')">Копировать команду активации</button>
+        </div>
+        
+        <p class="note">Если в конце вы увидели <code>&lt;Product activation successful&gt;</code> — всё готово!</p>
     </div>
 
     <script>
-        function copyScript() {
-            const scriptText = document.getElementById('script-code').innerText;
-            const tempInput = document.createElement('textarea'); // Используем textarea для сохранения переносов
-            tempInput.value = scriptText;
+        function copyToClipboard(text) {
+            const tempInput = document.createElement('textarea');
+            tempInput.value = text;
             document.body.appendChild(tempInput);
             tempInput.select();
             document.execCommand('copy');
             document.body.removeChild(tempInput);
-            alert('Скрипт скопирован! Вставьте его в PowerShell.');
+            alert('Скопировано! Вставьте в черное окно CMD (правой кнопкой мыши).');
         }
     </script>
 </body>
