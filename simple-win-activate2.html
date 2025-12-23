@@ -147,37 +147,31 @@
         <hr>
 
         <h1>Активация Microsoft Office</h1>
-        <p class="note">Для успешной активации нужно пройти все шаги. Если на Шаге 4 возникает ошибка "No Office KMS licenses found", обязательно выполните Шаг 3.</p>
+        <p class="note">Для успешной активации нужно пройти все шаги. Если вы закрыли окно консоли, начните с Шага 2 заново.</p>
 
         <div class="instruction-step">
             <p><strong>Шаг 1:</strong> Запустите командную строку или PowerShell от имени администратора (см. выше).</p>
-            <p><strong>Шаг 2:</strong> Перейдите в папку установки. Попробуйте эти команды по очереди, пока не исчезнут ошибки "Не удается найти путь":</p>
+            <p><strong>Шаг 2:</strong> Вход в папку. Используйте команду, соответствующую вашей версии:</p>
             
-            <p class="note">Вариант 1 (Самый частый для Office 2016/2019/2021):</p>
+            <p class="note">Вариант 1 (Стандартный):</p>
             <div class="command-block">
                 <span class="command">cd "C:\Program Files\Microsoft Office\root\Office16"</span>
                 <button class="copy-button" onclick="copyToClipboard('cd &quot;C:\\Program Files\\Microsoft Office\\root\\Office16&quot;')">Копировать</button>
             </div>
             
-            <p class="note">Вариант 2 (Старые версии или MSI установщик):</p>
+             <p class="note">Вариант 2 (Если у вас 32-бит Office):</p>
             <div class="command-block">
-                <span class="command">cd "C:\Program Files\Microsoft Office\Office16"</span>
-                <button class="copy-button" onclick="copyToClipboard('cd &quot;C:\\Program Files\\Microsoft Office\\Office16&quot;')">Копировать</button>
-            </div>
-             <p class="note">Вариант 3 (32-бит Office на 64-бит Windows):</p>
-            <div class="command-block">
-                <span class="command">cd "C:\Program Files (x86)\Microsoft Office\Office16"</span>
-                <button class="copy-button" onclick="copyToClipboard('cd &quot;C:\\Program Files (x86)\\Microsoft Office\\Office16&quot;')">Копировать</button>
+                <span class="command">cd "C:\Program Files (x86)\Microsoft Office\root\Office16"</span>
+                <button class="copy-button" onclick="copyToClipboard('cd &quot;C:\\Program Files (x86)\\Microsoft Office\\root\\Office16&quot;')">Копировать</button>
             </div>
         </div>
 
         <div class="instruction-step">
-            <p><strong>Шаг 3:</strong> Установка файлов лицензии <span class="warning">(Обязательно!)</span></p>
-            <p>Эта команда превращает ваш Office в корпоративный. Выберите вариант для вашего типа окна (синее или черное):</p>
+            <p><strong>Шаг 3:</strong> Установка лицензий <span class="warning">(Внимание!)</span></p>
+            <p>Попробуйте <strong>Вариант А</strong>. Если он выдаст красную ошибку или "путь не найден" — пробуйте <strong>Вариант Б</strong>. <br>Один из них сработает мгновенно.</p>
 
             <div class="sub-step">
-                <span class="sub-title">🔷 Для PowerShell (синее окно):</span>
-                <p class="note">Мы используем прямой путь к папке лицензий, чтобы избежать ошибок.</p>
+                <span class="sub-title">Вариант А (Обычный путь):</span>
                 <div class="command-block">
                     <span class="command">Get-ChildItem "C:\Program Files\Microsoft Office\root\Licenses16\*.xrm-ms" | ForEach-Object { cscript ospp.vbs /inslic:$_.FullName }</span>
                     <button class="copy-button" onclick="copyToClipboard('Get-ChildItem &quot;C:\\Program Files\\Microsoft Office\\root\\Licenses16\\*.xrm-ms&quot; | ForEach-Object { cscript ospp.vbs /inslic:$_.FullName }')">Копировать</button>
@@ -185,14 +179,14 @@
             </div>
 
             <div class="sub-step">
-                <span class="sub-title">⬛ Для CMD (черное окно):</span>
+                <span class="sub-title">Вариант Б (Путь для x86):</span>
                 <div class="command-block">
-                    <span class="command">for /f %x in ('dir /b "C:\Program Files\Microsoft Office\root\Licenses16\*.xrm-ms"') do cscript ospp.vbs /inslic:"C:\Program Files\Microsoft Office\root\Licenses16\%x"</span>
-                    <button class="copy-button" onclick="copyToClipboard('for /f %x in (\'dir /b &quot;C:\\Program Files\\Microsoft Office\\root\\Licenses16\\*.xrm-ms&quot;\') do cscript ospp.vbs /inslic:&quot;C:\\Program Files\\Microsoft Office\\root\\Licenses16\\%x&quot;')">Копировать</button>
+                    <span class="command">Get-ChildItem "C:\Program Files (x86)\Microsoft Office\root\Licenses16\*.xrm-ms" | ForEach-Object { cscript ospp.vbs /inslic:$_.FullName }</span>
+                    <button class="copy-button" onclick="copyToClipboard('Get-ChildItem &quot;C:\\Program Files (x86)\\Microsoft Office\\root\\Licenses16\\*.xrm-ms&quot; | ForEach-Object { cscript ospp.vbs /inslic:$_.FullName }')">Копировать</button>
                 </div>
             </div>
             
-            <p class="note">Если команда выдает ошибку "путь не найден" — значит у вас нестандартная установка, но в 90% случаев это работает.</p>
+            <p class="note">При успехе вы увидите много строк <code>Processing...</code> и <code>License installed successfully</code>.</p>
         </div>
 
         <div class="instruction-step">
