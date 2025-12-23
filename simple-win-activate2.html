@@ -75,6 +75,10 @@
             color: green;
             font-weight: bold;
         }
+        .warning {
+            color: #d9534f;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -134,59 +138,22 @@
         <h1>Активация Microsoft Office</h1>
 
         <div class="instruction-step">
-            <p><strong>Шаг 1:</strong> Запустите командную строку от имени администратора (см. выше).</p>
-            <p><strong>Шаг 2:</strong> Перейдите в папку установки Office. Попробуйте первую команду, если возникнет ошибка — вторую:</p>
+            <p><strong>Шаг 1:</strong> Запустите командную строку или PowerShell от имени администратора (см. выше).</p>
+            <p><strong>Шаг 2:</strong> Перейдите в папку установки Office. Попробуйте первую команду, если возникнет ошибка (путь не найден) — вторую:</p>
             
-            <p class="note">Для Office 2016, 2019, 2021:</p>
+            <p class="note">Для Office 2016, 2019, 2021 (Стандартная папка):</p>
             <div class="command-block">
-                <span class="command">cd /d %ProgramFiles%\Microsoft Office\Office16</span>
-                <button class="copy-button" onclick="copyToClipboard('cd /d %ProgramFiles%\\Microsoft Office\\Office16')">Копировать</button>
+                <span class="command">cd "C:\Program Files\Microsoft Office\Office16"</span>
+                <button class="copy-button" onclick="copyToClipboard('cd &quot;C:\\Program Files\\Microsoft Office\\Office16&quot;')">Копировать</button>
             </div>
             
+            <p class="note">Для 32-битной версии Office на 64-битной Windows:</p>
             <div class="command-block">
-                <span class="command">cd /d %ProgramFiles(x86)%\Microsoft Office\Office16</span>
-                <button class="copy-button" onclick="copyToClipboard('cd /d %ProgramFiles(x86)%\\Microsoft Office\\Office16')">Копировать</button>
+                <span class="command">cd "C:\Program Files (x86)\Microsoft Office\Office16"</span>
+                <button class="copy-button" onclick="copyToClipboard('cd &quot;C:\\Program Files (x86)\\Microsoft Office\\Office16&quot;')">Копировать</button>
             </div>
         </div>
 
         <div class="instruction-step">
-            <p><strong>Шаг 3:</strong> Выполните команды активации:</p>
-
-            <div class="command-block">
-                <span class="command">cscript ospp.vbs /sethst:kms.digiboy.ir</span>
-                <button class="copy-button" onclick="copyToClipboard('cscript ospp.vbs /sethst:kms.digiboy.ir')">Копировать</button>
-            </div>
-
-            <div class="command-block">
-                <span class="command">cscript ospp.vbs /act</span>
-                <button class="copy-button" onclick="copyToClipboard('cscript ospp.vbs /act')">Копировать</button>
-            </div>
-
-            <p class="note">Пояснение команд:</p>
-            <ul>
-                <li><code>cd /d ...</code> - переход в папку скрипта управления лицензиями Office.</li>
-                <li><code>/sethst</code> - задает адрес сервера KMS.</li>
-                <li><code>/act</code> - выполняет запрос на активацию.</li>
-            </ul>
-        </div>
-        
-        <div class="instruction-step">
-             <p><strong>Результат:</strong> В консоли должен появиться текст <code>&lt;Product activation successful&gt;</code>.</p>
-        </div>
-
-        <p class="note"><strong>Важно:</strong> Для успешной активации ваш компьютер должен быть подключен к интернету, чтобы иметь возможность связаться с указанным KMS-сервером.</p>
-    </div>
-
-    <script>
-        function copyToClipboard(text) {
-            const tempInput = document.createElement('input');
-            tempInput.value = text;
-            document.body.appendChild(tempInput);
-            tempInput.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempInput);
-            alert('Команда скопирована в буфер обмена!');
-        }
-    </script>
-</body>
-</html>
+            <p><strong>Шаг 3:</strong> Установка корпоративной лицензии <span class="warning">(Важно!)</span></p>
+            <p
