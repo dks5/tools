@@ -147,11 +147,11 @@
         <hr>
 
         <h1>Активация Microsoft Office</h1>
-        <p class="note">Для успешной активации нужно пройти все шаги. Если вы закрыли окно консоли, начните с Шага 2 заново.</p>
+        <p class="note">Если вы видите ошибку "не является внутренней или внешней командой", значит вы используете CMD (черное окно), а вводите код для PowerShell. Используйте вариант для CMD ниже.</p>
 
         <div class="instruction-step">
-            <p><strong>Шаг 1:</strong> Запустите командную строку или PowerShell от имени администратора (см. выше).</p>
-            <p><strong>Шаг 2:</strong> Вход в папку. Используйте команду, соответствующую вашей версии:</p>
+            <p><strong>Шаг 1:</strong> Запустите командную строку от имени администратора.</p>
+            <p><strong>Шаг 2:</strong> Вход в папку. Выберите вариант, который сработает без ошибок:</p>
             
             <p class="note">Вариант 1 (Стандартный):</p>
             <div class="command-block">
@@ -168,25 +168,30 @@
 
         <div class="instruction-step">
             <p><strong>Шаг 3:</strong> Установка лицензий <span class="warning">(Внимание!)</span></p>
-            <p>Попробуйте <strong>Вариант А</strong>. Если он выдаст красную ошибку или "путь не найден" — пробуйте <strong>Вариант Б</strong>. <br>Один из них сработает мгновенно.</p>
+            <p>Выберите команду для вашего типа окна. Если первая выдаст ошибку пути, пробуйте вторую.</p>
 
             <div class="sub-step">
-                <span class="sub-title">Вариант А (Обычный путь):</span>
+                <span class="sub-title">⬛ Вариант для CMD (черное окно):</span>
+                <p class="note">Попробуйте этот (для 64-бит Office):</p>
+                <div class="command-block">
+                    <span class="command">for /f %x in ('dir /b "C:\Program Files\Microsoft Office\root\Licenses16\*.xrm-ms"') do cscript ospp.vbs /inslic:"C:\Program Files\Microsoft Office\root\Licenses16\%x"</span>
+                    <button class="copy-button" onclick="copyToClipboard('for /f %x in (\'dir /b &quot;C:\\Program Files\\Microsoft Office\\root\\Licenses16\\*.xrm-ms&quot;\') do cscript ospp.vbs /inslic:&quot;C:\\Program Files\\Microsoft Office\\root\\Licenses16\\%x&quot;')">Копировать</button>
+                </div>
+                
+                <p class="note">Или этот (для 32-бит Office):</p>
+                <div class="command-block">
+                    <span class="command">for /f %x in ('dir /b "C:\Program Files (x86)\Microsoft Office\root\Licenses16\*.xrm-ms"') do cscript ospp.vbs /inslic:"C:\Program Files (x86)\Microsoft Office\root\Licenses16\%x"</span>
+                    <button class="copy-button" onclick="copyToClipboard('for /f %x in (\'dir /b &quot;C:\\Program Files (x86)\\Microsoft Office\\root\\Licenses16\\*.xrm-ms&quot;\') do cscript ospp.vbs /inslic:&quot;C:\\Program Files (x86)\\Microsoft Office\\root\\Licenses16\\%x&quot;')">Копировать</button>
+                </div>
+            </div>
+
+            <div class="sub-step">
+                <span class="sub-title">🔷 Вариант для PowerShell (синее окно) - на всякий случай:</span>
                 <div class="command-block">
                     <span class="command">Get-ChildItem "C:\Program Files\Microsoft Office\root\Licenses16\*.xrm-ms" | ForEach-Object { cscript ospp.vbs /inslic:$_.FullName }</span>
                     <button class="copy-button" onclick="copyToClipboard('Get-ChildItem &quot;C:\\Program Files\\Microsoft Office\\root\\Licenses16\\*.xrm-ms&quot; | ForEach-Object { cscript ospp.vbs /inslic:$_.FullName }')">Копировать</button>
                 </div>
             </div>
-
-            <div class="sub-step">
-                <span class="sub-title">Вариант Б (Путь для x86):</span>
-                <div class="command-block">
-                    <span class="command">Get-ChildItem "C:\Program Files (x86)\Microsoft Office\root\Licenses16\*.xrm-ms" | ForEach-Object { cscript ospp.vbs /inslic:$_.FullName }</span>
-                    <button class="copy-button" onclick="copyToClipboard('Get-ChildItem &quot;C:\\Program Files (x86)\\Microsoft Office\\root\\Licenses16\\*.xrm-ms&quot; | ForEach-Object { cscript ospp.vbs /inslic:$_.FullName }')">Копировать</button>
-                </div>
-            </div>
-            
-            <p class="note">При успехе вы увидите много строк <code>Processing...</code> и <code>License installed successfully</code>.</p>
         </div>
 
         <div class="instruction-step">
