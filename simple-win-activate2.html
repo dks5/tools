@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Активация Office (Ручной режим)</title>
+    <title>Очистка и Проверка</title>
     <style>
         body {
             font-family: sans-serif;
@@ -20,15 +20,14 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        h1 { color: #337ab7; }
-        h2 { color: #d9534f; border-bottom: 2px solid #d9534f; padding-bottom: 10px; }
+        h1 { color: #5cb85c; } /* Зеленый заголовок */
         
         .instruction-step {
             margin-bottom: 20px;
             padding: 20px;
-            border: 2px solid #333;
+            border: 2px solid #5cb85c;
             border-radius: 4px;
-            background-color: #fffbe6;
+            background-color: #f0fff4;
         }
         .command-block {
             background-color: #222;
@@ -56,55 +55,30 @@
         }
         .copy-button:hover { background-color: #555; }
         .note { font-size: 0.9em; color: #555; margin-top: 5px; }
+        .success-text { color: green; font-weight: bold; font-size: 1.2em; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Активация Office (Ручная установка)</h1>
+        <h1>✅ Office Активирован!</h1>
         
-        <p class="note"><strong>Важно:</strong> Закройте все старые окна и откройте одну новую командную строку (CMD) от имени администратора.</p>
+        <p class="success-text">Основная активация прошла успешно. Вы можете закрыть это окно и пользоваться программами.</p>
+        <p>Ниже инструкция, как удалить ошибку о старой версии (Office 365 Grace), если она мозолит глаза.</p>
 
         <div class="instruction-step">
-            <h2>ШАГ 1: Вход в папку</h2>
-            <p>Выполните переход (если первая не работает, пробуйте вторую):</p>
-
-            <div class="command-block">cd /d "%ProgramFiles%\Microsoft Office\Office16"</div>
-            <button class="copy-button" onclick="copyToClipboard('cd /d &quot;%ProgramFiles%\\Microsoft Office\\Office16&quot;')">Копировать (x64)</button>
-            <br><br>
-            <div class="command-block">cd /d "%ProgramFiles(x86)%\Microsoft Office\Office16"</div>
-            <button class="copy-button" onclick="copyToClipboard('cd /d &quot;%ProgramFiles(x86)%\\Microsoft Office\\Office16&quot;')">Копировать (x86)</button>
+            <h3>Удаление "мусорного" ключа (KHGM9)</h3>
+            <p>Эта команда удалит остатки пробной версии, которая выдает ошибку.</p>
+            
+            <div class="command-block">cscript ospp.vbs /unpkey:KHGM9</div>
+            <button class="copy-button" onclick="copyToClipboard('cscript ospp.vbs /unpkey:KHGM9')">Копировать команду удаления</button>
         </div>
 
         <div class="instruction-step">
-            <h2>ШАГ 2: Точечная установка лицензий</h2>
-            <p>Вместо поиска мы установим лицензии напрямую. Выполните эти три команды по очереди. Каждая должна выдать "License installed successfully".</p>
+            <h3>Финальная проверка</h3>
+            <p>Нажмите эту кнопку, чтобы вывести статус. В ответе вы должны увидеть <strong>LICENSE STATUS:  ---LICENSED---</strong> для версии ProPlusVL.</p>
             
-            <p class="note">Команда 1 (Главная лицензия):</p>
-            <div class="command-block">cscript ospp.vbs /inslic:"..\root\Licenses16\ProPlusVL_KMS_Client-ppd.xrm-ms"</div>
-            <button class="copy-button" onclick="copyToClipboard('cscript ospp.vbs /inslic:&quot;..\\root\\Licenses16\\ProPlusVL_KMS_Client-ppd.xrm-ms&quot;')">Копировать 1</button>
-
-            <p class="note">Команда 2 (Дополнительная):</p>
-            <div class="command-block">cscript ospp.vbs /inslic:"..\root\Licenses16\ProPlusVL_KMS_Client-ul.xrm-ms"</div>
-            <button class="copy-button" onclick="copyToClipboard('cscript ospp.vbs /inslic:&quot;..\\root\\Licenses16\\ProPlusVL_KMS_Client-ul.xrm-ms&quot;')">Копировать 2</button>
-            
-            <p class="note">Команда 3 (OOB):</p>
-            <div class="command-block">cscript ospp.vbs /inslic:"..\root\Licenses16\ProPlusVL_KMS_Client-ul-oob.xrm-ms"</div>
-            <button class="copy-button" onclick="copyToClipboard('cscript ospp.vbs /inslic:&quot;..\\root\\Licenses16\\ProPlusVL_KMS_Client-ul-oob.xrm-ms&quot;')">Копировать 3</button>
-        </div>
-
-        <div class="instruction-step">
-            <h2>ШАГ 3: Установка ключа</h2>
-            <p>Теперь, когда лицензии стоят, эта команда должна сработать без ошибки "SKU not found".</p>
-            
-            <div class="command-block">cscript ospp.vbs /inpkey:XQNVK-8JYDB-WJ9W3-YJ8YR-WFG99</div>
-            <button class="copy-button" onclick="copyToClipboard('cscript ospp.vbs /inpkey:XQNVK-8JYDB-WJ9W3-YJ8YR-WFG99')">Копировать ключ</button>
-        </div>
-
-        <div class="instruction-step">
-            <h2>ШАГ 4: Финал</h2>
-            <p>Активируем.</p>
-            <div class="command-block">cscript ospp.vbs /sethst:kms.digiboy.ir & cscript ospp.vbs /act</div>
-            <button class="copy-button" onclick="copyToClipboard('cscript ospp.vbs /sethst:kms.digiboy.ir & cscript ospp.vbs /act')">Активировать</button>
+            <div class="command-block">cscript ospp.vbs /dstatus</div>
+            <button class="copy-button" onclick="copyToClipboard('cscript ospp.vbs /dstatus')">Копировать команду проверки</button>
         </div>
     </div>
 
