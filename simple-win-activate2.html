@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Активация Windows и Office</title>
+    <title>Автоматическая активация Office</title>
     <style>
         body {
             font-family: sans-serif;
@@ -20,207 +20,108 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        h1, h2 {
-            color: #337ab7;
+        h1 {
+            color: #d9534f; /* Красный, чтобы привлечь внимание */
         }
         .instruction-step {
             margin-bottom: 20px;
             padding: 15px;
-            border: 1px solid #ddd;
+            border: 2px solid #337ab7;
             border-radius: 4px;
-            background-color: #f9f9f9;
+            background-color: #e6f3ff;
         }
         .command-block {
-            background-color: #e0f7fa;
+            background-color: #333;
+            color: #fff;
             padding: 15px;
             border-radius: 4px;
             margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid #b2ebf2;
+            overflow-x: auto;
         }
         .command {
             font-family: monospace;
-            font-size: 1em;
-            color: #00796b;
-            margin-right: 10px;
-            flex-grow: 1;
-            word-break: break-all;
+            font-size: 0.9em;
+            white-space: pre-wrap; /* Сохраняет переносы строк */
         }
         .copy-button {
-            background-color: #4CAF50;
+            background-color: #d9534f;
             color: white;
             border: none;
-            padding: 8px 15px;
+            padding: 15px 30px;
             text-align: center;
             text-decoration: none;
-            display: inline-block;
-            font-size: 0.9em;
+            display: block;
+            width: 100%;
+            font-size: 1.2em;
+            font-weight: bold;
             border-radius: 4px;
             cursor: pointer;
+            margin-top: 10px;
             transition: background-color 0.3s ease;
-            white-space: nowrap;
         }
         .copy-button:hover {
-            background-color: #45a049;
+            background-color: #c9302c;
         }
         .note {
-            color: #777;
+            color: #555;
             font-size: 0.9em;
             margin-top: 10px;
-            font-style: italic;
-        }
-        .success {
-            color: green;
-            font-weight: bold;
-        }
-        .warning {
-            color: #d9534f;
-            font-weight: bold;
-        }
-        .sub-step {
-            margin-top: 15px;
-            padding-top: 10px;
-            border-top: 1px dashed #ccc;
-        }
-        .sub-title {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
-            color: #555;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Активация Windows</h1>
+        <h1>Финальное исправление (PowerShell)</h1>
 
         <div class="instruction-step">
-            <p><span class="success">✅</span> Этим ключом 13/12/2023 активировал W10</p>
-            <p class="note">Обратите внимание, что данный ключ был использован ранее и может не подойти для новой активации.</p>
-        </div>
-
-        <h2>Инструкция по активации Windows через командную строку</h2>
-
-        <div class="instruction-step">
-            <p><strong>Шаг 1:</strong> Запустите командную строку от имени администратора.</p>
-            <p>Для этого:</p>
-            <ul>
-                <li>Нажмите правой кнопкой мыши на кнопку "Пуск".</li>
-                <li>Выберите "Windows PowerShell (администратор)" или "Командная строка (администратор)".</li>
-                <li>Если появится запрос контроля учетных записей пользователей, нажмите "Да".</li>
-            </ul>
-        </div>
-
-        <div class="instruction-step">
-            <p><strong>Шаг 2:</strong> Введите поочередно следующие команды. После ввода каждой команды нажимайте клавишу <kbd>Enter</kbd>.</p>
-
-            <div class="command-block">
-                <span class="command">slmgr /ipk W269N-WFGWX-YVC9B-4J6C9-T83GX</span>
-                <button class="copy-button" onclick="copyToClipboard('slmgr /ipk W269N-WFGWX-YVC9B-4J6C9-T83GX')">Копировать</button>
-            </div>
-
-            <div class="command-block">
-                <span class="command">slmgr /skms kms.digiboy.ir</span>
-                <button class="copy-button" onclick="copyToClipboard('slmgr /skms kms.digiboy.ir')">Копировать</button>
-            </div>
-
-            <div class="command-block">
-                <span class="command">slmgr /ato</span>
-                <button class="copy-button" onclick="copyToClipboard('slmgr /ato')">Копировать</button>
-            </div>
-
-            <p class="note">Каждая команда выполняет определенное действие:</p>
-            <ul>
-                <li><code>slmgr /ipk [ключ продукта]</code> - устанавливает ключ продукта.</li>
-                <li><code>slmgr /skms [KMS-сервер]</code> - устанавливает имя или IP-адрес KMS-сервера.</li>
-                <li><code>slmgr /ato</code> - активирует Windows, обращаясь к KMS-серверу.</li>
-            </ul>
-        </div>
-
-        <div class="instruction-step">
-            <p><strong>Шаг 3:</strong> Дождитесь сообщения об успешной активации Windows.</p>
-            <p>После выполнения команды <code>slmgr /ato</code> вы должны увидеть сообщение, подтверждающее успешную активацию.</p>
-        </div>
-
-        <hr>
-
-        <h1>Активация Microsoft Office</h1>
-        <p class="note">Если вы видите ошибку "не является внутренней или внешней командой", значит вы используете CMD (черное окно), а вводите код для PowerShell. Используйте вариант для CMD ниже.</p>
-
-        <div class="instruction-step">
-            <p><strong>Шаг 1:</strong> Запустите командную строку от имени администратора.</p>
-            <p><strong>Шаг 2:</strong> Вход в папку. Выберите вариант, который сработает без ошибок:</p>
+            <p><strong>Инструкция:</strong></p>
+            <ol>
+                <li>Запустите <strong>PowerShell</strong> от имени администратора.</li>
+                <li>Нажмите большую красную кнопку ниже.</li>
+                <li>Вставьте скопированный код в PowerShell (нажмите правую кнопку мыши в окне консоли или Ctrl+V).</li>
+                <li>Нажмите <strong>Enter</strong>.</li>
+            </ol>
             
-            <p class="note">Вариант 1 (Стандартный):</p>
+            <p class="note">Скрипт сам определит версию вашего Office, установит нужные файлы лицензий и выполнит активацию. Процесс займет около 1-2 минут. Просто дождитесь окончания.</p>
+
             <div class="command-block">
-                <span class="command">cd "C:\Program Files\Microsoft Office\root\Office16"</span>
-                <button class="copy-button" onclick="copyToClipboard('cd &quot;C:\\Program Files\\Microsoft Office\\root\\Office16&quot;')">Копировать</button>
+<pre class="command" id="script-code">
+$officePath = "C:\Program Files\Microsoft Office\root\Office16";
+$licensePath = "C:\Program Files\Microsoft Office\root\Licenses16";
+if (-not (Test-Path $officePath)) {
+    $officePath = "C:\Program Files (x86)\Microsoft Office\root\Office16";
+    $licensePath = "C:\Program Files (x86)\Microsoft Office\root\Licenses16";
+}
+if (Test-Path $officePath) {
+    Write-Host "Папка Office найдена: $officePath" -ForegroundColor Green;
+    Write-Host "Установка лицензий (подождите)..." -ForegroundColor Yellow;
+    $ospp = "$officePath\ospp.vbs";
+    Get-ChildItem "$licensePath\*.xrm-ms" | ForEach-Object {
+        cscript $ospp /inslic:$_.FullName
+    };
+    Write-Host "Активация..." -ForegroundColor Yellow;
+    cscript $ospp /sethst:kms.digiboy.ir;
+    cscript $ospp /act;
+} else {
+    Write-Host "Не удалось найти папку Office автоматически." -ForegroundColor Red;
+}
+</pre>
             </div>
-            
-             <p class="note">Вариант 2 (Если у вас 32-бит Office):</p>
-            <div class="command-block">
-                <span class="command">cd "C:\Program Files (x86)\Microsoft Office\root\Office16"</span>
-                <button class="copy-button" onclick="copyToClipboard('cd &quot;C:\\Program Files (x86)\\Microsoft Office\\root\\Office16&quot;')">Копировать</button>
-            </div>
+
+            <button class="copy-button" onclick="copyScript()">🔴 КОПИРОВАТЬ ВЕСЬ СКРИПТ ИСПРАВЛЕНИЯ</button>
         </div>
-
-        <div class="instruction-step">
-            <p><strong>Шаг 3:</strong> Установка лицензий <span class="warning">(Внимание!)</span></p>
-            <p>Выберите команду для вашего типа окна. Если первая выдаст ошибку пути, пробуйте вторую.</p>
-
-            <div class="sub-step">
-                <span class="sub-title">⬛ Вариант для CMD (черное окно):</span>
-                <p class="note">Попробуйте этот (для 64-бит Office):</p>
-                <div class="command-block">
-                    <span class="command">for /f %x in ('dir /b "C:\Program Files\Microsoft Office\root\Licenses16\*.xrm-ms"') do cscript ospp.vbs /inslic:"C:\Program Files\Microsoft Office\root\Licenses16\%x"</span>
-                    <button class="copy-button" onclick="copyToClipboard('for /f %x in (\'dir /b &quot;C:\\Program Files\\Microsoft Office\\root\\Licenses16\\*.xrm-ms&quot;\') do cscript ospp.vbs /inslic:&quot;C:\\Program Files\\Microsoft Office\\root\\Licenses16\\%x&quot;')">Копировать</button>
-                </div>
-                
-                <p class="note">Или этот (для 32-бит Office):</p>
-                <div class="command-block">
-                    <span class="command">for /f %x in ('dir /b "C:\Program Files (x86)\Microsoft Office\root\Licenses16\*.xrm-ms"') do cscript ospp.vbs /inslic:"C:\Program Files (x86)\Microsoft Office\root\Licenses16\%x"</span>
-                    <button class="copy-button" onclick="copyToClipboard('for /f %x in (\'dir /b &quot;C:\\Program Files (x86)\\Microsoft Office\\root\\Licenses16\\*.xrm-ms&quot;\') do cscript ospp.vbs /inslic:&quot;C:\\Program Files (x86)\\Microsoft Office\\root\\Licenses16\\%x&quot;')">Копировать</button>
-                </div>
-            </div>
-
-            <div class="sub-step">
-                <span class="sub-title">🔷 Вариант для PowerShell (синее окно) - на всякий случай:</span>
-                <div class="command-block">
-                    <span class="command">Get-ChildItem "C:\Program Files\Microsoft Office\root\Licenses16\*.xrm-ms" | ForEach-Object { cscript ospp.vbs /inslic:$_.FullName }</span>
-                    <button class="copy-button" onclick="copyToClipboard('Get-ChildItem &quot;C:\\Program Files\\Microsoft Office\\root\\Licenses16\\*.xrm-ms&quot; | ForEach-Object { cscript ospp.vbs /inslic:$_.FullName }')">Копировать</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="instruction-step">
-            <p><strong>Шаг 4:</strong> Активация:</p>
-
-            <div class="command-block">
-                <span class="command">cscript ospp.vbs /sethst:kms.digiboy.ir</span>
-                <button class="copy-button" onclick="copyToClipboard('cscript ospp.vbs /sethst:kms.digiboy.ir')">Копировать</button>
-            </div>
-
-            <div class="command-block">
-                <span class="command">cscript ospp.vbs /act</span>
-                <button class="copy-button" onclick="copyToClipboard('cscript ospp.vbs /act')">Копировать</button>
-            </div>
-
-            <p class="note">Если в конце вы увидели <code>&lt;Product activation successful&gt;</code> — поздравляем, Office активирован!</p>
-        </div>
-        
     </div>
 
     <script>
-        function copyToClipboard(text) {
-            const tempInput = document.createElement('input');
-            tempInput.value = text;
+        function copyScript() {
+            const scriptText = document.getElementById('script-code').innerText;
+            const tempInput = document.createElement('textarea'); // Используем textarea для сохранения переносов
+            tempInput.value = scriptText;
             document.body.appendChild(tempInput);
             tempInput.select();
             document.execCommand('copy');
             document.body.removeChild(tempInput);
-            alert('Команда скопирована в буфер обмена!');
+            alert('Скрипт скопирован! Вставьте его в PowerShell.');
         }
     </script>
 </body>
