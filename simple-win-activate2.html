@@ -147,18 +147,24 @@
         <hr>
 
         <h1>Активация Microsoft Office</h1>
+        <p class="note">Для успешной активации нужно пройти все шаги. Если на Шаге 4 возникает ошибка "No Office KMS licenses found", обязательно выполните Шаг 3.</p>
 
         <div class="instruction-step">
             <p><strong>Шаг 1:</strong> Запустите командную строку или PowerShell от имени администратора (см. выше).</p>
-            <p><strong>Шаг 2:</strong> Перейдите в папку установки Office. Попробуйте первую команду, если возникнет ошибка (путь не найден) — вторую:</p>
+            <p><strong>Шаг 2:</strong> Перейдите в папку установки. Попробуйте эти команды по очереди, пока не исчезнут ошибки "Не удается найти путь":</p>
             
-            <p class="note">Для Office 2016, 2019, 2021 (Стандартная папка):</p>
+            <p class="note">Вариант 1 (Самый частый для Office 2016/2019/2021):</p>
+            <div class="command-block">
+                <span class="command">cd "C:\Program Files\Microsoft Office\root\Office16"</span>
+                <button class="copy-button" onclick="copyToClipboard('cd &quot;C:\\Program Files\\Microsoft Office\\root\\Office16&quot;')">Копировать</button>
+            </div>
+            
+            <p class="note">Вариант 2 (Старые версии или MSI установщик):</p>
             <div class="command-block">
                 <span class="command">cd "C:\Program Files\Microsoft Office\Office16"</span>
                 <button class="copy-button" onclick="copyToClipboard('cd &quot;C:\\Program Files\\Microsoft Office\\Office16&quot;')">Копировать</button>
             </div>
-            
-            <p class="note">Для 32-битной версии Office на 64-битной Windows:</p>
+             <p class="note">Вариант 3 (32-бит Office на 64-бит Windows):</p>
             <div class="command-block">
                 <span class="command">cd "C:\Program Files (x86)\Microsoft Office\Office16"</span>
                 <button class="copy-button" onclick="copyToClipboard('cd &quot;C:\\Program Files (x86)\\Microsoft Office\\Office16&quot;')">Копировать</button>
@@ -166,66 +172,24 @@
         </div>
 
         <div class="instruction-step">
-            <p><strong>Шаг 3:</strong> Установка корпоративной лицензии <span class="warning">(Если возникла ошибка No KMS licenses found)</span></p>
-            <p>Выберите команду, соответствующую вашей программе (PowerShell или CMD):</p>
+            <p><strong>Шаг 3:</strong> Установка файлов лицензии <span class="warning">(Обязательно!)</span></p>
+            <p>Эта команда превращает ваш Office в корпоративный. Выберите вариант для вашего типа окна (синее или черное):</p>
 
             <div class="sub-step">
-                <span class="sub-title">🔷 Вариант для PowerShell (синее окно):</span>
+                <span class="sub-title">🔷 Для PowerShell (синее окно):</span>
+                <p class="note">Мы используем прямой путь к папке лицензий, чтобы избежать ошибок.</p>
                 <div class="command-block">
-                    <span class="command">Get-ChildItem ..\root\Licenses16\*.xrm-ms | ForEach-Object { cscript ospp.vbs /inslic:$_.FullName }</span>
-                    <button class="copy-button" onclick="copyToClipboard('Get-ChildItem ..\\root\\Licenses16\\*.xrm-ms | ForEach-Object { cscript ospp.vbs /inslic:$_.FullName }')">Копировать</button>
+                    <span class="command">Get-ChildItem "C:\Program Files\Microsoft Office\root\Licenses16\*.xrm-ms" | ForEach-Object { cscript ospp.vbs /inslic:$_.FullName }</span>
+                    <button class="copy-button" onclick="copyToClipboard('Get-ChildItem &quot;C:\\Program Files\\Microsoft Office\\root\\Licenses16\\*.xrm-ms&quot; | ForEach-Object { cscript ospp.vbs /inslic:$_.FullName }')">Копировать</button>
                 </div>
             </div>
 
             <div class="sub-step">
-                <span class="sub-title">⬛ Вариант для Командной строки / CMD (черное окно):</span>
+                <span class="sub-title">⬛ Для CMD (черное окно):</span>
                 <div class="command-block">
-                    <span class="command">for /f %x in ('dir /b ..\root\Licenses16\*.xrm-ms') do cscript ospp.vbs /inslic:"..\root\Licenses16\%x"</span>
-                    <button class="copy-button" onclick="copyToClipboard('for /f %x in (\'dir /b ..\\root\\Licenses16\\*.xrm-ms\') do cscript ospp.vbs /inslic:&quot;..\\root\\Licenses16\\%x&quot;')">Копировать</button>
+                    <span class="command">for /f %x in ('dir /b "C:\Program Files\Microsoft Office\root\Licenses16\*.xrm-ms"') do cscript ospp.vbs /inslic:"C:\Program Files\Microsoft Office\root\Licenses16\%x"</span>
+                    <button class="copy-button" onclick="copyToClipboard('for /f %x in (\'dir /b &quot;C:\\Program Files\\Microsoft Office\\root\\Licenses16\\*.xrm-ms&quot;\') do cscript ospp.vbs /inslic:&quot;C:\\Program Files\\Microsoft Office\\root\\Licenses16\\%x&quot;')">Копировать</button>
                 </div>
             </div>
             
-            <p class="note">Эта команда найдет и установит нужные файлы лицензий. Дождитесь завершения (может занять некоторое время).</p>
-        </div>
-
-        <div class="instruction-step">
-            <p><strong>Шаг 4:</strong> Выполните команды активации:</p>
-
-            <div class="command-block">
-                <span class="command">cscript ospp.vbs /sethst:kms.digiboy.ir</span>
-                <button class="copy-button" onclick="copyToClipboard('cscript ospp.vbs /sethst:kms.digiboy.ir')">Копировать</button>
-            </div>
-
-            <div class="command-block">
-                <span class="command">cscript ospp.vbs /act</span>
-                <button class="copy-button" onclick="copyToClipboard('cscript ospp.vbs /act')">Копировать</button>
-            </div>
-
-            <p class="note">Пояснение команд:</p>
-            <ul>
-                <li><code>Get-ChildItem / for /f</code> - конвертация Retail версии в Volume.</li>
-                <li><code>/sethst</code> - задает адрес сервера KMS.</li>
-                <li><code>/act</code> - выполняет запрос на активацию.</li>
-            </ul>
-        </div>
-        
-        <div class="instruction-step">
-             <p><strong>Результат:</strong> В консоли должен появиться текст <code>&lt;Product activation successful&gt;</code>.</p>
-        </div>
-
-        <p class="note"><strong>Важно:</strong> Для успешной активации ваш компьютер должен быть подключен к интернету.</p>
-    </div>
-
-    <script>
-        function copyToClipboard(text) {
-            const tempInput = document.createElement('input');
-            tempInput.value = text;
-            document.body.appendChild(tempInput);
-            tempInput.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempInput);
-            alert('Команда скопирована в буфер обмена!');
-        }
-    </script>
-</body>
-</html>
+            <p class="note
