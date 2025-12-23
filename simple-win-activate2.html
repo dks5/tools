@@ -79,6 +79,17 @@
             color: #d9534f;
             font-weight: bold;
         }
+        .sub-step {
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px dashed #ccc;
+        }
+        .sub-title {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
     </style>
 </head>
 <body>
@@ -155,14 +166,26 @@
         </div>
 
         <div class="instruction-step">
-            <p><strong>Шаг 3:</strong> Установка корпоративной лицензии <span class="warning">(Важно!)</span></p>
-            <p>Если при попытке активации вы видите ошибку <code>No Office KMS licenses found</code>, выполните эту команду. Она установит нужные файлы лицензий:</p>
+            <p><strong>Шаг 3:</strong> Установка корпоративной лицензии <span class="warning">(Если возникла ошибка No KMS licenses found)</span></p>
+            <p>Выберите команду, соответствующую вашей программе (PowerShell или CMD):</p>
 
-            <div class="command-block">
-                <span class="command">for /f %x in ('dir /b ..\root\Licenses16\*.xrm-ms') do cscript ospp.vbs /inslic:"..\root\Licenses16\%x"</span>
-                <button class="copy-button" onclick="copyToClipboard('for /f %x in (\'dir /b ..\\root\\Licenses16\\*.xrm-ms\') do cscript ospp.vbs /inslic:&quot;..\\root\\Licenses16\\%x&quot;')">Копировать</button>
+            <div class="sub-step">
+                <span class="sub-title">🔷 Вариант для PowerShell (синее окно):</span>
+                <div class="command-block">
+                    <span class="command">Get-ChildItem ..\root\Licenses16\*.xrm-ms | ForEach-Object { cscript ospp.vbs /inslic:$_.FullName }</span>
+                    <button class="copy-button" onclick="copyToClipboard('Get-ChildItem ..\\root\\Licenses16\\*.xrm-ms | ForEach-Object { cscript ospp.vbs /inslic:$_.FullName }')">Копировать</button>
+                </div>
             </div>
-            <p class="note">Эта команда переберет файлы в папке Licenses16 и установит их. Дождитесь завершения выполнения.</p>
+
+            <div class="sub-step">
+                <span class="sub-title">⬛ Вариант для Командной строки / CMD (черное окно):</span>
+                <div class="command-block">
+                    <span class="command">for /f %x in ('dir /b ..\root\Licenses16\*.xrm-ms') do cscript ospp.vbs /inslic:"..\root\Licenses16\%x"</span>
+                    <button class="copy-button" onclick="copyToClipboard('for /f %x in (\'dir /b ..\\root\\Licenses16\\*.xrm-ms\') do cscript ospp.vbs /inslic:&quot;..\\root\\Licenses16\\%x&quot;')">Копировать</button>
+                </div>
+            </div>
+            
+            <p class="note">Эта команда найдет и установит нужные файлы лицензий. Дождитесь завершения (может занять некоторое время).</p>
         </div>
 
         <div class="instruction-step">
@@ -180,7 +203,7 @@
 
             <p class="note">Пояснение команд:</p>
             <ul>
-                <li><code>for /f ...</code> - конвертация Retail версии в Volume.</li>
+                <li><code>Get-ChildItem / for /f</code> - конвертация Retail версии в Volume.</li>
                 <li><code>/sethst</code> - задает адрес сервера KMS.</li>
                 <li><code>/act</code> - выполняет запрос на активацию.</li>
             </ul>
