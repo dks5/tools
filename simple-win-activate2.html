@@ -192,4 +192,37 @@
                 </div>
             </div>
             
-            <p class="note
+            <p class="note">Если команда выдает ошибку "путь не найден" — значит у вас нестандартная установка, но в 90% случаев это работает.</p>
+        </div>
+
+        <div class="instruction-step">
+            <p><strong>Шаг 4:</strong> Активация:</p>
+
+            <div class="command-block">
+                <span class="command">cscript ospp.vbs /sethst:kms.digiboy.ir</span>
+                <button class="copy-button" onclick="copyToClipboard('cscript ospp.vbs /sethst:kms.digiboy.ir')">Копировать</button>
+            </div>
+
+            <div class="command-block">
+                <span class="command">cscript ospp.vbs /act</span>
+                <button class="copy-button" onclick="copyToClipboard('cscript ospp.vbs /act')">Копировать</button>
+            </div>
+
+            <p class="note">Если в конце вы увидели <code>&lt;Product activation successful&gt;</code> — поздравляем, Office активирован!</p>
+        </div>
+        
+    </div>
+
+    <script>
+        function copyToClipboard(text) {
+            const tempInput = document.createElement('input');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            alert('Команда скопирована в буфер обмена!');
+        }
+    </script>
+</body>
+</html>
