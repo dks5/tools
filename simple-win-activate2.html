@@ -156,4 +156,53 @@
 
         <div class="instruction-step">
             <p><strong>Шаг 3:</strong> Установка корпоративной лицензии <span class="warning">(Важно!)</span></p>
-            <p
+            <p>Если при попытке активации вы видите ошибку <code>No Office KMS licenses found</code>, выполните эту команду. Она установит нужные файлы лицензий:</p>
+
+            <div class="command-block">
+                <span class="command">for /f %x in ('dir /b ..\root\Licenses16\*.xrm-ms') do cscript ospp.vbs /inslic:"..\root\Licenses16\%x"</span>
+                <button class="copy-button" onclick="copyToClipboard('for /f %x in (\'dir /b ..\\root\\Licenses16\\*.xrm-ms\') do cscript ospp.vbs /inslic:&quot;..\\root\\Licenses16\\%x&quot;')">Копировать</button>
+            </div>
+            <p class="note">Эта команда переберет файлы в папке Licenses16 и установит их. Дождитесь завершения выполнения.</p>
+        </div>
+
+        <div class="instruction-step">
+            <p><strong>Шаг 4:</strong> Выполните команды активации:</p>
+
+            <div class="command-block">
+                <span class="command">cscript ospp.vbs /sethst:kms.digiboy.ir</span>
+                <button class="copy-button" onclick="copyToClipboard('cscript ospp.vbs /sethst:kms.digiboy.ir')">Копировать</button>
+            </div>
+
+            <div class="command-block">
+                <span class="command">cscript ospp.vbs /act</span>
+                <button class="copy-button" onclick="copyToClipboard('cscript ospp.vbs /act')">Копировать</button>
+            </div>
+
+            <p class="note">Пояснение команд:</p>
+            <ul>
+                <li><code>for /f ...</code> - конвертация Retail версии в Volume.</li>
+                <li><code>/sethst</code> - задает адрес сервера KMS.</li>
+                <li><code>/act</code> - выполняет запрос на активацию.</li>
+            </ul>
+        </div>
+        
+        <div class="instruction-step">
+             <p><strong>Результат:</strong> В консоли должен появиться текст <code>&lt;Product activation successful&gt;</code>.</p>
+        </div>
+
+        <p class="note"><strong>Важно:</strong> Для успешной активации ваш компьютер должен быть подключен к интернету.</p>
+    </div>
+
+    <script>
+        function copyToClipboard(text) {
+            const tempInput = document.createElement('input');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            alert('Команда скопирована в буфер обмена!');
+        }
+    </script>
+</body>
+</html>
